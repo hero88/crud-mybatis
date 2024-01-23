@@ -2,7 +2,10 @@ package sample.mybatis.xml.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+import sample.mybatis.xml.domain.City;
 import sample.mybatis.xml.domain.Users;
+
+import java.util.List;
 
 @Component
 public class UsersDAO {
@@ -13,16 +16,11 @@ public class UsersDAO {
         this.sqlSession = sqlSession;
     }
 
+    public Users selectUserById(Long userId) {
+        return this.sqlSession.selectOne("selectUserById", userId);
+    }
+
     public Users selectUserByUserName(String userName) {
         return this.sqlSession.selectOne("selectUserByUserName", userName);
     }
-
-    public void updateUser(int userId, String userName, String password) {
-        Users users = new Users(userId, userName, password);
-        this.sqlSession.update("updateUser", users);
-    }
-
-
-
-
 }
