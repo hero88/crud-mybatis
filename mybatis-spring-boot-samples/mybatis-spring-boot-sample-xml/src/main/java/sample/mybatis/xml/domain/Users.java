@@ -6,7 +6,7 @@ public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int userId;
+    private Long userId;
 
     private String userName;
 
@@ -26,17 +26,16 @@ public class Users implements Serializable {
 
     private String phoneNumber;
 
-    public Users(int userId, String userName, String password) {
+
+    public Users(Long userId) {
         this.userId = userId;
-        this.userName = userName;
-        this.password = password;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

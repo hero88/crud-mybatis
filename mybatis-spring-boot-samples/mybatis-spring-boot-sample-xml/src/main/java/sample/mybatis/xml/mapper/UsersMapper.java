@@ -9,4 +9,6 @@ public interface UsersMapper {
 
     Users findByUserName(@Param("userName") String userName);
 
+    Users findByUserId(@Param("userId") Long userId);
+
 }
