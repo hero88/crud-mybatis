@@ -22,7 +22,7 @@
 <configuration>
 
     <typeAliases>
-        <package name="sample.mybatis.xml.domain"/>
+        <package name="task.domain"/>
     </typeAliases>
 
     <environments default="development">
@@ -38,10 +38,10 @@
     </environments>
 
     <mappers>
-        <mapper resource="sample/mybatis/xml/mapper/CityMapper.xml"/>
-        <mapper resource="sample/mybatis/xml/mapper/HotelMapper.xml"/>
-        <mapper resource="sample/mybatis/xml/mapper/UsersMapper.xml"/>
-        <mapper resource="sample/mybatis/xml/mapper/UserRoleMapper.xml"/>
+        <mapper resource="mapper/CityMapper.xml"/>
+        <mapper resource="mapper/HotelMapper.xml"/>
+        <mapper resource="mapper/UsersMapper.xml"/>
+        <mapper resource="mapper/UserRoleMapper.xml"/>
     </mappers>
 </configuration>
 

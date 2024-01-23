@@ -1,5 +1,5 @@
 /*
- *    Copyright 2015-2022 the original author or authors.
+ *    Copyright 2015-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,18 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package sample.mybatis.xml.mapper;
+package task.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import sample.mybatis.xml.domain.Hotel;
+import org.apache.ibatis.annotations.Param;
+import task.domain.City;
 
 
 /**
- * @author Eduardo Macarron
+ * @author Eddú Meléndez
  */
 @Mapper
-public interface HotelMapper {
+public interface CityMapper {
 
-  Hotel selectByCityId(int cityId);
+  City findByState(@Param("state") String state);
 
 }

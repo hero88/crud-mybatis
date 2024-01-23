@@ -14,5 +14,6 @@
 --    limitations under the License.
 --
 
-insert into city (name, state, country) values ('San Francisco', 'CA', 'US');
-insert into hotel(city, name, address, zip) values (1, 'Conrad Treasury Place', 'William & George Streets', '4001')
+-- insert into city (name, state, country) values ('San Francisco', 'CA', 'US');
+-- insert into city (name, state, country) values ('New York', 'NY', 'US');
+-- insert into hotel(city, name, address, zip) values (1, 'Conrad Treasury Place', 'William & George Streets', '4001')
