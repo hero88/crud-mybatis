@@ -15,6 +15,4 @@ public interface UsersMapper {
     Users findByEmail(String email);
 
     void insertUser(Users user);
-
-    Users findByEmailAndPassword(String email, String password);
 }

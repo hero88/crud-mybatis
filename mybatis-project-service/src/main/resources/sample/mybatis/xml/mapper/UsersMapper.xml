@@ -7,10 +7,6 @@
         select * from users where id = #{value}
     </select>
 
-    <select id="findByEmailAndPassword" resultType="Users">
-        select * from users where email = #{email} and password = #{password}
-    </select>
-
     <select id="findByEmail" resultType="Users">
         select * from users where email = #{email}
     </select>
@@ -19,5 +15,4 @@
         insert into users (password, firstName, lastName, gender, address, age, email, phoneNumber, role)
         values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age}, #{email}, #{phoneNumber}, #{role})
     </insert>
-
 </mapper>
