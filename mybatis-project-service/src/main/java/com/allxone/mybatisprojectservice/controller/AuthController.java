@@ -4,25 +4,29 @@ import com.allxone.mybatisprojectservice.dto.request.AuthenticationRequest;
 import com.allxone.mybatisprojectservice.dto.request.RegisterRequest;
 import com.allxone.mybatisprojectservice.dto.response.ApiResponse;
 import com.allxone.mybatisprojectservice.service.AuthenticationService;
+import com.allxone.mybatisprojectservice.service.EmailService;
+import com.allxone.mybatisprojectservice.service.impl.JwtService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService authenticationService;
+    private final EmailService emailService;
+    private final JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
         var token = authenticationService.register(request);
         if (token != null) {
+            emailService.sendConfirmEmail(request,token);
             return ResponseEntity.ok(ApiResponse.builder()
-                    .message("Sign in successfully!!!")
+                    .message("An email have sent to your email, please check!!!")
                     .success(true)
                     .data(token)
                     .build()
@@ -35,7 +39,6 @@ public class AuthController {
                     .build()
             );
         }
-
     }
 
     @PostMapping("/authentication")
@@ -55,6 +58,16 @@ public class AuthController {
                     .data(null)
                     .build()
             );
+        }
+    }
+
+    @GetMapping("/register/confirmation")
+    public void verifyUser(@RequestParam(name = "token")String token, HttpServletResponse response) throws Exception {
+        String email = jwtService.extractUsername(token);
+        if (jwtService.isTokenValid(token,email)) {
+            response.sendRedirect("http://localhost:3000/confirm?status=success");
+        } else {
+            response.sendRedirect("http://localhost:3000/login");
         }
     }
 }

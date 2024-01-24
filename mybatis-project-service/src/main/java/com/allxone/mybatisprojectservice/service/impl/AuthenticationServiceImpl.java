@@ -23,6 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
+        try {
             var user = Users.builder()
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
@@ -39,20 +40,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return AuthenticationResponse.builder()
                     .token(jwtToken)
                     .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()
                     )
             );
-            var user = usersMapper.findByEmail(request.getEmail());
-            var jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponse.builder()
-                    .token(jwtToken)
-                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        var user = usersMapper.findByEmail(request.getEmail());
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }
