@@ -2,13 +2,22 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sample.mybatis.xml.mapper.UsersMapper">
-    <select id="selectUserById" resultType="Users">
+<mapper namespace="com.allxone.mybatisprojectservice.mapper.UsersMapper">
+    <select id="findByUserId" resultType="Users">
         select * from users where id = #{value}
     </select>
 
-    <select id="selectUserByUserName" resultType="Users">
-        select id, username, name, gender, address, age, is_active, email, phone_number from users where username = #{value}
+    <select id="findByEmailAndPassword" resultType="Users">
+        select * from users where email = #{email} and password = #{password}
     </select>
+
+    <select id="findByEmail" resultType="Users">
+        select * from users where email = #{email}
+    </select>
+
+    <insert id="insertUser" parameterType="com.allxone.mybatisprojectservice.model.Users">
+        insert into users (password, firstName, lastName, gender, address, age, email, phoneNumber, role)
+        values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age}, #{email}, #{phoneNumber}, #{role})
+    </insert>
 
 </mapper>

@@ -8,6 +8,5 @@
     </typeAliases>
     <mappers>
         <mapper resource="sample/mybatis/xml/mapper/UsersMapper.xml"/>
-<!--        <mapper resource="sample/mybatis/xml/mapper/HotelMapper.xml"/>-->
     </mappers>
 </configuration>
