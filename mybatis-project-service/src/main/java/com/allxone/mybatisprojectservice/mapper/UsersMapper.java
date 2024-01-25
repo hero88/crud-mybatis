@@ -16,7 +16,5 @@ public interface UsersMapper {
 
     void insertUser(Users user);
 
-    Users findByUserName(@Param("userName") String userName);
-
 }
 

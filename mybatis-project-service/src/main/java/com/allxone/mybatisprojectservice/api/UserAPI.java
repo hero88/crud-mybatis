@@ -44,10 +44,10 @@ public class UserAPI {
         }
     }
 
-    @GetMapping("/userName/{userName}")
-    public ResponseEntity<?> findByUserName(@PathVariable String userName) {
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> findByUserName(@PathVariable String email) {
         try {
-            Users users = userService.getByUserName(userName);
+            Users users = userService.findByEmail(email);
 
             return new ResponseEntity<>(users.toUserDTO(), HttpStatus.OK);
 

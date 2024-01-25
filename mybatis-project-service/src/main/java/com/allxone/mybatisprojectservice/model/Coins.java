@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,6 +21,14 @@ public class Coins {
 
     private String symbol;
 
-    private Long coinmarketId;
+    private Long coinMarketId;
+
+    private Long quantity;
+
+    private Long user_id;
+
+    private Date createdAt;
+
+    private Date updatedAt;
     
 }
