@@ -2,8 +2,9 @@ import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import ListUser from "./components/ListUser"
-import EditUser from "./components/EditUser"
+import ListUser from "./components/user/ListUser"
+import EditUser from "./components/user/EditUser"
+import ListCoin from "./components/coin/ListCoin"
 import "bootstrap/dist/css/bootstrap.min.css";
 import ForgotPassword from "./components/ForgotPassword";
 
@@ -17,6 +18,8 @@ function App() {
 
                 <Route path="/list-user" element={<ListUser/>}/>
                 <Route path="/edit-user/:userId" element={<EditUser/>}/>
+
+                <Route path="/list-coin" element={<ListCoin/>}/>
             </Routes>
         </BrowserRouter>
     );
