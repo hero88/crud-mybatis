@@ -1,8 +1,10 @@
 package com.allxone.mybatisprojectservice.controller;
 
 import com.allxone.mybatisprojectservice.dto.request.AuthenticationRequest;
+import com.allxone.mybatisprojectservice.dto.request.ForgotPasswordEmail;
 import com.allxone.mybatisprojectservice.dto.request.RegisterRequest;
 import com.allxone.mybatisprojectservice.dto.response.ApiResponse;
+import com.allxone.mybatisprojectservice.mapper.UsersMapper;
 import com.allxone.mybatisprojectservice.service.AuthenticationService;
 import com.allxone.mybatisprojectservice.service.EmailService;
 import com.allxone.mybatisprojectservice.service.impl.JwtService;
@@ -69,5 +71,25 @@ public class AuthController {
         } else {
             response.sendRedirect("http://localhost:3000");
         }
+    }
+
+    @PutMapping("/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@RequestBody ForgotPasswordEmail email) {
+        String newPassword = authenticationService.forgotPassword(email.getEmail());
+        if (newPassword != null) {
+            emailService.sendNewPassword(email.getEmail(),newPassword);
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .message("A new password has been sent to your email")
+                    .success(true)
+                    .data(null)
+                    .build()
+            );
+        }
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Wrong email")
+                .success(false)
+                .data(null)
+                .build()
+        );
     }
 }
