@@ -1,10 +1,10 @@
 package com.allxone.mybatisprojectservice.service.impl;
 
-import com.allxone.mybatisprojectservice.dto.request.AuthenticationRequest;
-import com.allxone.mybatisprojectservice.dto.request.RegisterRequest;
-import com.allxone.mybatisprojectservice.dto.response.AuthenticationResponse;
+import com.allxone.mybatisprojectservice.model.dto.request.AuthenticationRequest;
+import com.allxone.mybatisprojectservice.model.dto.request.RegisterRequest;
+import com.allxone.mybatisprojectservice.model.dto.response.AuthenticationResponse;
 import com.allxone.mybatisprojectservice.mapper.UsersMapper;
-import com.allxone.mybatisprojectservice.model.Role;
+import com.allxone.mybatisprojectservice.model.enums.Role;
 import com.allxone.mybatisprojectservice.model.Users;
 import com.allxone.mybatisprojectservice.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +25,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         try {
             var user = Users.builder()
-                    .firstName(request.getFirstName())
-                    .lastName(request.getLastName())
+                    .name(request.getName())
+                    .username(request.getUsername())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .gender(request.getGender())
                     .address(request.getAddress())
-                    .age(request.getAge())
                     .email(request.getEmail())
-                    .phoneNumber(request.getPhoneNumber())
                     .role(Role.USER)
                     .build();
             usersMapper.insertUser(user);

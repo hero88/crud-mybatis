@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.dto.response;
+package com.allxone.mybatisprojectservice.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

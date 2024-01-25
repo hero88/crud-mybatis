@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.dto.request;
+package com.allxone.mybatisprojectservice.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-    private String email;
-    private String password;
+public class AuthenticationResponse {
+    private String token;
 }

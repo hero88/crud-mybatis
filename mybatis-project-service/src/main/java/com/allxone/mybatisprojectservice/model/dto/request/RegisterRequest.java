@@ -1,6 +1,6 @@
-package com.allxone.mybatisprojectservice.dto.request;
+package com.allxone.mybatisprojectservice.model.dto.request;
 
-import com.allxone.mybatisprojectservice.model.Role;
+import com.allxone.mybatisprojectservice.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     private String password;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private String username;
 
     private String gender;
 

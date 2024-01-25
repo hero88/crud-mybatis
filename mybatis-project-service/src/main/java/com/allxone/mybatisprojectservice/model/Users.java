@@ -1,11 +1,11 @@
 package com.allxone.mybatisprojectservice.model;
 
+import com.allxone.mybatisprojectservice.model.enums.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,9 +20,9 @@ public class Users implements UserDetails {
 
     private String password;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private String username;
 
     private String gender;
 

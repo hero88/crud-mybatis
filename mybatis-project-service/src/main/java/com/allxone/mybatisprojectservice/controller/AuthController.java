@@ -1,8 +1,8 @@
 package com.allxone.mybatisprojectservice.controller;
 
-import com.allxone.mybatisprojectservice.dto.request.AuthenticationRequest;
-import com.allxone.mybatisprojectservice.dto.request.RegisterRequest;
-import com.allxone.mybatisprojectservice.dto.response.ApiResponse;
+import com.allxone.mybatisprojectservice.model.dto.request.AuthenticationRequest;
+import com.allxone.mybatisprojectservice.model.dto.request.RegisterRequest;
+import com.allxone.mybatisprojectservice.model.dto.response.ApiResponse;
 import com.allxone.mybatisprojectservice.service.AuthenticationService;
 import com.allxone.mybatisprojectservice.service.EmailService;
 import com.allxone.mybatisprojectservice.service.impl.JwtService;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService authenticationService;
@@ -22,6 +22,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
+        System.out.println(request);
         var token = authenticationService.register(request);
         if (token != null) {
             emailService.sendConfirmEmail(request,token);

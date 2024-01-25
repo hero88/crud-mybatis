@@ -1,7 +1,7 @@
 package com.allxone.mybatisprojectservice.service.impl;
 
-import com.allxone.mybatisprojectservice.dto.request.RegisterRequest;
-import com.allxone.mybatisprojectservice.dto.response.AuthenticationResponse;
+import com.allxone.mybatisprojectservice.model.dto.request.RegisterRequest;
+import com.allxone.mybatisprojectservice.model.dto.response.AuthenticationResponse;
 import com.allxone.mybatisprojectservice.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

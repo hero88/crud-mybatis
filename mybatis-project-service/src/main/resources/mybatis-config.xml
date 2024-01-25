@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <package name="com.allxone.mybatisprojectservice.model"/>
+        <package name="com.allxone.mybatisprojectservice.model.Users"/>
     </typeAliases>
     <mappers>
         <mapper resource="sample/mybatis/xml/mapper/UsersMapper.xml"/>
