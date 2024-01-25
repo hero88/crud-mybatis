@@ -13,9 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
+    private static final int RANDOM_STRING_LENGTH = 8;
+    private static final String CHARACTER_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private final UsersMapper usersMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -64,5 +68,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    @Override
+    public String forgotPassword(String email) {
+        try {
+            var user = usersMapper.findByEmail(email);
+            if (user != null) {
+                String password = generateRandomPassword();
+                String newPassword = passwordEncoder.encode(password);
+                usersMapper.updatePasswordByEmail(email, newPassword);
+                return password;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public String generateRandomPassword() {
+        Random random = new Random();
+        StringBuilder randomString = new StringBuilder();
+        for (int i = 0; i < RANDOM_STRING_LENGTH; i++) {
+            int index = random.nextInt(CHARACTER_SET.length());
+            randomString.append(CHARACTER_SET.charAt(index));
+        }
+        return randomString.toString();
     }
 }
