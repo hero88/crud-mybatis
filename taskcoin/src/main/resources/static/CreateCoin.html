@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<form id="formCreate" action="#">
+    <div class="container">
+        <div class="col-md-6">
+
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="name"><b>Name : </b></label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" id="name" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="symbol"><b>Symbol : </b></label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" id="symbol" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="coinMarketId"><b>Coin Market ID : </b></label>
+                </div>
+                <div class="col-md-9">
+                    <input type="number" id="coinMarketId" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="quantity"><b>Quantity : </b></label>
+                </div>
+                <div class="col-md-9">
+                    <input type="number" id="quantity" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mt-3 text-end" style="width: fit-content">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+
+        </div>
+    </div>
+</form>
+</body>
+<script>
+    $("#formCreate").on("submit", function (e) {
+        e.preventDefault();
+        var settings = {
+            "url": "http://localhost:8080/v1/coin/create",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify({
+                "name": $("#name").val(),
+                "symbol": $("#symbol").val(),
+                "coinMarketId": $("#coinMarketId").val(),
+                "quantity": $("#quantity").val()
+            }),
+        };
+
+        $.ajax(settings).done(function (response) {
+            alert("Success");
+        });
+    });
+</script>
+</html>

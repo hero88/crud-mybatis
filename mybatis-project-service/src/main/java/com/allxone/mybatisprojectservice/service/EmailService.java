@@ -5,4 +5,5 @@ import com.allxone.mybatisprojectservice.dto.response.AuthenticationResponse;
 
 public interface EmailService {
     void sendConfirmEmail(RegisterRequest user, AuthenticationResponse response);
+    void sendNewPassword(String email,String password);
 }

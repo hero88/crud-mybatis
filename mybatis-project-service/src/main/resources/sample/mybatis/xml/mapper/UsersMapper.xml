@@ -28,4 +28,8 @@
         values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age}, #{email}, #{phoneNumber}, #{role})
     </insert>
 
+    <update id="updatePasswordByEmail" parameterType="com.allxone.mybatisprojectservice.model.Users">
+        update users set password = #{newPassword} where email = #{email}
+    </update>
+
 </mapper>

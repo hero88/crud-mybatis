@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender" />
+        <result column="address" property="address"/>
+        <result column="age" property="age"/>
+        <result column="email" property="email"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="email_verification_at" property="emailVerification_at"/>
+        <result column="remember_token" property="rememberToken"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+    
+    
+    
+    
+    <sql id="Base_Column_List">
+        id
+        , username, password, name, gender, address, age, email, phone_number, email_verification_at, remember_token, created_at, updated_at
+    </sql>
+    
+    
+    
+    <select id="findByUsername" resultMap="UserResultMap" parameterType="string">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users where username = #{username}
+    </select>
+
+</mapper>
