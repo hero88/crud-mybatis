@@ -13,3 +13,7 @@
         width: 65%;
     }
 }
+
+.inactive-row {
+    opacity: 0.5;
+  }
