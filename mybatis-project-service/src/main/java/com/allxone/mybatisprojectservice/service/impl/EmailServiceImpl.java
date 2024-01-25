@@ -20,11 +20,24 @@ public class EmailServiceImpl implements EmailService {
         String subject = "Registration Confirmation";
         String message = "Thank you for registering to us." +
                 " Please click on this link to verify your account:";
-        String verifyLink = "http://localhost:8080/api" + "/auth/confirmation?token=" + response.getToken();
-        String sentMessage = message + "\n" + verifyLink;
+        String verifyLink = "http://localhost:8080/api" + "/auth/register/confirmation?token=" + response.getToken();
+        String sentMessage = message + "\n" + verifyLink + "\n" + "This is an automated message. Please do not reply to this!!!";
         email.setTo(receipientAddress);
         email.setSubject(subject);
         email.setText(sentMessage);
         mailSender.send(email);
+    }
+
+    @Override
+    public void sendNewPassword(String email ,String password) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        String subject = "Password has been changed";
+        String message = "Your new password: " + password;
+        String sentMessage = message + "\n" + "This is an automated message. Please do not reply to this!!!" + "\n" +
+                "Please click this link to sign in: http://localhost:3000";
+        mail.setTo(email);
+        mail.setSubject(subject);
+        mail.setText(sentMessage);
+        mailSender.send(mail);
     }
 }
