@@ -52,6 +52,7 @@ public class Users implements UserDetails {
                 .setRole(role)
                 ;
     }
+    
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
