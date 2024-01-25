@@ -11,9 +11,9 @@
         SELECT * FROM users
     </select>
 
-<!--    <insert id="createUser" parameterType="Users">-->
-<!--        INSERT INTO users (username, password, name, gender, address, age, is_active, email, phone_number) VALUES (#{userName}, #{password}, #{name}, #{gender}, #{address}, #{age}, #{isActive}, #{email}, #{phoneNumber})-->
-<!--    </insert>-->
+    <!--    <insert id="createUser" parameterType="Users">-->
+    <!--        INSERT INTO users (username, password, name, gender, address, age, is_active, email, phone_number) VALUES (#{userName}, #{password}, #{name}, #{gender}, #{address}, #{age}, #{isActive}, #{email}, #{phoneNumber})-->
+    <!--    </insert>-->
 
     <update id="updateUser" parameterType="Users">
         UPDATE users SET username = #{userName}, password = #{password} WHERE id = #{userId}

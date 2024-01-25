@@ -20,8 +20,8 @@ public class UsersRepository {
         return this.sqlSession.selectOne("findById", userId);
     }
 
-    public Users findByUserName(String userName) {
-        return this.sqlSession.selectOne("findByUserName", userName);
+    public Users findByEmail(String userName) {
+        return this.sqlSession.selectOne("findByEmail", userName);
     }
 
     public List<Users> findAllUser() {

@@ -43,9 +43,13 @@ public class Users implements UserDetails {
                 .setId(id)
                 .setFirstName(firstName)
                 .setLastName(lastName)
+                .setGender(gender)
+                .setAddress(address)
+                .setAge(age)
                 .setIsActive(isActive)
                 .setEmail(email)
                 .setPhoneNumber(phoneNumber)
+                .setRole(role)
                 ;
     }
 
