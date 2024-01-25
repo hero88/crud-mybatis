@@ -1,6 +1,5 @@
 package com.allxone.mybatisprojectservice.repository;
 
-import com.allxone.mybatisprojectservice.dto.RoleDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +15,5 @@ public class RoleRepository {
         this.sqlSession = sqlSession;
     }
 
-    public List<RoleDTO> findAllRoleDTO() {
-        return this.sqlSession.selectList("findAllRoleDTO");
-    }
 
 }

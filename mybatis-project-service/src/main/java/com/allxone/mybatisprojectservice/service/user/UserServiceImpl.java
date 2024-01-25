@@ -1,6 +1,6 @@
 package com.allxone.mybatisprojectservice.service.user;
 
-import com.allxone.mybatisprojectservice.dto.UserDTO;
+import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
 import com.allxone.mybatisprojectservice.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
