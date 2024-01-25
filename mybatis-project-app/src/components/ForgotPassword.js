@@ -16,7 +16,7 @@ export default function ForgotPassword() {
                         <button className='btn btn-primary'>Send</button>
                     </div>
                     <div className='text-end mt-2'>
-                        <Link to="/register" className='ms-2'>Sign up</Link> <Link to="/" className='ms-2'>Sign In</Link>
+                        <Link to="/register" className='ms-2'>Sign up</Link><Link to="/" className='ms-2'>Sign In</Link>
                     </div>
                 </form>
             </div>

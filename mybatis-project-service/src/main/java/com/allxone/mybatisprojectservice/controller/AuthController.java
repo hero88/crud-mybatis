@@ -65,9 +65,9 @@ public class AuthController {
     public void verifyUser(@RequestParam(name = "token")String token, HttpServletResponse response) throws Exception {
         String email = jwtService.extractUsername(token);
         if (jwtService.isTokenValid(token,email)) {
-            response.sendRedirect("http://localhost:3000/confirm?status=success");
+            response.sendRedirect("http://localhost:3000");
         } else {
-            response.sendRedirect("http://localhost:3000/login");
+            response.sendRedirect("http://localhost:3000");
         }
     }
 }
