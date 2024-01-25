@@ -47,7 +47,7 @@ public class UserServiceImpl implements IUserService{
 
     @Transactional
     @Override
-    public void createUser(Users user) {
-        usersRepository.createUser(user);
+    public void insertUser(Users user) {
+        usersRepository.insertUser(user);
     }
 }

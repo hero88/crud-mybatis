@@ -21,5 +21,5 @@ public interface IUserService {
     void updateUser(Users user);
 
     @Transactional
-    void createUser(Users user);
+    void insertUser(Users user);
 }
