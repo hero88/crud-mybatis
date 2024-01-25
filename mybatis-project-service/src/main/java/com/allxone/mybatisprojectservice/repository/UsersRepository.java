@@ -36,7 +36,7 @@ public class UsersRepository {
         this.sqlSession.update("activeUser", user);
     }
 
-    public void createUser(Users user) {
-        this.sqlSession.insert("createUser", user);
+    public void insertUser(Users user) {
+        this.sqlSession.insert("insertUser", user);
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserAPI {
     private final IUserService userService;
 
@@ -79,14 +80,13 @@ public class UserAPI {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody Users user) {
+    public ResponseEntity<?> insertUser(@RequestBody Users user) {
         try {
-            userService.createUser(user);
+            userService.insertUser(user);
             return new ResponseEntity<>("User created successfully.", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to create user.", HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }

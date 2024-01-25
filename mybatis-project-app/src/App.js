@@ -2,7 +2,9 @@ import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import "bootstrap/dist/css/bootstrap.min.css"
+import ListUser from "./components/ListUser"
+import EditUser from "./components/EditUser"
+import "bootstrap/dist/css/bootstrap.min.css";
 import ForgotPassword from "./components/ForgotPassword";
 
 function App() {
@@ -12,6 +14,9 @@ function App() {
                 <Route path="/" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/forgot-password" element={<ForgotPassword/>}/>
+
+                <Route path="/list-user" element={<ListUser/>}/>
+                <Route path="/edit-user/:userId" element={<EditUser/>}/>
             </Routes>
         </BrowserRouter>
     );

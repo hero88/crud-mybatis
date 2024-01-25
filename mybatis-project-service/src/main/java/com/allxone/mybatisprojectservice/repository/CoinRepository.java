@@ -20,19 +20,15 @@ public class CoinRepository {
         return this.sqlSession.selectOne("findById", id);
     }
 
-    public Coins findByName(String name) {
-        return this.sqlSession.selectOne("findByName", name);
-    }
-
-    public List<Coins> findByUserId() {
-        return this.sqlSession.selectList("findByUserId");
+    public List<Coins> findByUserId(Long userId) {
+        return this.sqlSession.selectList("findByUserId", userId);
     }
 
     public void updateCoin(Coins coins) {
         this.sqlSession.update("updateCoin", coins);
     }
 
-    public void createCoin(Coins coins) {
-        this.sqlSession.insert("createCoin", coins);
+    public void insertCoin(Coins coins) {
+        this.sqlSession.insert("insertCoin", coins);
     }
 }
