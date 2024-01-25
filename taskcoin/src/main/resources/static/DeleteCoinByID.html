@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<form id="formDeleteById" action="#">
+    <div class="container">
+        <div class="col-md-6">
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="idcoin"><b>ID : </b></label>
+                </div>
+                <div class="col-md-9">
+                    <input type="number" id="idcoin" class="form-control" style="width: 120px">
+                </div>
+            </div>
+            <div class="row mt-9 text-end" style="width: fit-content">
+                <button type="submit" class="btn btn-primary">Delete Coin</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+<script>
+    $("#formDeleteById").on("submit", function (e){
+        e.preventDefault();
+        if(confirm("Do you want to delete this coin")) {
+            var settings = {
+                "url": "http://localhost:8080/v1/coin/delete/" + $("#idcoin").val(),
+                "method": "DELETE",
+                "timeout": 0,
+            };
+
+            $.ajax(settings).done(function (response) {
+                alert("Success");
+            });
+        }
+    })
+</script>
+</html>

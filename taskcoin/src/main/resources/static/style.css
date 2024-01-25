@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.navbar {
+    background-color: rgba(46, 204, 113, 0.7);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 16px;
+}
+
+
+
+.login-text,
+.register-text {
+    font-size: 10px;
+    border: 1px solid white;
+    border-radius: 14px;
+    padding: 10px 10px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.login-text:hover,
+.register-text:hover {
+    text-decoration: underline;
+    color: #ff7f00;
+}
+
+
+
+
