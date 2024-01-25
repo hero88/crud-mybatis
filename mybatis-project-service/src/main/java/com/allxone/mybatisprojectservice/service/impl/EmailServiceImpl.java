@@ -20,8 +20,8 @@ public class EmailServiceImpl implements EmailService {
         String subject = "Registration Confirmation";
         String message = "Thank you for registering to us." +
                 " Please click on this link to verify your account:";
-        String verifyLink = "http://localhost:8080/api" + "/auth/confirmation?token=" + response.getToken();
-        String sentMessage = message + "\n" + verifyLink;
+        String verifyLink = "http://localhost:8080/api" + "/auth/register/confirmation?token=" + response.getToken();
+        String sentMessage = message + "\n" + verifyLink + "\n" + "This is an automated message. Please do not reply to this!!!";
         email.setTo(receipientAddress);
         email.setSubject(subject);
         email.setText(sentMessage);
