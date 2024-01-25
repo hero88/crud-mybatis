@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.RoleMapper">
+    <resultMap id="RoleResultMap" type="Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+
+
+
+    <sql id="Base_Column_List">
+        id
+        name
+    </sql>
+
+    <select id="findByUsername" resultMap="RoleResultMap" parameterType="string">
+        SELECT r.id   AS id,
+               r.name AS name
+        FROM users u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+                 LEFT JOIN roles r ON ur.role_id = r.id
+        where u.username
+                  = #{username}
+    </select>
+
+    <select id="findByName" resultMap="RoleResultMap" parameterType="string">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles where name = #{name}
+    </select>
+
+</mapper>
