@@ -1,6 +1,6 @@
 package com.allxone.mybatisprojectservice.api;
 
-import com.allxone.mybatisprojectservice.dto.UserDTO;
+import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
 import com.allxone.mybatisprojectservice.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class UserAPI {
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody Users user) {
         try {
-            user.setUserId(userId);
+            user.setId(userId);
             userService.updateUser(user);
             return new ResponseEntity<>("User updated successfully.", HttpStatus.OK);
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class UserAPI {
     @PutMapping("/activeUser/{userId}")
     public ResponseEntity<?> activeUser(@PathVariable Long userId, @RequestBody Users user) {
         try {
-            user.setUserId(userId);
+            user.setId(userId);
             userService.activeUser(user);
             return new ResponseEntity<>("User updated successfully.", HttpStatus.OK);
         } catch (Exception e) {

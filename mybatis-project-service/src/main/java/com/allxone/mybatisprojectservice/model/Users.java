@@ -1,6 +1,6 @@
 package com.allxone.mybatisprojectservice.model;
 
-import com.allxone.mybatisprojectservice.dto.UserDTO;
+import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

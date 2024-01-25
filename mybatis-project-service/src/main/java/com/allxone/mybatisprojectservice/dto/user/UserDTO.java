@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.dto;
+package com.allxone.mybatisprojectservice.dto.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
