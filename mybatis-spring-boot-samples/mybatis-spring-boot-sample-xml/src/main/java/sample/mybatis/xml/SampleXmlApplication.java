@@ -15,34 +15,14 @@
  */
 package sample.mybatis.xml;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import sample.mybatis.xml.dao.CityDao;
-import sample.mybatis.xml.mapper.HotelMapper;
 
 @SpringBootApplication
-public class SampleXmlApplication implements CommandLineRunner {
+public class SampleXmlApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(SampleXmlApplication.class, args);
   }
-
-  private final CityDao cityDao;
-
-  private final HotelMapper hotelMapper;
-
-  public SampleXmlApplication(CityDao cityDao, HotelMapper hotelMapper) {
-    this.cityDao = cityDao;
-    this.hotelMapper = hotelMapper;
-  }
-
-  @Override
-  @SuppressWarnings("squid:S106")
-  public void run(String... args) {
-    System.out.println(this.cityDao.selectCityById(1));
-    System.out.println(this.hotelMapper.selectByCityId(1));
-  }
-
 }
