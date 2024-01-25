@@ -11,9 +11,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserDTO {
 
-    private Long userId;
+    private Long id;
 
-    private String userName;
+    private String firstName;
+
+    private String lastName;
 
     private Boolean isActive;
 
