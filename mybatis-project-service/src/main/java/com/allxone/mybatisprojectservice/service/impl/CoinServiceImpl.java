@@ -1,8 +1,9 @@
-package com.allxone.mybatisprojectservice.service.coin;
+package com.allxone.mybatisprojectservice.service.impl;
 
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
 import com.allxone.mybatisprojectservice.model.Coins;
-import com.allxone.mybatisprojectservice.repository.CoinRepository;
+import com.allxone.mybatisprojectservice.mapper.CoinRepository;
+import com.allxone.mybatisprojectservice.service.ICoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CoinServiceImpl implements ICoinService{
+public class CoinServiceImpl implements ICoinService {
     @Autowired
     private CoinRepository coinRepository;
 

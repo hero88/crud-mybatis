@@ -1,13 +1,13 @@
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import ListUser from "./components/user/ListUser"
 import EditUser from "./components/user/EditUser"
 import ListCoin from "./components/coin/ListCoin"
 import "bootstrap/dist/css/bootstrap.min.css";
-import ForgotPassword from "./components/ForgotPassword";
-import Home from "./components/Home";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import Home from "./components/auth/Home";
 
 function App() {
     return (

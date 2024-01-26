@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.repository;
+package com.allxone.mybatisprojectservice.mapper;
 
 import com.allxone.mybatisprojectservice.model.Coins;
 import com.allxone.mybatisprojectservice.model.Users;

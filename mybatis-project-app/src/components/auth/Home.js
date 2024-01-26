@@ -1,8 +1,13 @@
+<<<<<<< HEAD:mybatis-project-app/src/components/auth/Home.js
+import React from "react";
+import '../../assets/style.css'
+=======
 import React, { useState, useEffect } from 'react';
 import {Link} from "react-router-dom";
 import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/style.css'
+>>>>>>> a12581804919368ac67f64024275c4338992959d:mybatis-project-app/src/components/Home.js
 
 const Home = () => {
     const [data, setData] = useState([]);

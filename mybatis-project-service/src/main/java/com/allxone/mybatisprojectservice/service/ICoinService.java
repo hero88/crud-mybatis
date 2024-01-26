@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.service.coin;
+package com.allxone.mybatisprojectservice.service;
 
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
 import com.allxone.mybatisprojectservice.model.Coins;

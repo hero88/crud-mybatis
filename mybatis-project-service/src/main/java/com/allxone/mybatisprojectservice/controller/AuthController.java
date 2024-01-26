@@ -4,7 +4,6 @@ import com.allxone.mybatisprojectservice.dto.request.AuthenticationRequest;
 import com.allxone.mybatisprojectservice.dto.request.ForgotPasswordEmail;
 import com.allxone.mybatisprojectservice.dto.request.RegisterRequest;
 import com.allxone.mybatisprojectservice.dto.response.ApiResponse;
-import com.allxone.mybatisprojectservice.mapper.UsersMapper;
 import com.allxone.mybatisprojectservice.service.AuthenticationService;
 import com.allxone.mybatisprojectservice.service.EmailService;
 import com.allxone.mybatisprojectservice.service.impl.JwtService;
@@ -26,7 +25,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
         var token = authenticationService.register(request);
         if (token != null) {
-            emailService.sendConfirmEmail(request,token);
+            emailService.sendConfirmEmail(request, token);
             return ResponseEntity.ok(ApiResponse.builder()
                     .message("An email have sent to your email, please check!!!")
                     .success(true)
@@ -64,9 +63,9 @@ public class AuthController {
     }
 
     @GetMapping("/register/confirmation")
-    public void verifyUser(@RequestParam(name = "token")String token, HttpServletResponse response) throws Exception {
+    public void verifyUser(@RequestParam(name = "token") String token, HttpServletResponse response) throws Exception {
         String email = jwtService.extractUsername(token);
-        if (jwtService.isTokenValid(token,email)) {
+        if (jwtService.isTokenValid(token, email)) {
             response.sendRedirect("http://localhost:3000");
         } else {
             response.sendRedirect("http://localhost:3000");
@@ -77,7 +76,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse> forgotPassword(@RequestBody ForgotPasswordEmail email) {
         String newPassword = authenticationService.forgotPassword(email.getEmail());
         if (newPassword != null) {
-            emailService.sendNewPassword(email.getEmail(),newPassword);
+            emailService.sendNewPassword(email.getEmail(), newPassword);
             return ResponseEntity.ok(ApiResponse.builder()
                     .message("A new password has been sent to your email")
                     .success(true)
@@ -89,6 +88,26 @@ public class AuthController {
                 .message("Wrong email")
                 .success(false)
                 .data(null)
+                .build()
+        );
+    }
+
+    @GetMapping("/authentication/google")
+    public ResponseEntity<ApiResponse> redirectToGoogleLogin() {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Redirecting to Google Login")
+                .success(true)
+                .data("http://localhost:8080/oauth2/authorization/google")
+                .build()
+        );
+    }
+
+    @GetMapping("/authentication/facebook")
+    public ResponseEntity<ApiResponse> redirectToFacebookLogin() {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Redirecting to Facebook Login")
+                .success(true)
+                .data("http://localhost:8080/login/facebook")
                 .build()
         );
     }
