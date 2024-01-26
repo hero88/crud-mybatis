@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allxone.JavaMyBatis.mapper.UserMapper">
+    <select id="findByUserId" resultType="User">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="findByEmail" resultType="User">
+        select * from user where email = #{email}
+    </select>
+
+    <select id="findByEmailAndType" resultType="User">
+        select * from user where email = #{email} and type= #{type}
+    </select>
+
+    <insert id="insertUser" parameterType="com.allxone.JavaMyBatis.model.User" useGeneratedKeys="true" keyProperty="id">
+<!--        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">-->
+<!--            SELECT LAST_INSERT_ID() AS id-->
+<!--        </selectKey>-->
+        insert into user (password, firstName, lastName, gender, address, age, email, phoneNumber, role, type, isActive)
+        values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age}, #{email}, #{phoneNumber}, #{role}, #{type}, #{isActive})
+    </insert>
+
+</mapper>
