@@ -1,8 +1,8 @@
-package com.allxone.mybatisprojectservice.api;
+package com.allxone.mybatisprojectservice.controller;
 
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
 import com.allxone.mybatisprojectservice.model.Coins;
-import com.allxone.mybatisprojectservice.service.coin.ICoinService;
+import com.allxone.mybatisprojectservice.service.ICoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

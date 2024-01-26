@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.service.user;
+package com.allxone.mybatisprojectservice.service;
 
 import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
