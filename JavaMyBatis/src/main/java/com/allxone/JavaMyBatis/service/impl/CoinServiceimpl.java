@@ -1,7 +1,7 @@
-package com.allxone.mybatisprojectservice.service.impl;
+package com.allxone.JavaMyBatis.service.impl;
 
-import com.allxone.mybatisprojectservice.model.dto.response.CoinApiReponse;
-import com.allxone.mybatisprojectservice.service.CoinService;
+import com.allxone.JavaMyBatis.dto.response.CoinApiReponse;
+import com.allxone.JavaMyBatis.service.CoinService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

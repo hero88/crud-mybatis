@@ -1,7 +1,7 @@
-package com.allxone.mybatisprojectservice.controller;
+package com.allxone.JavaMyBatis.controller;
 
-import com.allxone.mybatisprojectservice.model.dto.response.ApiResponse;
-import com.allxone.mybatisprojectservice.service.CoinService;
+import com.allxone.JavaMyBatis.dto.response.ApiResponse;
+import com.allxone.JavaMyBatis.service.CoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

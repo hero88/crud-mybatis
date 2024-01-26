@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>CoinMarketCap</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		header {
+			background-color: #fff;
+			color: #1c1c1c;
+			display: flex;
+			justify-content: space-between;
+			padding: 20px;
+		}
+
+		header h1 {
+			margin: 0;
+		}
+
+		header nav {
+			display: flex;
+			align-items: center;
+		}
+
+		header nav a {
+			color: #1c1c1c;
+			margin-left: 20px;
+			text-decoration: none;
+		}
+
+		main {
+			margin: 20px;
+		}
+
+		main h2 {
+			margin-top: 0;
+		}
+
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: left;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		tr:hover {
+			background-color: #ddd;
+		}
+	</style>
+</head>
+
+<body style="background-color: #fff;">
+	<header>
+		<h1>CoinMarketCap</h1>
+		<nav>
+			<a href="#">Home</a>
+			<a href="#">Cryptocurrencies</a>
+			<a href="#">Exchanges</a>
+			<a href="#">Tools</a>
+			<a href="#">Resources</a>
+			<a href="#">Blog</a>
+		</nav>
+	</header>
+	<div class="container" style="background-color: #fff;">
+		<main>
+			<h2>Today's Cryptocurrency Prices by Market Cap</h2>
+			<table id="cryptoTable">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th>Price</th>
+						<th>1h %</th>
+						<th>24h %</th>
+						<th>7d %</th>
+						<th>Market Cap</th>
+						<th>Volume (24h)</th>
+						<th>Circulating Supply</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</main>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script>
+		// Đường dẫn của API bạn muốn truy cập
+		const apiUrl = 'http://localhost:8080/api/coin';
+		// Sử dụng fetch để gửi yêu cầu GET đến API
+		function fetchDataAndPopulateTable(apiUrl) {
+			axios.get(apiUrl)
+				.then(response => {
+					if (response.status !== 200) {
+						throw new Error(`Error: ${response.status}`);
+					}
+					return response.data;
+				})
+				.then(data => {
+					console.log(data.data.data.cryptoCurrencyList);
+					populateTable(data.data.data.cryptoCurrencyList);
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
+		}
+
+		// Gọi hàm lần đầu
+		fetchDataAndPopulateTable(apiUrl);
+
+		// Thiết lập để tự động gọi hàm mỗi 15 giây
+		setInterval(() => {
+			fetchDataAndPopulateTable(apiUrl);
+		}, 60000);
+
+		function populateTable(data) {
+			const tableBody = document.getElementById('cryptoTable').getElementsByTagName('tbody')[0];
+			// Xóa dữ liệu hiện tại trên bảng
+			tableBody.innerHTML = '';
+
+			const mapping = {
+				'cmcRank': crypto => crypto.cmcRank,
+				'name': crypto => `<img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${crypto.id}.png" style="width: 24px; height: 24px;"> <strong>${crypto.name}</strong> <span style="color: rgb(128, 138, 157);">${crypto.symbol}</span>`,
+				'price': crypto => crypto.quotes && crypto.quotes[0] ? `<strong>$ ${crypto.quotes[0].price}</strong>` : '',
+				'percent1h': crypto => `<strong>${formatNumber(crypto.quotes[0].percentChange1h)}%</strong>`,
+				'percent24h': crypto => `<strong>${formatNumber(crypto.quotes[0].percentChange24h)}%</strong>`,
+				'percent7d': crypto => `<strong>${formatNumber(crypto.quotes[0].percentChange7d)}%</strong>`,
+				'marketCap': crypto => `<strong>${crypto.quotes && crypto.quotes[0] ? crypto.quotes[0].marketCap.toFixed(2) : ''}</strong>`,
+				'volume24h': crypto => `<strong>${crypto.quotes && crypto.quotes[0] ? crypto.quotes[0].volume24h.toFixed(2) + ' ' + crypto.symbol : ''}</strong>`,
+				'circulatingSupply': crypto => `<strong>${crypto.circulatingSupply.toFixed(2) + ' ' + crypto.symbol}</strong>`,
+			};
+
+			data.forEach(crypto => {
+				const row = tableBody.insertRow();
+
+				Object.keys(mapping).forEach((key, index) => {
+					const cell = row.insertCell(index);
+					const label = key;
+					const value = mapping[key](crypto);
+
+					// Thêm class 'negative' vào ô nếu giá trị là âm
+					if (key === 'price' || key === 'marketCap' || key === 'volume24h' || key === 'circulatingSupply') {
+						const isNegative = Number(value) < 0;
+						cell.className = isNegative ? 'negative' : 'positive';
+					}
+					cell.innerHTML = `${value}`;
+				});
+			});
+		}
+		// Hàm này để định dạng số và thêm màu đỏ cho giá trị âm
+		function formatNumber(value) {
+			const formattedValue = Number(value).toFixed(2);
+			return value < 0 ? formattedValue.fontcolor('red') : formattedValue.fontcolor('green');
+		}
+	</script>
+</body>
+
+</html>
+
+<!-- Nguồn: Cuộc hội thoại với Bing, 24/1/2024
+(1) Cryptocurrency Prices, Charts And Market Capitalizations | CoinMarketCap. https://coinmarketcap.com/.
+(2) coinmarketcap Referrals, Promo Codes, Rewards ••• 20 diamonds • January .... https://invitation.codes/coinmarketcap.
+(3) CoinMarketCap Promo Codes 14% Off [2024 January]. https://giftcode.mobi/coinmarketcap/.
+(4) CODE price - CoinMarketCap. https://coinmarketcap.com/currencies/developer-dao-code/.
+(5) github.com. https://github.com/vascoII/coinWallet/tree/5dd13afeb0603671f88f81dfbc68541a5cd19199/resources%2Fviews%2Fquotes%2Flist.blade.php.
+(6) github.com. https://github.com/Code-stalkers/Entertainment-Hunt/tree/9429aaaf699e8a64094e39dd156c9cc07442d2ca/src%2FahmadComponents%2FcoinsTable.js. -->

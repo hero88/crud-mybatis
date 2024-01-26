@@ -1,6 +1,6 @@
-package com.allxone.mybatisprojectservice.service;
+package com.allxone.JavaMyBatis.service;
 
-import com.allxone.mybatisprojectservice.model.dto.response.CoinApiReponse;
+import com.allxone.JavaMyBatis.dto.response.CoinApiReponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
