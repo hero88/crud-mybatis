@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/style.css'
+import '../../assets/style.css'
 
 const Home = () => {
     const [data, setData] = useState([]);

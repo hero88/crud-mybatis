@@ -1,11 +1,13 @@
-package com.allxone.mybatisprojectservice.api;
+package com.allxone.mybatisprojectservice.controller;
 
 import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
-import com.allxone.mybatisprojectservice.service.user.IUserService;
+import com.allxone.mybatisprojectservice.service.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class UserAPI {
     private final IUserService userService;
-
-    @Autowired
-    public UserAPI(IUserService userService){
-        this.userService = userService;
-    }
 
     @GetMapping
     public ResponseEntity<?> findAllUser() {
@@ -68,10 +66,11 @@ public class UserAPI {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/activeUser/{userId}")
-    public ResponseEntity<?> activeUser(@PathVariable Long userId, @RequestBody Users user) {
+    public ResponseEntity<?> activeUser(@PathVariable Long userId) {
         try {
-            user.setId(userId);
+            var user = userService.findByUserId(userId);
             userService.activeUser(user);
             return new ResponseEntity<>("User updated successfully.", HttpStatus.OK);
         } catch (Exception e) {
