@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../assets/style.css';
 import {Link} from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import ApiCoin from '../service/ApiCoin.js';
+import ApiUser from '../service/ApiUser.js';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
 
@@ -13,7 +13,7 @@ function ListUser() {
   const [usersPerPage] = useState(15);
 
 const handleGetAll = async () => {
-  const response = await ApiCoin.getAlls();
+  const response = await ApiUser.getAlls();
 
   setCoins(response.data);
   console.log(response.data);
