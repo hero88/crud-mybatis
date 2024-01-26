@@ -2,14 +2,14 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="CoinsMapper">
+<mapper namespace="com.allxone.mybatisprojectservice.mapper.CoinsMapper">
 
     <select id="findById" resultType="Coins">
         select * from coins where id = #{value}
     </select>
 
     <select id="findByUserId" resultType="Coins">
-        SELECT * FROM coins where user_id = #{value}
+        SELECT * FROM coins where user_id = #{userId}
     </select>
 
     <update id="updateCoin" parameterType="Coins">

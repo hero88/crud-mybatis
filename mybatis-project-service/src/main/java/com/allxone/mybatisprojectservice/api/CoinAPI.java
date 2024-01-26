@@ -20,7 +20,7 @@ public class CoinAPI {
         this.coinService = coinService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<?> findByUserId(@PathVariable Long userId) {
         List<CoinDTO> coinDTOS = coinService.findByUserId(userId);
 
@@ -60,7 +60,7 @@ public class CoinAPI {
             coinService.insertCoin(coin);
             return new ResponseEntity<>("Successfully added coins to the account.", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed to add coins to the account.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to add coins to the account." + e.getMessage() + "111", HttpStatus.BAD_REQUEST);
         }
     }
 }

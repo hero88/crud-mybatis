@@ -24,8 +24,8 @@
     </select>
 
     <insert id="insertUser" parameterType="Users">
-        insert into users (password, firstName, lastName, gender, address, age, email, phoneNumber, role)
-        values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age}, #{email}, #{phoneNumber}, #{role})
+        insert into users (password, firstName, lastName, gender, address, age, isActive, email, phoneNumber, role)
+        values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age},  #{isActive}, #{email}, #{phoneNumber}, #{role})
     </insert>
 
     <update id="updatePasswordByEmail" parameterType="com.allxone.mybatisprojectservice.model.Users">

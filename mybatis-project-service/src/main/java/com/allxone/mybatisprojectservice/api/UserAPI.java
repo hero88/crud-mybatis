@@ -85,7 +85,7 @@ public class UserAPI {
             userService.insertUser(user);
             return new ResponseEntity<>("User created successfully.", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed to create user.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to create user." +  e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

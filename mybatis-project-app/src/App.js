@@ -8,6 +8,7 @@ import ListCoin from "./components/coin/ListCoin"
 import "bootstrap/dist/css/bootstrap.min.css";
 import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
+import AddCoin from "./components/coin/AddCoin";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/edit-user/:userId" element={<EditUser/>}/>
 
                 <Route path="/list-coin" element={<ListCoin/>}/>
+                <Route path="/add-coin/" element={<AddCoin/>}/>
 
                 <Route path="/home" element={<Home/>}/>
             </Routes>

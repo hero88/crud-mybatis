@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsersMapper {
 
-    Users findByUserId(@Param("userId") Long userId);
-
     Users findByEmail(String email);
 
     void insertUser(Users user);

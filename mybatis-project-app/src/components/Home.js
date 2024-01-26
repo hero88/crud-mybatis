@@ -70,6 +70,9 @@ const Home = () => {
         </nav>
   
         <div className="container mt-5" style={{ width: "100%" }}>
+          <button type="button" className="btn btn-warning" style={{ marginRight: '10px' }}>
+                <Link to={`/add-coin`}>Add Coin</Link>
+          </button>
           <table id="coin-table" className="table table-striped table-hover">
             <thead>
               <tr>
