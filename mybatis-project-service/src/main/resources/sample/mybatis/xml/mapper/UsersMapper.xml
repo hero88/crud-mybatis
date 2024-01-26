@@ -3,15 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.allxone.mybatisprojectservice.mapper.UsersMapper">
-    <select id="findByUserId" resultType="Users">
+    <select id="findById" resultType="Users">
         select * from users where id = #{value}
     </select>
+
+    <select id="findAllUser" resultType="Users">
+        SELECT * FROM users
+    </select>
+
+    <update id="updateUser" parameterType="Users">
+        UPDATE users SET firstName = #{firstName}, lastName = #{lastName}, gender = #{gender}, address = #{address}, age = #{age}, email = #{email}, phoneNumber = #{phoneNumber} WHERE id = #{id}
+    </update>
+
+    <update id="activeUser" parameterType="Users">
+        UPDATE users SET isActive = #{isActive} WHERE id = #{id}
+    </update>
 
     <select id="findByEmail" resultType="Users">
         select * from users where email = #{email}
     </select>
 
-    <insert id="insertUser" parameterType="com.allxone.mybatisprojectservice.model.Users">
+    <insert id="insertUser" parameterType="Users">
         insert into users (password, firstName, lastName, gender, address, age, email, phoneNumber, role)
         values (#{password}, #{firstName}, #{lastName}, #{gender}, #{address}, #{age}, #{email}, #{phoneNumber}, #{role})
     </insert>
@@ -19,4 +31,5 @@
     <update id="updatePasswordByEmail" parameterType="com.allxone.mybatisprojectservice.model.Users">
         update users set password = #{newPassword} where email = #{email}
     </update>
+
 </mapper>
