@@ -37,6 +37,7 @@
   <inceptionYear>2015</inceptionYear>
 
   <modules>
+    <module>mybatis-project-service</module>
     <module>mybatis-spring-boot-autoconfigure</module>
     <module>mybatis-spring-boot-starter</module>
     <module>mybatis-spring-boot-samples</module>
