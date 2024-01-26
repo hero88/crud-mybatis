@@ -1,11 +1,11 @@
 package com.allxone.mybatisprojectservice.model;
 
+import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +37,22 @@ public class Users implements UserDetails {
     private String phoneNumber;
 
     private Role role;
+
+    public UserDTO toUserDTO() {
+        return new UserDTO()
+                .setId(id)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setGender(gender)
+                .setAddress(address)
+                .setAge(age)
+                .setIsActive(isActive)
+                .setEmail(email)
+                .setPhoneNumber(phoneNumber)
+                .setRole(role)
+                ;
+    }
+    
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

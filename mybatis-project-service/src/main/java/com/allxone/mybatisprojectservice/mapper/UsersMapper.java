@@ -15,6 +15,8 @@ public interface UsersMapper {
     Users findByEmail(String email);
 
     void insertUser(Users user);
-
+    
     void updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
+
 }
+
