@@ -1,8 +1,6 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# .gitignore
+
+# ...
 
 ### STS ###
 .apt_generated
@@ -31,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore application.properties
+mybatis-project-service/src/main/resources/application.properties
+
