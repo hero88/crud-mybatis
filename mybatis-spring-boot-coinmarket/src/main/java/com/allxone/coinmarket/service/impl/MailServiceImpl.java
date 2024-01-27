@@ -1,4 +1,4 @@
-package com.allxone.coinmarket.serviceimpl;
+package com.allxone.coinmarket.service.impl;
 
 import java.io.File;
 import java.util.ArrayList;
