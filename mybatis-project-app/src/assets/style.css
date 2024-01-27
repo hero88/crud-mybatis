@@ -17,3 +17,9 @@
 .inactive-row {
     opacity: 0.5;
   }
+
+  .not-found {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }

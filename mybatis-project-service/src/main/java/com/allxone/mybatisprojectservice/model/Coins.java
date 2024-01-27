@@ -2,10 +2,7 @@ package com.allxone.mybatisprojectservice.model;
 
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
 import com.allxone.mybatisprojectservice.dto.user.UserDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;

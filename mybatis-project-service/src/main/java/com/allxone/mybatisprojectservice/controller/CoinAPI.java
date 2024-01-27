@@ -3,6 +3,7 @@ package com.allxone.mybatisprojectservice.controller;
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
 import com.allxone.mybatisprojectservice.model.Coins;
 import com.allxone.mybatisprojectservice.service.ICoinService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,23 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/coin")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class CoinAPI {
+
     private final ICoinService coinService;
-
-    @Autowired
-    public CoinAPI(ICoinService coinService) {
-        this.coinService = coinService;
-    }
-
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> findByUserId(@PathVariable Long userId) {
-        List<CoinDTO> coinDTOS = coinService.findByUserId(userId);
-
-        if(coinDTOS.isEmpty()) {
-            return new ResponseEntity<>("No coin found.", HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(coinDTOS, HttpStatus.OK);
+    public ResponseEntity<?> findAllCoinByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(coinService.findAllCoinByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

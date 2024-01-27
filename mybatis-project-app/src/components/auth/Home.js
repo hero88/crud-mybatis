@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {Link} from "react-router-dom";
-import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../assets/style.css'
 import '../../assets/style.css'
 
 const Home = () => {
     const [data, setData] = useState([]);
     const [gSTT, setGSTT] = useState(1);
-  
+    let accoutName = window.localStorage.getItem("lastName");
+    let accoutId = window.localStorage.getItem("userId");
+
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -65,8 +65,8 @@ const Home = () => {
             <img src='url(../assets/images/330406_home_icon.png)' alt="HOME" title="Trang chủ" />
           </a>
           <div className="login-register-group">
-            <button href="/" >Login</button>
-            <button href="/register" className="register-text">Register</button>
+            <button type="button"><Link to={`/edit-user/${accoutId}`}>{accoutName}</Link></button>
+            <button href="/register" className="register-text">Logout</button>
           </div>
         </nav>
   

@@ -31,15 +31,15 @@ public class UserAPI {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> findUserById(@PathVariable Long userId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findUserById(@PathVariable Long id) {
         try {
-            Users users = userService.findByUserId(userId);
+            Users users = userService.findUserById(id);
 
             return new ResponseEntity<>(users.toUserDTO(), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to find user by id." +  e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +70,7 @@ public class UserAPI {
     @PutMapping("/activeUser/{userId}")
     public ResponseEntity<?> activeUser(@PathVariable Long userId) {
         try {
-            var user = userService.findByUserId(userId);
+            var user = userService.findUserById(userId);
             userService.activeUser(user);
             return new ResponseEntity<>("User updated successfully.", HttpStatus.OK);
         } catch (Exception e) {

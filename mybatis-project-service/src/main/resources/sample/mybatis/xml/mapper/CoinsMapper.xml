@@ -8,7 +8,7 @@
         select * from coins where id = #{value}
     </select>
 
-    <select id="findByUserId" resultType="Coins">
+    <select id="findAllCoinByUserId" resultType="Coins">
         SELECT * FROM coins where user_id = #{userId}
     </select>
 

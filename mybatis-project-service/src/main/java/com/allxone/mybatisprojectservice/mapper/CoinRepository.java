@@ -20,8 +20,8 @@ public class CoinRepository {
         return this.sqlSession.selectOne("findById", id);
     }
 
-    public List<Coins> findByUserId(Long userId) {
-        return this.sqlSession.selectList("findByUserId", userId);
+    public List<Coins> findAllCoinByUserId(Long userId) {
+        return this.sqlSession.selectList("findAllCoinByUserId", userId);
     }
 
     public void updateCoin(Coins coins) {

@@ -14,6 +14,7 @@ function ListUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [alertMessage, setAlertMessage] = useState('');
+  let accoutRole = window.localStorage.getItem("role");
 
 const handleGetAll = async () => {
   const response = await ApiUser.getAlls();

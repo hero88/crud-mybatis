@@ -27,7 +27,8 @@ export default function Login() {
                 if (data.success) {
                     window.localStorage.setItem("token", data.data.token);
                     window.localStorage.setItem("userId", data.data.id);
-                    window.localStorage.setItem("role", data.data.role)
+                    window.localStorage.setItem("role", data.data.role);
+                    window.localStorage.setItem("lastName", data.data.lastName);
                     navigate("/home");
                     if (data.data.role === "ADMIN") {
                         navigate("/admin")

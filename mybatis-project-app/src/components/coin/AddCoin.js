@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ApiCoin from "../service/ApiCoin";
 
 const AddCoin = () => {
   const [coinList, setCoinList] = useState([]);
   const [selectedCoin, setSelectedCoin] = useState('');
   const [quantity, setQuantity] = useState('');
+  let accoutId = window.localStorage.getItem("userId");
+  const [selectedCoinInfo, setSelectedCoinInfo] = useState("");
 
   useEffect(() => {
     const fetchCoinList = async () => {
@@ -23,19 +26,33 @@ const AddCoin = () => {
     fetchCoinList();
   }, []);
 
-  const handleCoinChange = (event) => {
-    setSelectedCoin(event.target.value);
-  };
-
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle the submission logic, e.g., sending data to the server
-    // You can access selectedCoin and quantity states here
+  const handleCoinChange = (event) => {
+    const selectedCoinId = parseInt(event.target.value);
+    setSelectedCoin(selectedCoinId);
+    console.log('Selected Coin Id:', selectedCoinId);
+    console.log(typeof(selectedCoinId));
+    const coinInfo = coinList.find((coin) => coin.id === selectedCoinId);
+
+    console.log('Selected Coin Info:', coinInfo);
+    setSelectedCoinInfo(coinInfo);
   };
+  
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    console.log('Selected Coin Info:', selectedCoinInfo);
+  
+    if (selectedCoinInfo) {
+      const { name, symbol, marketPairCount } = selectedCoinInfo;
+      console.log('Selected Coin Info:', { name, symbol, marketPairCount });
+    }
+  };
+  
 
   return (
     <div>
@@ -53,7 +70,7 @@ const AddCoin = () => {
               className="form-select"
               id="coinSelect"
               value={selectedCoin}
-              onChange={handleCoinChange}
+              onChange={handleCoinChange} 
               required
             >
               <option value="" disabled>
@@ -61,7 +78,7 @@ const AddCoin = () => {
               </option>
               {coinList.map((coin) => (
                 <option key={coin.id} value={coin.id}>
-                  {coin.name} ({coin.symbol})
+                  {coin.name} ({coin.symbol}), {coin.marketPairCount}
                 </option>
               ))}
             </select>

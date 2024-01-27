@@ -1,9 +1,11 @@
 package com.allxone.mybatisprojectservice.service.impl;
 
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
+import com.allxone.mybatisprojectservice.exception.NotFoundResourceException;
 import com.allxone.mybatisprojectservice.model.Coins;
 import com.allxone.mybatisprojectservice.mapper.CoinRepository;
 import com.allxone.mybatisprojectservice.service.ICoinService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CoinServiceImpl implements ICoinService {
-    @Autowired
-    private CoinRepository coinRepository;
+
+    private final CoinRepository coinRepository;
 
     @Override
     public Coins findById(Long id) {
@@ -22,8 +25,11 @@ public class CoinServiceImpl implements ICoinService {
     }
 
     @Override
-    public List<CoinDTO> findByUserId(Long userId) {
-        List<Coins> coins = coinRepository.findByUserId(userId);
+    public List<CoinDTO> findAllCoinByUserId(Long userId) {
+        List<Coins> coins = coinRepository.findAllCoinByUserId(userId);
+        if(coins.isEmpty()) {
+            throw new NotFoundResourceException("Can not find list coin by id: " + userId);
+        }
         return coins.stream()
                 .map(Coins::toCoinDTO)
                 .collect(Collectors.toList());

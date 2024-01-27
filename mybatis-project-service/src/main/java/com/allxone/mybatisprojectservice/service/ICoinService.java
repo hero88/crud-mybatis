@@ -9,7 +9,7 @@ import java.util.List;
 public interface ICoinService {
     Coins findById(Long id);
 
-    List<CoinDTO> findByUserId(Long userId);
+    List<CoinDTO> findAllCoinByUserId(Long userId);
 
     @Transactional
     void updateCoin(Coins coins);

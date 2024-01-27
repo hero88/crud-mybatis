@@ -16,8 +16,8 @@ public class UsersRepository {
         this.sqlSession = sqlSession;
     }
 
-    public Users findById(Long userId) {
-        return this.sqlSession.selectOne("findById", userId);
+    public Users findUserById(Long id) {
+        return this.sqlSession.selectOne("findUserById", id);
     }
 
     public Users findByEmail(String userName) {

@@ -7,6 +7,8 @@ export default function EditUser() {
   const { userId } = useParams();
   const [userData, setUserData] = useState({});
 
+  let accoutRole = window.localStorage.getItem("role");
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData({
@@ -22,7 +24,12 @@ export default function EditUser() {
 
   const handleFormSubmit = async () => {
     await ApiUser.updateUser(userId, userData);
-    navigate("/list-user");
+    if (accoutRole === "ADMIN") {
+      navigate("/list-user");
+    }
+    if (accoutRole === "USER") {
+      navigate("/home");
+    }
   };
 
   useEffect(() => {

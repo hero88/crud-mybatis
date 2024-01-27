@@ -17,8 +17,8 @@ public class UserServiceImpl implements IUserService {
     private UsersRepository usersRepository;
 
     @Override
-    public Users findByUserId(Long userId) {
-        return usersRepository.findById(userId);
+    public Users findUserById(Long id) {
+        return usersRepository.findUserById(id);
     }
 
     @Override
