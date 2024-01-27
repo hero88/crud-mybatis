@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin market</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<style>
+    body {
+        background: rgb(238, 174, 202);
+        background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+    }
+
+    .checkbox {
+        width: 140px;
+        height: 40px;
+        position: relative;
+    }
+
+    .checkbox input {
+        position: absolute;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .box {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1;
+        background: white;
+        color: black;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        overflow: hidden;
+        transition: all 0.6s;
+        align-items: center;
+    }
+
+    .box p {
+        margin: 0px !important;
+    }
+
+    .checkbox input:checked~.box {
+        background: black;
+        border: 2px solid white;
+        color: white;
+    }
+</style>
+
+<body class="container col-8">
+    <section id="container-login" class="row mt-5 bg-white rounded-4">
+        <div class="col-6 ">
+            <div class="m-5">
+                <h4>Coin market</h4>
+                <p>Welcome back!!!</p>
+                <h1>Log In</h1>
+                <form>
+                    <div>
+                        <label for="email">Email</label>
+                        <input id="email" class="mailLogin form-control" type="text">
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="pass">Password</label>
+                            <a type="button" class="btn" data-bs-toggle="modal"
+                                data-bs-target="#forgot-pass"><span>Forgot
+                                    Password?</span></a>
+                        </div>
+                        <input id="pass" class="passLogin form-control" type="password">
+                    </div>
+                </form>
+                <div class="d-flex justify-content-center">
+                    <button class="btn-login btn btn-primary rounded-pill px-5 my-4">Login</button>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <span class="mx-auto text-center">or continue with</span>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-primary rounded-pill px-5 my-4 mx-2">Google</a>
+                    <a class="btn btn-primary rounded-pill px-5 my-4 mx-2">Facebook</a>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span class="mx-2">Don't have an account yet?</span>
+                    <a class="open-ui-register mx-2 text-decoration-none"><span>Sign up for free</span></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6 align-items-center">
+            <img src="../../img/cryptocurrency-6973466-5701572.png" alt="">
+        </div>
+    </section>
+    <div class="modal fade" id="forgot-pass">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Forgot password</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input id="mail-forgot" class="form-control" type="text" placeholder="Type your email.">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn-send-mail-forgot btn btn-outline-success">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="container-register" class="row mt-5 bg-white rounded-4">
+        <div class="col-6 ">
+            <img src="../../img/4159684.png" alt="">
+        </div>
+        <div class="col-6 align-items-center">
+            <div class="m-5">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a class="text-decoration-none open-ui-login">Login now</a>
+                    <h1>Register</h1>
+                </div>
+
+                <form>
+                    <div>
+                        <label for="username">Username</label>
+                        <input id="username" class="username-register form-control" type="text">
+                    </div>
+                    <div>
+                        <label for="fullname">Fullname</label>
+                        <input id="fullnameRegister" class="fullname-register form-control" type="text">
+                    </div>
+                    <div>
+                        <label for="email-regis">Email</label>
+                        <input id="email-regis" class="email-register form-control" type="text">
+                    </div>
+                    <div>
+                        <label for="pass-regis">Password</label>
+                        <input id="pass-regis" class="pass-register form-control" type="password">
+                    </div>
+                    <div>
+                        <label for="confirm-password">Confirm your password</label>
+                        <input id="confirm-password" class="confirm-pass-register form-control" type="password">
+                    </div>
+                    <div>
+                        <label for="gender">Gender</label>
+                        <div class="d-flex">
+                            <div class="checkbox ">
+                                <input checked type="radio" name="gender" value="Male" />
+                                <div class="box">
+                                    <p class="my-0">Male</p>
+                                </div>
+                            </div>
+                            <div class="checkbox mx-3">
+                                <input type="radio" value="Female" name="gender" />
+                                <div class="box">
+                                    <p>Female</p>
+                                </div>
+                            </div>
+                            <div class="checkbox">
+                                <input type="radio" value="None" name="gender" />
+                                <div class="box">
+                                    <p>None</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="phonenumber">Phone number</label>
+                        <input id="phonenumber" class="phone-register form-control" type="text">
+                    </div>
+                    <div>
+                        <label for="age">Age</label>
+                        <input id="age" class="age-register form-control" type="text">
+                    </div>
+                    <div>
+                        <label for="address">Address</label>
+                        <input id="address" class="address-register form-control" type="text">
+                    </div>
+                </form>
+                <div>
+                    <button class="btn w-100 rounded-pill btn-primary my-3 btn-register">Register</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="../../axios/sign.js"></script>
+</body>
+
+</html>
