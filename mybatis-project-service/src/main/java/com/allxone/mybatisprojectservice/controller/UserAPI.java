@@ -1,11 +1,13 @@
-package com.allxone.mybatisprojectservice.api;
+package com.allxone.mybatisprojectservice.controller;
 
 import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
-import com.allxone.mybatisprojectservice.service.user.IUserService;
+import com.allxone.mybatisprojectservice.service.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class UserAPI {
     private final IUserService userService;
-
-    @Autowired
-    public UserAPI(IUserService userService){
-        this.userService = userService;
-    }
 
     @GetMapping
     public ResponseEntity<?> findAllUser() {
@@ -33,15 +31,15 @@ public class UserAPI {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> findUserById(@PathVariable Long userId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findUserById(@PathVariable Long id) {
         try {
-            Users users = userService.findByUserId(userId);
+            Users users = userService.findUserById(id);
 
             return new ResponseEntity<>(users.toUserDTO(), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to find user by id." +  e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -68,10 +66,11 @@ public class UserAPI {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/activeUser/{userId}")
-    public ResponseEntity<?> activeUser(@PathVariable Long userId, @RequestBody Users user) {
+    public ResponseEntity<?> activeUser(@PathVariable Long userId) {
         try {
-            user.setId(userId);
+            var user = userService.findUserById(userId);
             userService.activeUser(user);
             return new ResponseEntity<>("User updated successfully.", HttpStatus.OK);
         } catch (Exception e) {
@@ -85,7 +84,7 @@ public class UserAPI {
             userService.insertUser(user);
             return new ResponseEntity<>("User created successfully.", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed to create user.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to create user." +  e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

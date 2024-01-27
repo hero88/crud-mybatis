@@ -1,8 +1,9 @@
-package com.allxone.mybatisprojectservice.api;
+package com.allxone.mybatisprojectservice.controller;
 
 import com.allxone.mybatisprojectservice.dto.coin.CoinDTO;
 import com.allxone.mybatisprojectservice.model.Coins;
-import com.allxone.mybatisprojectservice.service.coin.ICoinService;
+import com.allxone.mybatisprojectservice.service.ICoinService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,23 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/coin")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class CoinAPI {
+
     private final ICoinService coinService;
-
-    @Autowired
-    public CoinAPI(ICoinService coinService) {
-        this.coinService = coinService;
-    }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> findByUserId(@PathVariable Long userId) {
-        List<CoinDTO> coinDTOS = coinService.findByUserId(userId);
-
-        if(coinDTOS.isEmpty()) {
-            return new ResponseEntity<>("No coin found.", HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(coinDTOS, HttpStatus.OK);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> findAllCoinByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(coinService.findAllCoinByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -60,7 +52,7 @@ public class CoinAPI {
             coinService.insertCoin(coin);
             return new ResponseEntity<>("Successfully added coins to the account.", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed to add coins to the account.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to add coins to the account." + e.getMessage() + "111", HttpStatus.BAD_REQUEST);
         }
     }
 }

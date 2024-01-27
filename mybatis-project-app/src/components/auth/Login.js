@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import '../assets/style.css'
+import '../../assets/style.css'
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 
@@ -26,7 +26,15 @@ export default function Login() {
                 console.log(data);
                 if (data.success) {
                     window.localStorage.setItem("token", data.data.token);
+                    window.localStorage.setItem("userId", data.data.id);
+                    window.localStorage.setItem("role", data.data.role);
+                    window.localStorage.setItem("lastName", data.data.lastName);
                     navigate("/home");
+                    if (data.data.role === "ADMIN") {
+                        navigate("/admin")
+                    } else if (data.data.role === "USER"){
+                        navigate("/")
+                    }
                 } else {
                     alert(data.message);
                 }

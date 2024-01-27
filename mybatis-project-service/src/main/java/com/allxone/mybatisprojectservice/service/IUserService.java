@@ -1,4 +1,4 @@
-package com.allxone.mybatisprojectservice.service.user;
+package com.allxone.mybatisprojectservice.service;
 
 import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IUserService {
 
-    Users findByUserId(Long userId);
+    Users findUserById(Long id);
 
     Users findByEmail(String email);
 

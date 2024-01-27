@@ -1,8 +1,9 @@
-package com.allxone.mybatisprojectservice.service.user;
+package com.allxone.mybatisprojectservice.service.impl;
 
 import com.allxone.mybatisprojectservice.dto.user.UserDTO;
 import com.allxone.mybatisprojectservice.model.Users;
-import com.allxone.mybatisprojectservice.repository.UsersRepository;
+import com.allxone.mybatisprojectservice.mapper.UsersRepository;
+import com.allxone.mybatisprojectservice.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +12,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService {
     @Autowired
     private UsersRepository usersRepository;
 
     @Override
-    public Users findByUserId(Long userId) {
-        return usersRepository.findById(userId);
+    public Users findUserById(Long id) {
+        return usersRepository.findUserById(id);
     }
 
     @Override
