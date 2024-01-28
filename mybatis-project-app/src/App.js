@@ -10,11 +10,12 @@ import AddCoin from "./components/coin/AddCoin";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import Home from "./components/auth/Home";
 import Notfound from "./components/auth/Notfound";
+import EditCoin from "./components/coin/EditCoin";
 
 function App() {
     const accountRole = window.localStorage.getItem("role");
 
-    const isAdmin = accountRole === "ADMIN";
+    const isAdmin = accountRole == "ADMIN";
 
     return (
         <BrowserRouter>
@@ -25,9 +26,11 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/edit-user/:userId" element={<EditUser />} />
-                <Route path="/list-coin" element={<ListCoin />} />
                 <Route path="/add-coin/" element={<AddCoin />} />
                 <Route path="/home" element={<Home />} />
+
+                <Route path="/list-coin" element={<ListCoin />} />
+                <Route path="/edit-coin/:coinId" element={<EditCoin />} />
 
                 {isAdmin ? (
                     <>

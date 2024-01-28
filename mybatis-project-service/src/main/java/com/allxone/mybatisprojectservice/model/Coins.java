@@ -16,11 +16,13 @@ public class Coins {
 
     private Long id;
 
+    private Long coinId;
+
     private String name;
 
     private String symbol;
 
-    private Long coinMarketId;
+    private Long marketPairCount;
 
     private Long quantity;
 
@@ -33,9 +35,10 @@ public class Coins {
     public CoinDTO toCoinDTO() {
         return new CoinDTO()
                 .setId(id)
+                .setCoinId(coinId)
                 .setName(name)
                 .setSymbol(symbol)
-                .setCoinMarketId(coinMarketId)
+                .setMarketPairCount(marketPairCount)
                 .setQuantity(quantity)
                 .setUserId(userId)
                 ;

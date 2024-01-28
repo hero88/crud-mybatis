@@ -55,4 +55,14 @@ public class CoinAPI {
             return new ResponseEntity<>("Failed to add coins to the account." + e.getMessage() + "111", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCoinById(@PathVariable Long id) {
+        try {
+            coinService.deleteCoinById(id);
+            return new ResponseEntity<>("Successfully delete coins in the account.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to delete coins in the account." + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

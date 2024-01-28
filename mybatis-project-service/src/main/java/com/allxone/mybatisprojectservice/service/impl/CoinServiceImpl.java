@@ -6,7 +6,8 @@ import com.allxone.mybatisprojectservice.model.Coins;
 import com.allxone.mybatisprojectservice.mapper.CoinRepository;
 import com.allxone.mybatisprojectservice.service.ICoinService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,12 @@ public class CoinServiceImpl implements ICoinService {
 
     @Transactional
     @Override
+    public void deleteCoinById(Long id) {
+        coinRepository.deleteCoinById(id);
+    }
+
+    @Transactional
+    @Override
     public void updateCoin(Coins coins) {
         coinRepository.updateCoin(coins);
     }
@@ -46,4 +53,5 @@ public class CoinServiceImpl implements ICoinService {
     public void insertCoin(Coins coins) {
         coinRepository.insertCoin(coins);
     }
+
 }

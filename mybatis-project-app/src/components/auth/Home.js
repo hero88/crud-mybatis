@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import {Link} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../assets/style.css'
+import ApiCoin from '../service/ApiCoin';
 
 const Home = () => {
     const [data, setData] = useState([]);
     const [gSTT, setGSTT] = useState(1);
-    let accoutName = window.localStorage.getItem("lastName");
-    let accoutId = window.localStorage.getItem("userId");
+    let accountName = window.localStorage.getItem("lastName");
+    let accountId = window.localStorage.getItem("userId");
 
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch("http://localhost:8080/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
-          const json = await response.json();
-          const newData = json.data.cryptoCurrencyList;
+          const response = await ApiCoin.getAllCoins();
+          const newData = response.data.data.cryptoCurrencyList;
           setData(newData);
         } catch (error) {
           console.error("Error loading table data:", error);
@@ -57,6 +57,8 @@ const Home = () => {
   
       return <span style={{ color: textColor }}>{icon} {formattedNumber}%</span>;
     };
+
+    console.log(accountName);
   
     return (
       <div>
@@ -65,7 +67,13 @@ const Home = () => {
             <img src='url(../assets/images/330406_home_icon.png)' alt="HOME" title="Trang chủ" />
           </a>
           <div className="login-register-group">
-            <button type="button"><Link to={`/edit-user/${accoutId}`}>{accoutName}</Link></button>
+          <div class="dropdown">
+            <button class="dropbtn">{accountName}</button>
+            <div class="dropdown-content">
+              <a><Link to={`/edit-user/${accountId}`}>Account Detail</Link></a>
+              <a><Link to={`/list-coin`}>Account coin list</Link></a>
+            </div>
+          </div>
             <button href="/register" className="register-text">Logout</button>
           </div>
         </nav>

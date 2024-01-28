@@ -9,7 +9,7 @@
     </select>
 
     <select id="findAllCoinByUserId" resultType="Coins">
-        SELECT * FROM coins where user_id = #{userId}
+        SELECT * FROM coins where userId = #{userId};
     </select>
 
     <update id="updateCoin" parameterType="Coins">
@@ -17,8 +17,13 @@
     </update>
 
     <insert id="insertCoin" parameterType="Coins">
-        insert into coins (name, symbol, coinmarket_id, quantity, user_id)
-        values (#{name}, #{symbol}, #{coinMarketId}, #{quantity}, #{userId})
+        insert into coins (coinId ,name, symbol, marketPairCount, quantity, userId)
+        values (#{coinId}, #{name}, #{symbol}, #{marketPairCount}, #{quantity}, #{userId})
     </insert>
+
+    <delete id="deleteCoinById">
+        DELETE FROM coins WHERE id = #{id}
+    </delete>
+
 
 </mapper>
