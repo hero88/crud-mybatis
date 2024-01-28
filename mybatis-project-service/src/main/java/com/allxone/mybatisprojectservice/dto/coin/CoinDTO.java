@@ -13,11 +13,13 @@ public class CoinDTO {
 
     private Long id;
 
+    private Long coinId;
+
     private String name;
 
     private String symbol;
 
-    private Long coinMarketId;
+    private Long marketPairCount;
 
     private Long quantity;
 

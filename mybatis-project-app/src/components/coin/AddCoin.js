@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ApiCoin from "../service/ApiCoin";
 
 const AddCoin = () => {
+  const navigate = useNavigate();
   const [coinList, setCoinList] = useState([]);
   const [selectedCoin, setSelectedCoin] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -12,11 +13,8 @@ const AddCoin = () => {
   useEffect(() => {
     const fetchCoinList = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8080/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD'
-        );
-        const json = await response.json();
-        const coinData = json.data.cryptoCurrencyList;
+        const response = await ApiCoin.getCoinById();
+        const coinData = response.data.data.cryptoCurrencyList;
         setCoinList(coinData);
       } catch (error) {
         console.error('Error loading coin list:', error);
@@ -33,23 +31,35 @@ const AddCoin = () => {
   const handleCoinChange = (event) => {
     const selectedCoinId = parseInt(event.target.value);
     setSelectedCoin(selectedCoinId);
-    console.log('Selected Coin Id:', selectedCoinId);
-    console.log(typeof(selectedCoinId));
     const coinInfo = coinList.find((coin) => coin.id === selectedCoinId);
-
-    console.log('Selected Coin Info:', coinInfo);
     setSelectedCoinInfo(coinInfo);
   };
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    console.log('Selected Coin Info:', selectedCoinInfo);
-  
-    if (selectedCoinInfo) {
-      const { name, symbol, marketPairCount } = selectedCoinInfo;
-      console.log('Selected Coin Info:', { name, symbol, marketPairCount });
+
+    try {
+      const selectedCoinData = coinList.find((coin) => coin.id === selectedCoin);
+
+      if (!selectedCoinData) {
+        console.error('Selected coin data not found.');
+        return;
+      }
+
+      const coinObj = {
+        coinId: selectedCoinData.id,
+        name: selectedCoinData.name,
+        symbol: selectedCoinData.symbol,
+        marketPairCount: selectedCoinData.marketPairCount,
+        quantity: parseFloat(quantity),
+        userId: accoutId,
+      };
+
+      await ApiCoin.addCoin(coinObj);
+
+      navigate("/home");
+    } catch (error) {
+      console.error('Error adding coin:', error);
     }
   };
   
@@ -57,7 +67,6 @@ const AddCoin = () => {
   return (
     <div>
       <nav className="navbar">
-        {/* Navigation items */}
       </nav>
 
       <div className="container mt-5" style={{ width: '50%' }}>

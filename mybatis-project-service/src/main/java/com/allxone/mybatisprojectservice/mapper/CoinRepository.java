@@ -31,4 +31,8 @@ public class CoinRepository {
     public void insertCoin(Coins coins) {
         this.sqlSession.insert("insertCoin", coins);
     }
+
+    public void deleteCoinById(Long id) {
+        this.sqlSession.delete("deleteCoinById", id);
+    }
 }

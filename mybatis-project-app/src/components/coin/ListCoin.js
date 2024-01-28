@@ -1,33 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/style.css';
-import {Link} from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import ApiUser from '../service/ApiUser.js';
-import Swal from 'sweetalert2';
+import ApiCoin from '../service/ApiCoin.js';
 import 'sweetalert2/dist/sweetalert2.css';
+import {Link} from "react-router-dom";
 
 
 function ListUser() {
   const [coins, setCoins] = useState([]);
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(15);
+  const [loading, setLoading] = useState(true);
+  let accoutId = window.localStorage.getItem("userId");
 
-const handleGetAll = async () => {
-  const response = await ApiUser.getAlls();
+  const fetchData = async () => {
+    try {
+      const coinResponse = await ApiCoin.getAllCoins();
+      const coinData = coinResponse.data.data.cryptoCurrencyList;
+      setData(coinData);
+  
+      const userResponse = await ApiCoin.getAllCoinByUserId(accoutId);
+      setCoins(userResponse.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      setLoading(false);
+    }
+  };
 
-  setCoins(response.data);
-  console.log(response.data);
-};
-
+  
 useEffect(() => {
-  handleGetAll();
-}, []);
+  fetchData();
+}, [accoutId]);
+
+  const handleDelete = async (coinId) => {
+    try {
+      await ApiCoin.delCoinById(coinId);
+
+      const updatedCoins = coins.filter((coin) => coin.coinId !== coinId);
+      setCoins(updatedCoins);
+
+      fetchData();
+    } catch (error) {
+      console.error('Lỗi khi xóa coin:', error);
+    }
+  };
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentCoins = coins.slice(indexOfFirstUser, indexOfLastUser);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
 
   return (
     <div>
@@ -45,43 +70,35 @@ useEffect(() => {
                     <table className="table table-hover">
                       <thead>
                         <tr>
-                          <th>#</th>
+                          <th>CoinId</th>
                           <th>Name</th>
                           <th>Symbol</th>
-                          <th>Slug</th>
-                          <th>cmcRank</th>
-                          <th>marketPairCount</th>
-                          <th>totalSupply</th>
-                          <th>maxSupply</th>
-                          <th>Role</th>
+                          <th>Quantity</th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentCoins.map((coin) => (
-                          <tr key={coin.id} className={coin.isActive ? 'active-row' : 'inactive-row'}>
-                            <td>{coin.name}</td>
-                            {/* <td>{user.email}</td>
-                            <td>{user.firstName}</td>
-                            <td>{user.lastName}</td>
-                            <td>{user.gender}</td>
-                            <td>{user.address}</td>
-                            <td>{user.age}</td>
-                            <td>{user.phoneNumber}</td>
-                            <td>{user.role}</td> */}
-                            <td>
-                              {coin.isActive ? (
-                                <button type="button" className="btn btn-danger">
-                                  <i className="fa-solid fa-ban"></i>
+                        {currentCoins.map((coin) => {
+                          const selectedCoinData = data.find((c) => c.id === coin.coinId);
+                          return (
+                            <tr key={coin.id}>
+                              <td>{coin.coinId}</td>
+                              <td>{selectedCoinData.name}</td>
+                              <td>{selectedCoinData.symbol}</td>
+                              <td>{coin.quantity}</td>
+                              <td>
+                                <button type="button" className="btn btn-warning" style={{ marginRight: '10px' }}>
+                                  <Link to={`/edit-coin/${coin.id}`}><i className="fa-solid fa-pen-to-square"></i></Link>
                                 </button>
-                              ) : (
-                                <button type="button" className="btn btn-success">
-                                  <i className="fa-solid fa-ban"></i>
+
+                                <button type="button" className="btn btn-danger" style={{ marginRight: '10px' }}
+                                  onClick={() => handleDelete(coin.id)}> 
+                                    <i className="fa-solid fa-trash"></i>
                                 </button>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>

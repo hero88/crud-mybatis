@@ -16,4 +16,7 @@ public interface ICoinService {
 
     @Transactional
     void insertCoin(Coins coins);
+
+    @Transactional
+    void deleteCoinById(Long id);
 }
