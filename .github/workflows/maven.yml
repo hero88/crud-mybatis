@@ -10,9 +10,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main", "develop-java-gr1", "develop-java-gr2", "develop-java-gr3" ]
+    branches: [ "main", "hero88-patch-1" ]
   pull_request:
-    branches: [ "main", "develop-java-gr1", "develop-java-gr2", "develop-java-gr3" ]
+    branches: [ "main", "hero88-patch-1" ]
 
 jobs:
   build:
@@ -27,5 +27,5 @@ jobs:
     - name: copy_file
       run: |
         sudo rsync -a . /home/azureuser/test-java/ --exclude .git
-        cd /home/azureuser/test-java/crud-my-batis/
+        cd /home/azureuser/test-java/crud-mybatis/
         mvn spring-boot:run

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- JQUERY -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- BOOTSTRAP -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+        <!-- DATA TABLE -->
+        <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light "  style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../customer/home.html"><i class="fa-solid fa-dollar-sign fa-bounce" style="font-size: 25px; padding: 8px; color: darkorange;"></i></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="../customer/home.html">Home</a>
+                        </li>
+                        <li id="link-user-manager" class="nav-item" style="display: none">
+                            <a class="nav-link" href="../admin/users.html">User Manager</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex" id="account">
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-3">
+            <form id="form-add-coin" class="card">
+                <div class="card-header">
+                    <h2>Add Wallet</h2>
+                </div>
+                <div class="card-body">
+                    <div class="col-sm-6">
+                        <div class="row my-3">
+                            <div class="col-sm-3">
+                                <label for="select-coin">Select Coin</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <select id="select-coin" class="form-select" style="width: 100%;" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-sm-3">
+                                <label for="input-quantity">Quantity</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input id="input-quantity" type="number" style="width: 100%;" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Add Coin</button>
+                </div>
+            </form>
+        </div>
+    </body>
+    </div>
+</html>
+<script src="../js/main.js"></script>
+
+<script>
+    if (accessToken) {
+        $("#account").html(
+            `<a href="../customer/user.html"><i class="fa-solid fa-user" title="User Info" style="font-size: 25px; padding: 8px"></i></a>
+                <a id="btn-logout" href="#"><i class="fa-solid fa-right-from-bracket" title="Logout" style="font-size: 25px; padding: 8px; color: red"></i></a>`
+        );
+    } else {
+        window.location.href = "../auth/login.html";
+    }
+
+    $("#account").on("click", "#btn-logout", function () {
+        if (confirm("Are you sure you want to logout?")) {
+            setCookie("token", "", 0, false);
+            window.location.href = "../customer/home.html";
+        }
+    });
+
+    $.ajax({
+        url: "http://localhost:8080/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD",
+        method: "GET",
+        dataType: "json",
+        success: function (res) {
+            const data = res.data.cryptoCurrencyList;
+            console.log(data)
+            data.forEach(opt => {
+                $("#select-coin").append(
+                    `<option value="${opt.id}" data-id="${opt.id}" data-name="${opt.name}" data-symbol="${opt.symbol}" data-price="${opt.quotes[0].price}">
+                        ${opt.name} - ${opt.symbol} - $${parseFloat(opt.quotes[0].price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </option>`
+                );
+            });
+        },
+        error: function (err) {
+            console.log(err.responseText);
+        }
+    });
+
+    $("#select-coin").select2({
+        placeholder: "Select coin"
+    });
+
+
+    $("#form-add-coin").on("submit", function (e) {
+        e.preventDefault();
+        if(confirm("Are you sure you want to add this coin?")) {
+            addCoinFunction();
+        }
+    });
+
+    function addCoinFunction() {
+        "use strict";
+        const token = getCookie("token");
+        const selectCoinElement = $("#select-coin");
+        const id = selectCoinElement.find(":selected").data("id");
+        const name = selectCoinElement.find(":selected").data("name");
+        const symbol = selectCoinElement.find(":selected").data("symbol");
+        const quantity = $("#input-quantity").val();
+        const vCoinData = {
+            coinmarketId: id,
+            name: name,
+            symbol: symbol,
+            quantity: quantity
+        };
+        $.ajax({
+            url: gBASE_URL + "/coins",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            data: JSON.stringify(vCoinData),
+            success: function (res) {
+                window.location.href = "../customer/user.html";
+            },
+            error: function (err) {
+                alert("Add coin failed!");
+                console.log(err.responseText);
+            }
+        });
+    }
+</script>
+
+<style>
+    .coin-logo {
+        height : 24px;
+        width :  24px;
+    }
+
+    body {
+        background-color: #eeeeee;
+    }
+</style>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- JQUERY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- DATA TABLE -->
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light "  style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="../customer/home.html"><i class="fa-solid fa-dollar-sign fa-bounce" style="font-size: 25px; padding: 8px; color: darkorange;"></i></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="../customer/home.html">Home</a>
+                </li>
+                <li id="link-user-manager" class="nav-item" style="display: none">
+                    <a class="nav-link" href="../admin/users.html">User Manager</a>
+                </li>
+            </ul>
+            <div class="d-flex" id="account">
+
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3">
+
+    <div class="card-header">
+        <h2></h2>
+    </div>
+    <div class="card-body">
+        <canvas id="myChart"></canvas>
+
+    </div>
+
+
+</div>
+</body>
+</div>
+</html>
+<script src="../js/main.js"></script>
+
+<script>
+    if (accessToken) {
+        $("#account").html(
+            `<a href="../customer/user.html"><i class="fa-solid fa-user" title="User Info" style="font-size: 25px; padding: 8px"></i></a>
+                <a id="btn-logout" href="#"><i class="fa-solid fa-right-from-bracket" title="Logout" style="font-size: 25px; padding: 8px; color: red"></i></a>`
+        );
+    } else {
+        window.location.href = "../auth/login.html";
+    }
+
+    $("#account").on("click", "#btn-logout", function () {
+        if (confirm("Are you sure you want to logout?")) {
+            setCookie("token", "", 0, false);
+            window.location.href = "../customer/home.html";
+        }
+    });
+
+
+
+    $(document).ready(function() {
+    // Đoạn mã trong đây sẽ được thực thi khi trang đã được tải xong
+        console.log("Trang đã được tải xong.");
+         // Gọi hàm getParameterByName
+        var coinId = getParameterByName('id');
+        var coinName = getParameterByName('name');
+        $("h2").text(coinName);
+        console.log(coinId);
+        console.log('Coin Name:', coinName);
+        let id = parseInt(coinId);
+        var getData= historyFunction(id);
+        console.log(getData);
+        processedData(getData);
+
+    });
+
+    //Lấy CoinID name và URL
+    function getParameterByName(name, url) {
+        if (!url) {
+            url = window.location.href;
+        }
+
+        // Sử dụng `name` như là một biểu thức chính quy
+        name = name.replace(/[\[\]]/g, "\\$&");
+
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+        var results = regex.exec(url);
+
+        if (!results) {
+            return null;
+        }
+
+        // Giải quyết vấn đề về dấu "+" trong URL-encoded string
+        var decodedValue = decodeURIComponent(results[2].replace(/\+/g, " "));
+
+        return decodedValue;
+    }
+
+
+    var gSecondsNow = 0;
+    function processedData(paramsData){
+        const secondsMonth = 2629743;
+           const map = new Map(Object.entries(paramsData.points));
+           console.log(map);
+           const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+           const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+         //    //test
+         var beginTime =parseInt(map.entries().next().value[0]);
+           var listTimes = [];
+           var listPriceC =[];
+
+           for(let i = gSecondsNow; i >= beginTime; i-=secondsMonth){
+                let numberF = i;
+                let stringTemp = numberF.toString();
+                //Cho đến khi tìm thấy
+                while(!map.has(stringTemp)){
+                    numberF--;
+                    stringTemp =  numberF.toString();
+                }
+                if(map.has(numberF.toString())){
+                     console.log(numberF);
+                     var date = new Date(numberF * 1000);
+                    // Lấy tên ngày, tháng và năm từ đối tượng ngày
+                    var dayOfWeek = weekdays[date.getDay()];
+                    var month = months[date.getMonth()];
+                    var dayOfMonth = date.getDate();
+                    var year = date.getFullYear();
+                    // Tạo chuỗi định dạng và thêm vào danh sách
+                    var formattedDate = `${dayOfWeek} ${month} ${dayOfMonth} ${year}`;
+                    listTimes.unshift(formattedDate);
+                     listPriceC.unshift(map.get(numberF.toString()).c[0]);
+                }
+           }
+
+           //Vẽ đồ thị
+           const ctx = document.getElementById('myChart');
+           Chart.getChart(ctx)?.destroy();
+           new Chart(ctx, {
+                    type: 'line',
+            data: {
+                labels: listTimes,
+                datasets: [{
+                    label: 'Coins',
+                    data: listPriceC, //[12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+          });
+
+    }
+
+
+
+    function historyFunction(paramsCoinID) {
+        "use strict";
+       let id = paramsCoinID;
+        var secondsToday = Math.floor(Date. now() / 1000)
+        var  prevOneYear = secondsToday - 31556926;
+        gSecondsNow = secondsToday;
+
+        console.log(secondsToday +" "+ prevOneYear);
+        console.log(id);
+        var timestampsAndPrices = {};
+            $.ajax({
+                url: "http://localhost:8080/api/coinmarketdetail",
+               // method: "GET",
+                data: {
+                    id: id,
+                    dateStart: prevOneYear,
+                    dateEnd: secondsToday
+
+                },
+                dataType: 'json',
+                async: false,
+                success: function(response) {
+                    // Xử lý dữ liệu khi yêu cầu thành công
+                   // console.log(response.data);
+                    timestampsAndPrices = response.data;
+                    //console.log(timestampsAndPrices.points);
+
+                },
+                error: function(error) {
+                    // Xử lý lỗi khi yêu cầu không thành công
+                    console.error("Error: ", error);
+                }
+            });
+           // console.log(timestampsAndPrices.points);
+        return timestampsAndPrices;
+      
+    }
+
+
+
+
+
+
+</script>
+
+<style>
+    .coin-logo {
+        height : 24px;
+        width :  24px;
+    }
+
+    body {
+        background-color: #eeeeee;
+    }
+</style>
