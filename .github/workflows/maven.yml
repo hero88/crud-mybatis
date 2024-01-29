@@ -15,15 +15,13 @@ on:
     branches: [ "main", "hero88-patch-1" ]
 
 jobs:
-  build:
+  test-java:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.before }}  # Use the commit before the push
-    #- name: Build with Maven
-    #  run: mvn -B package --file pom.xml
-
+    
     - name: copy_file
       run: |
         sudo rsync -a . /home/azureuser/test-java/ --exclude .git
