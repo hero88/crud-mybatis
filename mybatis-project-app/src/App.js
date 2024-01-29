@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import AddCoin from "./components/coin/AddCoin";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import Home from "./components/auth/Home";
-import Notfound from "./components/auth/Notfound";
+// import Notfound from "./components/auth/Notfound";
 import EditCoin from "./components/coin/EditCoin";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/404" element={<Notfound />} />
+                {/*<Route path="/404" element={<Notfound />} />*/}
 
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />

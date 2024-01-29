@@ -92,4 +92,24 @@ public class AuthController {
                 .build()
         );
     }
+
+    @GetMapping("/authentication/google")
+    public ResponseEntity<ApiResponse> redirectToGoogleLogin() {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Redirecting to Google Login")
+                .success(true)
+                .data("http://localhost:8080/oauth2/authorization/google")
+                .build()
+        );
+    }
+
+    @GetMapping("/authentication/facebook")
+    public ResponseEntity<ApiResponse> redirectToFacebookLogin() {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Redirecting to Facebook Login")
+                .success(true)
+                .data("http://localhost:8080/login/facebook")
+                .build()
+        );
+    }
 }

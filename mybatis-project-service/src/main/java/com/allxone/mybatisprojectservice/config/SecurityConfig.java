@@ -33,7 +33,13 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/coin/**").hasRole(Role.USER.toString())
                         .requestMatchers("/api/coin","/api/coin/**").permitAll()
                         .requestMatchers("/api/coinmarketcap","/api/coinmarketcap/**").permitAll()
+                        .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
                         .anyRequest().authenticated())
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .defaultSuccessUrl("/home")
+                        .failureUrl("/")
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
