@@ -18,7 +18,7 @@ public class CoinsRestApi {
     public ResponseEntity<?> addToCoin(@RequestBody Coins coins) throws ParamInvalidException {
         coinService.addToCoin(coins);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Successfully added coins to the account");
     }
 
     @PutMapping("{id}")
@@ -27,14 +27,14 @@ public class CoinsRestApi {
         coins.setId(id);
         coinService.updateCoin(coins);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Coin update successfully!");
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteCoin(@PathVariable Long id) throws ParamInvalidException {
         coinService.deleteById(id);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Coin deleted successfully!");
     }
 
     @GetMapping("{id}")
