@@ -1,5 +1,6 @@
 package com.allxone.coinmarket.auth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,16 +29,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final CustomUserDetailService customUserDetailsService;
-
 	private final RolesMapper rolesMapper;
 
 	private final UserRoleMapper userRoleMapper;
 
-	@Bean
-	public JWTAuthenticationFilter jwtAuthentitationFilter() {
-		return new JWTAuthenticationFilter();
-	}
+	private final JWTAuthenticationFilter jwtAuthenticationFilter;
+	
+	@Autowired
+	 CustomSuccessHandler customSuccessHandler;
+
+//	@Bean
+//	public JWTAuthenticationFilter jwtAuthentitationFilter() {
+//		return new JWTAuthenticationFilter();
+//	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -52,14 +56,15 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-        .csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeHttpRequests()
-        .requestMatchers("/**").permitAll();
-		http.addFilterBefore(jwtAuthentitationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+		http.csrf(AbstractHttpConfigurer::disable)
+				.sessionManagement(session ->
+						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(authorize -> 
+						authorize.requestMatchers("/**").permitAll())
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.oauth2Login(oauth2 -> 
+				oauth2.successHandler(customSuccessHandler)
+				);
 
 		UserFactory jwtUserFactory = UserFactory.getInstance();
 		jwtUserFactory.setRoleMapper(rolesMapper);
