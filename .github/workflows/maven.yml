@@ -1,0 +1,31 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main", "develop-java-gr1", "develop-java-gr2", "develop-java-gr3" ]
+  pull_request:
+    branches: [ "main", "develop-java-gr1", "develop-java-gr2", "develop-java-gr3" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.before }}  # Use the commit before the push
+    #- name: Build with Maven
+    #  run: mvn -B package --file pom.xml
+
+    - name: copy_file
+      run: |
+        sudo rsync -a . /home/azureuser/test-java/ --exclude .git
+        cd /home/azureuser/test-java/crud-my-batis/
+        mvn spring-boot:run
