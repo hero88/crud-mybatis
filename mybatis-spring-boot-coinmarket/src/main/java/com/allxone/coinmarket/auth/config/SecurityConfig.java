@@ -1,5 +1,6 @@
 package com.allxone.coinmarket.auth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 import com.allxone.coinmarket.auth.UserDetail.CustomUserDetailService;
 import com.allxone.coinmarket.auth.UserDetail.UserFactory;
@@ -28,16 +30,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final CustomUserDetailService customUserDetailsService;
-
 	private final RolesMapper rolesMapper;
 
 	private final UserRoleMapper userRoleMapper;
 
-	@Bean
-	public JWTAuthenticationFilter jwtAuthentitationFilter() {
-		return new JWTAuthenticationFilter();
-	}
+	private final JWTAuthenticationFilter jwtAuthenticationFilter;
+	
+	@Autowired
+	 CustomSuccessHandler customSuccessHandler;
+
+//	@Bean
+//	public JWTAuthenticationFilter jwtAuthentitationFilter() {
+//		return new JWTAuthenticationFilter();
+//	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -49,17 +54,23 @@ public class SecurityConfig {
 			throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
+	
+	   @Bean
+	    public RestTemplate restTemplate() {
+	        return new RestTemplate();
+	    }
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-        .csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeHttpRequests()
-        .requestMatchers("/**").permitAll();
-		http.addFilterBefore(jwtAuthentitationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+		http.csrf(AbstractHttpConfigurer::disable)
+				.sessionManagement(session ->
+						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(authorize -> 
+						authorize.requestMatchers("/**").permitAll())
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.oauth2Login(oauth2 -> 
+				oauth2.successHandler(customSuccessHandler)
+				);
 
 		UserFactory jwtUserFactory = UserFactory.getInstance();
 		jwtUserFactory.setRoleMapper(rolesMapper);

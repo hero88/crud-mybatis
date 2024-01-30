@@ -2,6 +2,11 @@ package com.allxone.coinmarket.service.impl;
 
 import java.util.Date;
 
+import com.allxone.coinmarket.exception.auth.AuthenticateException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.allxone.coinmarket.mapper.UserRoleMapper;
@@ -43,6 +48,26 @@ public class UserServiceImpl implements UserService {
 		user.setUpdatedAt(new Date());
 		userMapper.updateByExample(user, example);
 		return user;
+	}
+
+	@Override
+	public Users getLoggedUser(){
+		Authentication auth = SecurityContextHolder
+				.getContext()
+				.getAuthentication();
+
+		UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) auth;
+
+		if (authToken.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) authToken.getPrincipal();
+
+			String username = userDetails.getUsername();
+
+			return userMapper.findUserByUsername(username);
+
+		}
+
+		throw new AuthenticateException("Vui lòng đăng nhập");
 	}
 
 }
