@@ -2,8 +2,8 @@ package sample.mybatis.xml.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+
 import sample.mybatis.xml.domain.UserRole;
-import sample.mybatis.xml.domain.Users;
 
 @Component
 public class UserRoleDAO {

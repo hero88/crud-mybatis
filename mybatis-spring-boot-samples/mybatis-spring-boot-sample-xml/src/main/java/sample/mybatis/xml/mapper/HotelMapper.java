@@ -16,8 +16,8 @@
 package sample.mybatis.xml.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import sample.mybatis.xml.domain.Hotel;
 
+import sample.mybatis.xml.domain.Hotel;
 
 /**
  * @author Eduardo Macarron
