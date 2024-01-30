@@ -21,8 +21,9 @@ jobs:
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.before }}  # Use the commit before the push
-    #- name: Build with Maven
-    #  run: mvn -B package --file pom.xml
+
+    - name: stop_previous_running_instance
+      run: mvn spring-boot:stop
 
     - name: copy_file
       run: |
