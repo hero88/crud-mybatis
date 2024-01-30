@@ -1,4 +1,4 @@
-package com.allxone.JavaMyBatis.dto.response.dataApi;
+package com.allxone.coinmarket.dto.response.dataApi;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

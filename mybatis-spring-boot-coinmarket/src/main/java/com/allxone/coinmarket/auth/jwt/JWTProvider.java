@@ -2,7 +2,10 @@ package com.allxone.coinmarket.auth.jwt;
 
 import java.util.Date;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.allxone.coinmarket.auth.UserDetail.CustomUserDetail;
@@ -69,4 +72,13 @@ public class JWTProvider {
         return false;
     }
 
+	public CustomUserDetail getCurrentAuthenticatedAccount(){
+		UsernamePasswordAuthenticationToken authenticationToken
+				= (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetail userDetail = (CustomUserDetail) authenticationToken.getPrincipal();
+		if(userDetail == null) {
+			throw new EntityNotFoundException();
+		}
+		return  userDetail;
+	}
 }
