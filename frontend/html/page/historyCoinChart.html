@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3" style="min-height: 100vh;">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <h5 class="m-0 mx-2">Bitcoin</h5>
+                        <span>BTC</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-light"><i class="bi bi-star"></i></button>
+                        <button class="btn btn-light"><i class="bi bi-share"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="fw-bold">$43,412.89</h2>
+                </div>
+                <div>
+                    <span class="w-100 btn btn-light d-flex justify-content-between my-3 text-muted">
+                        <div>
+                            <i class="bi bi-star"></i>
+                            Add to watchlist
+                        </div>
+
+                        <i class="ms-5 bi bi-plus"></i>
+                    </span>
+                    <span class="w-100 btn btn-light d-flex justify-content-between mb-3 text-muted">
+                        <div>
+                            <i class="bi bi-star"></i>
+                            Track in portfolio
+                        </div>
+                        <i class="ms-5 bi bi-plus"></i>
+                    </span>
+                </div>
+                <div class="my-1">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="text-muted">Market cap</h6>
+                        <span class="fw-bold">$852,851,860,485</span>
+                    </div>
+                    <div>
+                        <input class="w-100" type="range" value="">
+                    </div>
+                </div>
+                <div class="my-1">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="text-muted">Volume(24h) ></h6>
+                        <span class="fw-bold">$852,851,860,485</span>
+                    </div>
+                    <div>
+                        <input class="w-100" type="range" value="">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between my-1">
+                    <h6 class="text-muted">Volume/Market cap (24h)</h6>
+                    <span class="fw-bold">2.49%</span>
+                </div>
+                <div class="my-1">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="text-muted">Circulating supply</h6>
+                        <span class="fw-bold">19,612,812 BTC</span>
+                    </div>
+                    <div>
+                        <input class="w-100" type="range" value="">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between my-1">
+                    <h6 class="text-muted">Total supply</h6>
+                    <span class="fw-bold">19,612,812 BTC</span>
+                </div>
+                <div class="d-flex justify-content-between my-1">
+                    <h6 class="text-muted">Max. supply</h6>
+                    <span class="fw-bold">21,000,000 BTC</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h6 class="text-muted">Fully diluted market cap</h6>
+                    <span class="fw-bold">$914,701,241,936</span>
+                </div>
+            </div>
+            <div class="col-9">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const ctx = document.getElementById('myChart');
+        var id = new URLSearchParams(window.location.search).get('id');
+        axios.get('http://localhost:8080/api/v1/history-coin', {
+            params: {
+                id: id
+            },
+        }).then(function (resp) {
+            var timestamps = resp.data.timestamps;
+            var months = resp.data.months;
+            var prices = [];
+            for (let i = 0; i < timestamps.length - 1; i++) {
+                var dataPoint = resp.data.data.points[timestamps[i]];
+                prices.push(dataPoint['c'][0]);
+            }
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Price',
+                        data: prices,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>
