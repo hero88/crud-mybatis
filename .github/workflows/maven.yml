@@ -22,9 +22,6 @@ jobs:
       with:
         ref: ${{ github.event.before }}  # Use the commit before the push
 
-    - name: stop_previous_running_instance
-      run: mvn spring-boot:stop
-
     - name: copy_file
       run: |
         sudo rsync -a . /home/azureuser/test-java/ --exclude .git
