@@ -1,10 +1,12 @@
-import config from "../config";
-import Login from "../pages/Login";
+import config from "@/config";
+import LoginLayout from "@/layouts/LoginLayout";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
 
 //Public routes
 const publicRoutes = [
-  // { path: config.routes.home, component: Home },
-  { path: config.routes.login, component: Login },
+  { path: config.routes.home, component: Home },
+  { path: config.routes.login, component: Login, layout: LoginLayout },
 ];
 
 const privateRoutes = [];
