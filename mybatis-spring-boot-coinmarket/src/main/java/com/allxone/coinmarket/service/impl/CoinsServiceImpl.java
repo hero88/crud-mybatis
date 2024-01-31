@@ -4,9 +4,8 @@ package com.allxone.coinmarket.service.impl;
 import com.allxone.coinmarket.auth.UserDetail.CustomUserDetail;
 import com.allxone.coinmarket.auth.jwt.JWTProvider;
 import com.allxone.coinmarket.dto.response.CoinApiReponse;
-import com.allxone.coinmarket.dto.response.CoinResponse;
 import com.allxone.coinmarket.dto.response.CoinsUserReponse;
-import com.allxone.coinmarket.dto.response.dataApi.CryptoCurrency;
+import com.allxone.coinmarket.dto.response.CryptoCurrency;
 import com.allxone.coinmarket.exception.auth.AuthenticateException;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
 import com.allxone.coinmarket.exception.core.ApplicationException;
@@ -20,7 +19,6 @@ import com.allxone.coinmarket.utilities.ValidatorUtils;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

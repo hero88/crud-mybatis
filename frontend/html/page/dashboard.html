@@ -156,10 +156,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const apiUrl = 'http://localhost:8080/api/v1/coins/myCoins';
-        const authToken = localStorage.getItem('authToken');
+        const authToken = sessionStorage.getItem('authToken');
+        console.log(authToken);
         const requestConfig = {
             headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwaGFtc29uZ2hpZXBiM2s0NkBnbWFpbC5jb20iLCJSb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImlhdCI6MTcwNjU5MDIwNSwiZXhwIjoxNzA3MTk1MDA1fQ.VFUEWM11lAnOdua9vlAxJLlxGrWSirabRKdoCLqHDS4`,
+                'Authorization': `Bearer ${authToken}`,
             }
         };
 

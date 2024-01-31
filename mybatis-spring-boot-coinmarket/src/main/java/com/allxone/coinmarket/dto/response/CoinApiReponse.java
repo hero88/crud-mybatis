@@ -1,6 +1,5 @@
 package com.allxone.coinmarket.dto.response;
 
-import com.allxone.coinmarket.dto.response.dataApi.CryptoCurrency;
 import lombok.*;
 
 import java.util.List;
