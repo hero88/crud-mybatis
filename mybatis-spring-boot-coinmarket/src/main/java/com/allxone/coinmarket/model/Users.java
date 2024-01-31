@@ -1,5 +1,6 @@
 package com.allxone.coinmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.allxone.coinmarket.enums.AuthenticationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,8 @@ public class Users {
 	private Long id;
 	
 	private String username;
-	
+
+	@JsonIgnore
 	private String password;
 	
 	private String name;
@@ -32,9 +34,11 @@ public class Users {
 	private String email;
 	
 	private String phoneNumber;
-	
+
+	@JsonIgnore
 	private Date emailVerificationAt;
-	
+
+	@JsonIgnore
 	private String rememberToken;
 	
 	private Date createdAt;

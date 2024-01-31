@@ -72,6 +72,8 @@ public interface UsersMapper {
 	Users findUserByEmail(String email);
 	
 	Users findUserByUsername(String userName);
-	
-	Users updateUserById(Users user);
+
+	int updateUserById(@Param("row")Users user);
+
+	List<Users> findAllUser();
 }

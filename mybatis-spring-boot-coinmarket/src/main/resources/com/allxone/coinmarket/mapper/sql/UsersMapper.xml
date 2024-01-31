@@ -407,5 +407,29 @@
   <select id="findUserByUsername" parameterType="string" resultType="com.allxone.coinmarket.model.Users">
     	select * from users where username = #{userName}
   </select>
-  
+
+  <select id="findAllUser" resultType="com.allxone.coinmarket.model.Users">
+    select * from user
+  </select>
+
+  <update id="updateUserById" parameterType="com.allxone.coinmarket.model.Users">
+
+    update user
+    set
+      username = #{row.username,jdbcType=VARCHAR},
+      password = #{row.password,jdbcType=VARCHAR},
+      name = #{row.name,jdbcType=VARCHAR},
+      gender = #{row.gender,jdbcType=VARCHAR},
+      age = #{row.age,jdbcType=INTEGER},
+      is_active = #{row.active,jdbcType=BIT},
+      email = #{row.email,jdbcType=VARCHAR},
+      phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
+      email_verification_at = #{row.emailVerificationAt,jdbcType=DATE},
+      remember_token = #{row.rememberToken,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    where ID = #{row.id,jdbcType=BIGINT}
+
+  </update>
+
 </mapper>
