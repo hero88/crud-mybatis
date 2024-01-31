@@ -24,6 +24,6 @@ jobs:
 
     - name: copy_file
       run: |
-        sudo rsync -a . /home/azureuser/test-java/ --exclude .git
-        cd /home/azureuser/test-java/crud-mybatis/
+        sudo rsync -a . /home/azureuser/crud_training/java_gr2/ --exclude .git
+        cd /home/azureuser/crud_training/java_gr2/crud-mybatis/
         mvn spring-boot:run
