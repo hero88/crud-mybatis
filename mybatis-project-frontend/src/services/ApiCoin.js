@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const coinMarketCapApi = process.env.REACT_APP_COINMARKETCAP_API;
-const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-
+const apiBaseUrl = import.meta.env.REACT_APP_API_BASE_URL;
+console.log(apiBaseUrl)
 const API = axios.create({ baseURL: apiBaseUrl });
 
 API.interceptors.request.use((req) => {
@@ -14,7 +13,7 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const getAllCoins = (formData) => API.get("api/coin", formData);
+export const getAllCoins = () => API.get("api/coin");
 
 export const getCoinById = () => API.get("/");
 
