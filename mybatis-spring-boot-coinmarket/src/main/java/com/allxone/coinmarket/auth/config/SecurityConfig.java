@@ -35,9 +35,8 @@ public class SecurityConfig {
 	private final UserRoleMapper userRoleMapper;
 
 	private final JWTAuthenticationFilter jwtAuthenticationFilter;
-	
-	@Autowired
-	 CustomSuccessHandler customSuccessHandler;
+
+	private final CustomSuccessHandler customSuccessHandler;
 
 //	@Bean
 //	public JWTAuthenticationFilter jwtAuthentitationFilter() {

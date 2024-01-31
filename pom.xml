@@ -37,7 +37,7 @@
   <inceptionYear>2015</inceptionYear>
 
   <modules>
-    <module>JavaMyBatis</module>
+    <module>mybatis-spring-boot-coinmarket</module>
     <module>mybatis-spring-boot-autoconfigure</module>
     <module>mybatis-spring-boot-starter</module>
     <module>mybatis-spring-boot-samples</module>

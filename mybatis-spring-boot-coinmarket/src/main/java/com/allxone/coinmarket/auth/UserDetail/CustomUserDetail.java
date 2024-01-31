@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.allxone.coinmarket.model.Users;
 
 public class CustomUserDetail implements UserDetails{
+	private Long id;
 	private String email;
 	
 	private String username;
@@ -20,6 +21,7 @@ public class CustomUserDetail implements UserDetails{
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	public CustomUserDetail(Users user, Collection<? extends GrantedAuthority> authorities) {
+		this.id = user.getId();
 		this.username=user.getUsername();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
@@ -47,7 +49,7 @@ public class CustomUserDetail implements UserDetails{
 		return email;
 	}
 	
-	
+	public Long getId(){return id;}
 
 	public boolean isActive() {
 		return isActive;

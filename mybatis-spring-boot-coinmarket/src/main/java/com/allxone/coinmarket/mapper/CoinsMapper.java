@@ -96,4 +96,6 @@ public interface CoinsMapper {
      * @mbg.generated Thu Jan 25 09:56:51 ICT 2024
      */
     int updateByPrimaryKey(Coins row);
+
+    List<Coins> selectAllCoinsByUserId(Long userId);
 }

@@ -1,6 +1,5 @@
-package com.allxone.JavaMyBatis.dto.response;
+package com.allxone.coinmarket.dto.response;
 
-import com.allxone.JavaMyBatis.dto.response.dataApi.CryptoCurrency;
 import lombok.*;
 
 import java.util.List;
