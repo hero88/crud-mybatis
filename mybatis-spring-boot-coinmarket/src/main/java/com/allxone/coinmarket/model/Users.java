@@ -1,9 +1,19 @@
 package com.allxone.coinmarket.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.allxone.coinmarket.enums.AuthenticationType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Users {
 
 	private Long id;
@@ -36,6 +46,8 @@ public class Users {
 	private Date updatedAt;
 	
 	private String address;
+
+	private AuthenticationType type;
 
 	public Long getId() {
 		return id;

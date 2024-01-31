@@ -3,19 +3,28 @@ package com.allxone.coinmarket.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.allxone.coinmarket.auth.UserDetail.GetSubject;
-import com.allxone.coinmarket.dto.request.PasswordDTO;
-import com.allxone.coinmarket.model.*;
-import com.allxone.coinmarket.model.enums.ERole;
-import com.allxone.coinmarket.service.RoleService;
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.allxone.coinmarket.auth.UserDetail.GetSubject;
+import com.allxone.coinmarket.dto.request.PasswordDTO;
+import com.allxone.coinmarket.exception.auth.AuthenticateException;
 import com.allxone.coinmarket.mapper.UserRoleMapper;
 import com.allxone.coinmarket.mapper.UsersMapper;
+import com.allxone.coinmarket.model.Roles;
+import com.allxone.coinmarket.model.UserRole;
+import com.allxone.coinmarket.model.UserRoleExample;
+import com.allxone.coinmarket.model.Users;
+import com.allxone.coinmarket.model.UsersExample;
+import com.allxone.coinmarket.model.enums.ERole;
+import com.allxone.coinmarket.service.RoleService;
 import com.allxone.coinmarket.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -173,6 +182,24 @@ public class UserServiceImpl implements UserService {
 			return  user.get(0);
 		}
 		return null;
+	}
+	public Users getLoggedUser(){
+		Authentication auth = SecurityContextHolder
+				.getContext()
+				.getAuthentication();
+
+		UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) auth;
+
+		if (authToken.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) authToken.getPrincipal();
+
+			String username = userDetails.getUsername();
+
+			return userMapper.findUserByUsername(username);
+
+		}
+
+		throw new AuthenticateException("Vui lòng đăng nhập");
 	}
 
 }

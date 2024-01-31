@@ -1,0 +1,32 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    /* Thay đổi loại chữ cho toàn bộ trang */
+}
+
+h2 {
+    font-family: 'Open Sans', sans-serif;
+    /* Thay đổi font chữ cho tiêu đề h1 */
+    color: #333;
+    /* Thay đổi màu chữ cho tiêu đề h1 */
+}
+
+p {
+    font-family: 'Lato', sans-serif;
+    /* Thay đổi font chữ cho đoạn văn bản */
+}
+
+div {
+    font-family: 'Roboto', sans-serif;
+}
+
+h4 {
+    font-family: 'Open Sans', sans-serif;
+    /* Thay đổi font chữ cho tiêu đề h1 */
+    color: #333;
+    /* Thay đổi màu chữ cho tiêu đề h1 */
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}

@@ -22,4 +22,6 @@ public interface UserService {
 	boolean deleteUser(Long id);
 
 	int changePassword(PasswordDTO passwordDTO, HttpServletRequest request);
+	
+    Users getLoggedUser();
 }
