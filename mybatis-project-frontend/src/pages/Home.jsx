@@ -134,7 +134,7 @@ function Home() {
 
   return (
     <div>
-      <div className="mx-6 min-h-svh">
+      <div className="min-h-svh">
       <Table className="px-12">
         <TableHeader>
           <TableRow>

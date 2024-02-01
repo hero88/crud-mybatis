@@ -3,6 +3,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 function Header() {
   const navigate = useNavigate();
+
+  // let userId = window.localStorage.getItem("userId");
+  let userId = 1;
   return (
     <div className="px-6 py-4 flex justify-between">
       <div className="flex content-center">
@@ -32,7 +35,7 @@ function Header() {
         </span>
       </div>
       <div>
-        <Avatar className="h-8 w-8" onClick={() => navigate("/profile")}>
+        <Avatar className="h-8 w-8" onClick={() => navigate(`/profile/detail/${userId}`)}>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>

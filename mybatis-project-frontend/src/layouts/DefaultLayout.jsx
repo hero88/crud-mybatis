@@ -5,7 +5,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <div className="w-screen">
       <Header />
-      {children}
+      <div className="mx-12">{children}</div>
       <Footer />
     </div>
   );
