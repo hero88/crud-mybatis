@@ -38,7 +38,7 @@ function Profile() {
   });
 
   return (
-    <div className="centerSide w-6/12 px-8">
+    <div className="centerSide w-7/12 px-8">
       <h2>About me</h2>
       <h3>Your Avatar</h3>
       <div className="flex gap-8 items-center">

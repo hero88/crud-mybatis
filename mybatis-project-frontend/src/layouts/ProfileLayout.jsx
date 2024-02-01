@@ -10,7 +10,7 @@ function ProfileLayout({ children }) {
   return (
     <DefaultLayout>
       <div id="profile" className="flex justify-between min-h-svh">
-        <div className="leftSide bg-sky-50 w-3/12 px-12 text-lg">
+        <div className="leftSide bg-sky-50 w-2/12 px-12 text-lg">
           <aside className="flex flex-col gap-1 ">
             <Button onClick={() => navigate("../profile/detail/1")}>My profile</Button>
             {isAdmin && (

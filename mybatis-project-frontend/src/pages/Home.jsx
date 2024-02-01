@@ -11,8 +11,6 @@ import {
 
 import { PiStarThin } from "react-icons/pi";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import PaginationCustom from "@/components/shared/PaginationCustom";
 
 const fakeData = {
@@ -135,65 +133,65 @@ function Home() {
   return (
     <div>
       <div className="min-h-svh">
-      <Table className="px-12">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-8"></TableHead>
-            <TableHead className="p-0 min-w-6">#</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>1h %</TableHead>
-            <TableHead>24h %</TableHead>
-            <TableHead>7d %</TableHead>
-            <TableHead>Market Cap</TableHead>
-            <TableHead>Volume(24h)</TableHead>
-            <TableHead>Circulating Supply</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <PiStarThin />
-              </TableCell>
-              <TableCell className="p-0 min-w-6">{index + 1}</TableCell>
-              <TableCell>
-                <div className="flex items-center">
-                  <div className="me-2">
-                    <img
-                      src={`https://s2.coinmarketcap.com/static/img/coins/32x32/${item.id}.png`}
-                      alt={item.name}
-                      className="coin-logo"
-                      width={32}
-                      height={32}
-                    />
-                  </div>
-                  <div className="items-center">
-                    <span className="me-2">{item.name}</span>
-                    <span className="">{item.symbol}</span>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>{formatNumber(item.quotes[0].price)}</TableCell>
-              <TableCell>
-                {renderChange(item.quotes[0].percentChange1h)}
-              </TableCell>
-              <TableCell>
-                {renderChange(item.quotes[0].percentChange24h)}
-              </TableCell>
-              <TableCell>
-                {renderChange(item.quotes[0].percentChange7d)}
-              </TableCell>
-              <TableCell>{formatNumber(item.quotes[0].marketCap)}</TableCell>
-              <TableCell>{formatNumber(item.quotes[0].volume24h)}</TableCell>
-              <TableCell>
-                {formatNumber(parseFloat(item.circulatingSupply), 0)}{" "}
-                {item.symbol}
-              </TableCell>
+        <Table className="px-12">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-8"></TableHead>
+              <TableHead className="p-0 min-w-6">#</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>1h %</TableHead>
+              <TableHead>24h %</TableHead>
+              <TableHead>7d %</TableHead>
+              <TableHead>Market Cap</TableHead>
+              <TableHead>Volume(24h)</TableHead>
+              <TableHead>Circulating Supply</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {data.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <PiStarThin />
+                </TableCell>
+                <TableCell className="p-0 min-w-6">{index + 1}</TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <div className="me-2">
+                      <img
+                        src={`https://s2.coinmarketcap.com/static/img/coins/32x32/${item.id}.png`}
+                        alt={item.name}
+                        className="coin-logo"
+                        width={32}
+                        height={32}
+                      />
+                    </div>
+                    <div className="items-center">
+                      <span className="me-2">{item.name}</span>
+                      <span className="">{item.symbol}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>{formatNumber(item.quotes[0].price)}</TableCell>
+                <TableCell>
+                  {renderChange(item.quotes[0].percentChange1h)}
+                </TableCell>
+                <TableCell>
+                  {renderChange(item.quotes[0].percentChange24h)}
+                </TableCell>
+                <TableCell>
+                  {renderChange(item.quotes[0].percentChange7d)}
+                </TableCell>
+                <TableCell>{formatNumber(item.quotes[0].marketCap)}</TableCell>
+                <TableCell>{formatNumber(item.quotes[0].volume24h)}</TableCell>
+                <TableCell>
+                  {formatNumber(parseFloat(item.circulatingSupply), 0)}{" "}
+                  {item.symbol}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
       <PaginationCustom
         currentPage={{ id: 1, serial: 1 }}
