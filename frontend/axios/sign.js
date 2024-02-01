@@ -18,7 +18,8 @@ $(".btn-login").click(function () {
         email: mailLogin,
         password: passLogin
     }).then(function (resp) {
-        console.log(resp.data)
+        alert("Login successful")
+        setCookie("token",resp.data.data.access_token,30)
         //window.location.href = "";
     }).catch(function (error) {
         console.log(error);
@@ -67,3 +68,13 @@ $(".btn-send-mail-forgot").click(function(){
         console.log(error);
     });
 })
+
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
