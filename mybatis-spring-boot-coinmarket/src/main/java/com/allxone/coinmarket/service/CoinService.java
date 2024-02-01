@@ -3,6 +3,7 @@ package com.allxone.coinmarket.service;
 import com.allxone.coinmarket.dto.response.CoinApiReponse;
 import com.allxone.coinmarket.dto.response.CoinsUserReponse;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
+import com.allxone.coinmarket.exception.core.ApplicationException;
 import com.allxone.coinmarket.model.Coins;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public interface CoinService {
 
     CoinApiReponse fetchApiDataCoins(Integer sl) throws IOException;
     List<CoinsUserReponse> getAllCoinsUser() throws IOException;
-    void addToCoin(Coins coins) throws ParamInvalidException;
+    void addToCoin(Coins coins) throws ApplicationException;
     void updateCoin(Coins coins) throws ParamInvalidException;
     List<Coins> findByUser(Long userId) throws ParamInvalidException;
     Coins findById(Long id) throws ParamInvalidException;

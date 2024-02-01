@@ -9,6 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -19,12 +21,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JWTProvider jwtProvider;
-
-    private final CustomOAuth2UserService customOAuth2UserService;
+	@Autowired
+	JWTProvider jwtProvider;
+	
+	@Autowired
+    CustomOAuth2UserService customOAuth2UserService;
 
     @Value("${app.oauth2.return-url}")
     private String returnUrl;
