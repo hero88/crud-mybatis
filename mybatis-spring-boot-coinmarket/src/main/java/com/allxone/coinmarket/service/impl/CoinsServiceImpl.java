@@ -7,6 +7,7 @@ import com.allxone.coinmarket.dto.response.CoinApiReponse;
 import com.allxone.coinmarket.dto.response.CoinsUserReponse;
 import com.allxone.coinmarket.dto.response.CryptoCurrency;
 import com.allxone.coinmarket.exception.auth.AuthenticateException;
+import com.allxone.coinmarket.exception.common.DuplicateDataException;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
 import com.allxone.coinmarket.exception.core.ApplicationException;
 import com.allxone.coinmarket.mapper.CoinsMapper;
@@ -91,13 +92,24 @@ public class CoinsServiceImpl implements CoinService {
     }
 
     @Override
-    public void addToCoin(Coins coins) throws ParamInvalidException {
+    public void addToCoin(Coins coins) throws ApplicationException {
 
         ValidatorUtils.checkNullParam(
                 coins.getCoinmarketId()
                 , coins.getQuantity());
 
         Users user = userService.getLoggedUser();
+
+
+
+        CoinsExample coinsExample = new CoinsExample();
+        coinsExample.createCriteria().andCoinmarketIdEqualTo(coins.getCoinmarketId()).andUserIdEqualTo(user.getId());
+
+        Coins dbCoin = coinMapper.selectByExample(coinsExample).get(0);
+
+        if(dbCoin!=null) {
+            throw new DuplicateDataException("This coin already exists in the account");
+        }
 
         coins.setUserId(user.getId());
         coins.setCreatedAt(new Date());

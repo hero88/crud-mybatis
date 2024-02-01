@@ -30,6 +30,7 @@ public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
                 .id(null)
                 .email(oAuth2UserInfo.getEmail())
                 .username(oAuth2UserInfo.getEmail())
+                .name(oAuth2UserInfo.getName())
                 .password(new BCryptPasswordEncoder().encode(RandomStringUtils.randomAlphanumeric(20)))
                 .type(type)
                 .active(true)

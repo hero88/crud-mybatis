@@ -20,11 +20,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter{
 
-	
-	private final JWTProvider jwtProvider;
+	@Autowired
+	JWTProvider jwtProvider;
 	
 	@Autowired
 	CustomUserDetailService userDetailService;
