@@ -210,7 +210,7 @@
 
 
             const coinData = {
-                id: id,
+            
                 coinmarketId: coinmarketId,
                 name: name,
                 symbol: symbol,
@@ -222,6 +222,7 @@
             if (id) {
 
                 url = 'http://localhost:8080/api/v1/coins/' + id;
+                // coinData.id=null;
 
                 updateCoin(url, coinData);
             } else {
@@ -321,6 +322,7 @@
             $('#coinmarket_id').val(1)
             $('#coin_id').val("")
             $('#quantity').val(1)
+            $('#exampleModal').modal('hide');
         }
 
         function findById(id) {

@@ -100,14 +100,13 @@ public class CoinsServiceImpl implements CoinService {
 
         Users user = userService.getLoggedUser();
 
-
-
         CoinsExample coinsExample = new CoinsExample();
         coinsExample.createCriteria().andCoinmarketIdEqualTo(coins.getCoinmarketId()).andUserIdEqualTo(user.getId());
 
-        Coins dbCoin = coinMapper.selectByExample(coinsExample).get(0);
+        List<Coins> coinsList = coinMapper.selectByExample(coinsExample);
 
-        if(dbCoin!=null) {
+        if(coinsList != null && !coinsList.isEmpty()) {
+//            Coins dbCoin = coinsList.get(0);
             throw new DuplicateDataException("This coin already exists in the account");
         }
 
