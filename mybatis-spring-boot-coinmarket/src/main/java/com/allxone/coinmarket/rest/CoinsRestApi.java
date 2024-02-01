@@ -62,7 +62,7 @@ public class CoinsRestApi {
         return ResponseEntity.ok(ApiResponse.builder().data(coinService.getAllCoinsUser()).success(true).message("ok").build());
     }
 
-    @GetMapping("/history-coin")
+    @GetMapping("history-coin")
 	public ResponseEntity<?> getHistory(@RequestParam("id") Integer id) {
 		Map<String, Object> history = coinService.getHistoryPriceCoin(id);
 		if(history!=null) {

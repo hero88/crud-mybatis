@@ -138,7 +138,7 @@ public class Users {
 	 * @mbg.generated  Thu Jan 25 09:56:51 ICT 2024
 	 */
 	public Boolean getIsActive() {
-		return true;
+		return active;
 	}
 
 	/**

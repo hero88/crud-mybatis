@@ -37,11 +37,6 @@ public class SecurityConfig {
 
 	private final CustomSuccessHandler customSuccessHandler;
 
-//	@Bean
-//	public JWTAuthenticationFilter jwtAuthentitationFilter() {
-//		return new JWTAuthenticationFilter();
-//	}
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
