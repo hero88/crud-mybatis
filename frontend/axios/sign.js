@@ -8,11 +8,7 @@ $(".open-ui-login").click(function () {
     $("#container-register").hide();
     $("#container-login").show(800);
 });
-const instance = axios.create({
-    baseURL: 'http://localhost:8080/api/',
-    timeout: 1000,
-   
-});
+
 const baseURL = instance.defaults.baseURL;
 
 $(".btn-login").click(function () {

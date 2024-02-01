@@ -24,7 +24,7 @@
     <javaClientGenerator type="XMLMAPPER" targetPackage="com.allxone.coinmarket.mapper"  targetProject="mybatis-spring-boot-coinmarket"/>
      
 
-    <table tableName="user" domainObjectName="Users">
+    <table tableName="users" domainObjectName="Users">
       
     </table>
     <table tableName="roles" domainObjectName="Roles">

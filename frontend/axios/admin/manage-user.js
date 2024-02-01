@@ -1,4 +1,5 @@
-var api = "http://localhost:8080/api/v1/user";
+const baseURL = instance.defaults.baseURL;
+var api = baseURL+"v1/user";
 
 window.onload = function () {
     getAllUser();

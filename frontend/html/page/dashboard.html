@@ -154,10 +154,11 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../../axios/config.js"></script>
     <script>
-        const apiUrl = 'http://localhost:8080/api/v1/coins/myCoins';
+        const baseURL = instance.defaults.baseURL;
+        const apiUrl = baseURL+'v1/coins/myCoins';
         const authToken = sessionStorage.getItem('authToken');
-        console.log(authToken);
         const requestConfig = {
             headers: {
                 'Authorization': `Bearer ${authToken}`,

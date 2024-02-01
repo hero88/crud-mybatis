@@ -58,7 +58,6 @@ public class LoginService {
 			user.setRememberToken(refreshToken);
 			userMapper.updateByExample(user, example);
 			cookie.add("token", accessToken, 2, resp);
-			
 			map.put("access_token", accessToken);
 			map.put("refresh_token", refreshToken);
 			return map;
@@ -67,12 +66,10 @@ public class LoginService {
 	}
 	
 	public int checkStatusLogin(AuthenticationRequest authReq) {
-		UsersExample example = new UsersExample();
-		example.createCriteria().andEmailEqualTo(authReq.getEmail());
-		Users user = userMapper.selectByExample(example).get(0);
+		Users user = userMapper.findUserByEmail(authReq.getEmail());
         if (user == null) {
             return 0;
-        }else if (endcode.matches(authReq.getPassword(), user.getPassword())) {
+        }else if (endcode.matches(authReq.getPassword(), user.getPassword()) && user.getIsActive() == true) {
             return 1;
         }else if (user.getIsActive() == false) {
             return 2;

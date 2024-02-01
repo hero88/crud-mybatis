@@ -409,12 +409,12 @@
   </select>
 
   <select id="findAllUser" resultType="com.allxone.coinmarket.model.Users">
-    select * from user
+    select * from users
   </select>
 
   <update id="updateUserById" parameterType="com.allxone.coinmarket.model.Users">
 
-    update user
+    update users
     set
       username = #{row.username,jdbcType=VARCHAR},
       password = #{row.password,jdbcType=VARCHAR},
