@@ -4,6 +4,7 @@ const routes = {
   register: "/register",
   profile: "/profile/detail/:userId",
   listUser: "/profile/list-user/",
+  coin:"/profile/coins/"
 };
 
 export default routes;
