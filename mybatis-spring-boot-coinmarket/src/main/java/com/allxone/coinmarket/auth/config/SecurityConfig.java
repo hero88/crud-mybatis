@@ -1,6 +1,7 @@
 package com.allxone.coinmarket.auth.config;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,17 +26,19 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-	private final RolesMapper rolesMapper;
+	@Autowired
+	RolesMapper rolesMapper;
 
-	private final UserRoleMapper userRoleMapper;
+	@Autowired
+	UserRoleMapper userRoleMapper;
 
-	private final JWTAuthenticationFilter jwtAuthenticationFilter;
+	@Autowired
+	JWTAuthenticationFilter jwtAuthenticationFilter;
 
-	private final CustomSuccessHandler customSuccessHandler;
+	@Autowired
+	CustomSuccessHandler customSuccessHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -52,23 +55,19 @@ public class SecurityConfig {
 			throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
-	
-	   @Bean
-	    public RestTemplate restTemplate() {
-	        return new RestTemplate();
-	    }
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
-				.sessionManagement(session ->
-						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> 
-						authorize.requestMatchers("/**").permitAll())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.oauth2Login(oauth2 -> 
-				oauth2.successHandler(customSuccessHandler)
-				);
+				.oauth2Login(oauth2 -> oauth2.successHandler(customSuccessHandler));
 
 		UserFactory jwtUserFactory = UserFactory.getInstance();
 		jwtUserFactory.setRoleMapper(rolesMapper);

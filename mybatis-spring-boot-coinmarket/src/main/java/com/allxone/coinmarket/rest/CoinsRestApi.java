@@ -3,6 +3,7 @@ package com.allxone.coinmarket.rest;
 
 import com.allxone.coinmarket.dto.response.ApiResponse;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
+import com.allxone.coinmarket.exception.core.ApplicationException;
 import com.allxone.coinmarket.model.Coins;
 import com.allxone.coinmarket.service.CoinService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class CoinsRestApi {
     private final CoinService coinService;
 
     @PostMapping
-    public ResponseEntity<?> addToCoin(@RequestBody Coins coins) throws ParamInvalidException {
+    public ResponseEntity<?> addToCoin(@RequestBody Coins coins) throws ApplicationException {
         coinService.addToCoin(coins);
 
         return ResponseEntity.ok("Successfully added coins to the account");

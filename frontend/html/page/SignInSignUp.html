@@ -205,7 +205,6 @@
     </section>
     <script src="../../axios/config.js"></script>
     <script src="../../axios/sign.js"></script>
-
     <script>
 
         function setCookie(name, value, days) {
@@ -233,11 +232,10 @@
 
         if (accessToken) {
 
-            setCookie('accessToken', accessToken, 7);
+            setCookie('token', accessToken, 7);
 
-            window.location.href = "/home"
-    
-            console.log('AccessToken:', accessToken);
+            window.location.href = "http://127.0.0.1:5500/html/page/coin-magement.html"
+
         } else {
             console.error('AccessToken not found in the URL.');
         }
