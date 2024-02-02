@@ -2,7 +2,6 @@ import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,15 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "@/config/firebase.config";
 import PasswordInput from "@/components/shared/PasswordInput";
-
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(2, {
-    message: "Password must be at least 2 characters.",
-  }),
-});
+import { SignInValidation } from "@/lib/validation";
 
 const imagesInit = [
   "/src/assets/side-img-1.jpg",
@@ -40,11 +31,11 @@ const imagesInit = [
   "/src/assets/side-img-3.png",
 ];
 
-const Login = () => {
+const SignIn = () => {
   const navigate = useNavigate();
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(SignInValidation),
     defaultValues: {
       username: "",
       password: "",
@@ -84,7 +75,7 @@ const Login = () => {
   return (
     <>
       <div className="flex justify-center">
-        <div className="flex flex-col md:flex-row xl:flex-row justify-center p-8 xl:space-x-20">
+        <div className="flex flex-col md:flex-row xl:flex-row justify-center p-8 xl:space-x-20 md:space-x-16">
           {/* Left site */}
           <div className="flex flex-1 flex-col justify-center xl:max-w-[430px] md:max-w-[430px] pt-8">
             <div className="flex flex-col flex-1 text-center">
@@ -193,10 +184,10 @@ const Login = () => {
             </div>
           </div>
           {/* Right site */}
-          <div className="xl:flex hidden w-1/2">
+          <div className="w-1/2 xl:flex md:flex sm:hidden">
             <Carousel
               plugins={[plugin.current]}
-              className="w-[570px] flex items-center"
+              className="flex items-center md:w-[500px] xl:w-[570px]"
               onMouseEnter={plugin.current.stop}
               onMouseLeave={plugin.current.play}
             >
@@ -205,7 +196,7 @@ const Login = () => {
                   <CarouselItem key={index}>
                     <div>
                       <Card className="rounded-2xl">
-                        <CardContent className="h-[700px] w-[570px] p-0">
+                        <CardContent className="h-[700px] p-0 md:w-[500px] xl:w-[570px]">
                           <img
                             src={item}
                             className="w-full h-full rounded-2xl"
@@ -227,4 +218,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;
