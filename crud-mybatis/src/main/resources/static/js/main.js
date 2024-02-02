@@ -1,7 +1,7 @@
 "use strict";
-import dotenv from 'https://cdn.jsdelivr.net/npm/dotenv@16.4.1/+esm';
+import { config } from 'https://cdn.jsdelivr.net/npm/dotenv@16.4.1/+esm';
 
-dotenv.config();
+config();
 
 const gBASE_URL = import.meta.env.HOST_API + '/api';
 
