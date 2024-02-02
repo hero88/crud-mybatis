@@ -76,22 +76,26 @@ public class CoinsServiceImpl implements CoinService {
     @Override
     public List<CoinsUserReponse> getAllCoinsUser() throws IOException {
         CustomUserDetail user = jwtProvider.getCurrentAuthenticatedAccount();
-        System.out.println(user.getId());
         List<Coins> listCoins = coinMapper.selectAllCoinsByUserId(user.getId());
         List<CoinsUserReponse> userCoinsReponseList = new ArrayList<>();
         CoinApiReponse coinApiReponseList = fetchApiDataCoins(100);
-        for (Coins coin : listCoins){
-            CoinsUserReponse userReponse = new CoinsUserReponse();
-            List<CryptoCurrency> list = coinApiReponseList.getData().getCryptoCurrencyList().stream().filter(c -> c.getId() == coin.getCoinmarketId()).collect(Collectors.toList());
-            userReponse.setId(coin.getCoinmarketId());
-            userReponse.setSymbol(coin.getSymbol());
-            userReponse.setPrice(list.get(0).getQuotes().get(0).getPrice());
-            userReponse.setName(coin.getName());
-            userReponse.setQuantity(coin.getQuantity());
-            userReponse.setAmount(coin.getQuantity() * list.get(0).getQuotes().get(0).getPrice());
-            userCoinsReponseList.add(userReponse);
-        }
-        System.out.println(userCoinsReponseList.size());
+        listCoins.forEach(coin -> {
+            List<CryptoCurrency> cryptoCurrencyList = coinApiReponseList.getData().getCryptoCurrencyList().stream()
+                    .filter(c -> c.getId() == coin.getCoinmarketId())
+                    .collect(Collectors.toList());
+            if (!cryptoCurrencyList.isEmpty()) {
+                CryptoCurrency cryptoCurrency = cryptoCurrencyList.get(0);
+                CoinsUserReponse userReponse = new CoinsUserReponse();
+                userReponse.setId(coin.getCoinmarketId());
+                userReponse.setSymbol(coin.getSymbol());
+                userReponse.setPrice(cryptoCurrency.getQuotes().get(0).getPrice());
+                userReponse.setName(coin.getName());
+                userReponse.setQuantity(coin.getQuantity());
+                userReponse.setAmount(coin.getQuantity() * cryptoCurrency.getQuotes().get(0).getPrice());
+
+                userCoinsReponseList.add(userReponse);
+            }
+        });
         return userCoinsReponseList;
     }
 
