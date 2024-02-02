@@ -16,10 +16,14 @@ import com.allxone.coinmarket.model.CoinsExample;
 import com.allxone.coinmarket.model.Users;
 import com.allxone.coinmarket.service.CoinService;
 import com.allxone.coinmarket.service.UserService;
+import com.allxone.coinmarket.utilities.TimeUtils;
 import com.allxone.coinmarket.utilities.ValidatorUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,8 +43,9 @@ public class CoinsServiceImpl implements CoinService {
     private final JWTProvider jwtProvider;
     private final UserService userService;
     private final RestTemplate restTemplate;
+    private final TimeUtils timeUntil;
 
-
+    private final String URI_HISTORY_PRICECOIN = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart";
     private final String apiUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing";
 
 
@@ -72,22 +77,26 @@ public class CoinsServiceImpl implements CoinService {
     @Override
     public List<CoinsUserReponse> getAllCoinsUser() throws IOException {
         CustomUserDetail user = jwtProvider.getCurrentAuthenticatedAccount();
-        System.out.println(user.getId());
         List<Coins> listCoins = coinMapper.selectAllCoinsByUserId(user.getId());
         List<CoinsUserReponse> userCoinsReponseList = new ArrayList<>();
         CoinApiReponse coinApiReponseList = fetchApiDataCoins(100);
-        for (Coins coin : listCoins){
-            CoinsUserReponse userReponse = new CoinsUserReponse();
-            List<CryptoCurrency> list = coinApiReponseList.getData().getCryptoCurrencyList().stream().filter(c -> c.getId() == coin.getCoinmarketId()).collect(Collectors.toList());
-            userReponse.setId(coin.getCoinmarketId());
-            userReponse.setSymbol(coin.getSymbol());
-            userReponse.setPrice(list.get(0).getQuotes().get(0).getPrice());
-            userReponse.setName(coin.getName());
-            userReponse.setQuantity(coin.getQuantity());
-            userReponse.setAmount(coin.getQuantity() * list.get(0).getQuotes().get(0).getPrice());
-            userCoinsReponseList.add(userReponse);
-        }
-        System.out.println(userCoinsReponseList.size());
+        listCoins.forEach(coin -> {
+            List<CryptoCurrency> cryptoCurrencyList = coinApiReponseList.getData().getCryptoCurrencyList().stream()
+                    .filter(c -> c.getId() == coin.getCoinmarketId())
+                    .collect(Collectors.toList());
+            if (!cryptoCurrencyList.isEmpty()) {
+                CryptoCurrency cryptoCurrency = cryptoCurrencyList.get(0);
+                CoinsUserReponse userReponse = new CoinsUserReponse();
+                userReponse.setId(coin.getCoinmarketId());
+                userReponse.setSymbol(coin.getSymbol());
+                userReponse.setPrice(cryptoCurrency.getQuotes().get(0).getPrice());
+                userReponse.setName(coin.getName());
+                userReponse.setQuantity(coin.getQuantity());
+                userReponse.setAmount(coin.getQuantity() * cryptoCurrency.getQuotes().get(0).getPrice());
+
+                userCoinsReponseList.add(userReponse);
+            }
+        });
         return userCoinsReponseList;
     }
 
@@ -192,7 +201,26 @@ public class CoinsServiceImpl implements CoinService {
 
     @Override
     public Map<String, Object> getHistoryPriceCoin(Integer coinId) {
-        return null;
+    	RestTemplate restTemplate = new RestTemplate();
+		String range=timeUntil.getListTimeStampEnd12MonthsAgo().get(0)+"~"+timeUntil.getListTimeStampEnd12MonthsAgo().get(timeUntil.getListTimeStampEnd12MonthsAgo().size()-1);
+		ResponseEntity<String> response = restTemplate
+				.getForEntity(URI_HISTORY_PRICECOIN+"?id=" + coinId + "&range="+range, String.class);
+		try {
+			if (response.getStatusCode().is2xxSuccessful()) {
+				String responseData = response.getBody();
+				ObjectMapper objectMapper = new ObjectMapper();
+				Map<String, Object> dataMap;
+				dataMap = objectMapper.readValue(responseData, Map.class);
+				dataMap.put("timestamps", timeUntil.getListTimeStampEnd12MonthsAgo());
+				dataMap.put("months", timeUntil.getEnglishMonthNamesLast12Months());
+				return dataMap;
+			} else {
+				return null;
+			}
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
 

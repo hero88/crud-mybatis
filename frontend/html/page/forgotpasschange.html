@@ -40,12 +40,14 @@
             </div>
         </section>
     </div>
+    <script src="../../axios/config.js"></script>
     <script>
+        const baseURL = instance.defaults.baseURL;
         $(".btn-changepass").click(function () {
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
             var newPass = $('.password').val();
-            axios.get('http://localhost:8080/api/v1/recovery-password', {
+            axios.get(baseURL+'v1/recovery-password', {
                 params: {
                     id: id,
                     newPass: newPass
