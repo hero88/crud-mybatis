@@ -188,11 +188,11 @@
 
         function onPageLoading() {
             // Gọi hàm loadTable lần đầu tiên ngay khi trang được tải
-            loadTable(gBASE_URL + "/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
+            loadTable(gBASE_URL + "/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
 
             // Sử dụng setTimeout để chờ 30 giây trước khi gọi lại hàm loadTable
             setInterval(function () {
-                loadTable(gBASE_URL + "/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
+                loadTable(gBASE_URL + "/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
             }, 60000);
         }
 
