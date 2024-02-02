@@ -1,5 +1,5 @@
 "use strict";
-require('dotenv').config();
+dotenv.config();
 
 const gBASE_URL = process.env.HOST_API + '/api';
 console.log(gBASE_URL);

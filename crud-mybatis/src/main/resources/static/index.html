@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
+        <!-- DOTENV -->
+        <script src="https://cdn.jsdelivr.net/npm/dotenv@10.0.0/dist/main.js"></script>
+
         <!-- JQUERY -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
                 integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
@@ -72,7 +75,7 @@
 
     </body>
 </html>
-<script src="../js/main.js"></script>
+<script src="./js/main.js"></script>
 
 <script>
     if (accessToken) {
@@ -183,11 +186,11 @@
 
         function onPageLoading() {
             // Gọi hàm loadTable lần đầu tiên ngay khi trang được tải
-            loadTable("http://localhost:8080/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
+            loadTable(gBASE_URL + "/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
 
             // Sử dụng setTimeout để chờ 30 giây trước khi gọi lại hàm loadTable
             setInterval(function () {
-                loadTable("http://localhost:8080/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
+                loadTable(gBASE_URL + "/api/coinmarketcap?start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD");
             }, 60000);
         }
 
