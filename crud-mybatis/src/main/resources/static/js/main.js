@@ -1,6 +1,6 @@
 "use strict";
 
-import { HOST_API } from "../config/config";
+import { HOST_API } from "../config/config.js";
 
 const gBASE_URL = HOST_API + '/api';
 
