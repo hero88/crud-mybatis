@@ -59,3 +59,5 @@ if (accessToken) {
         }
     });
 }
+
+export {accessToken, gBASE_URL};

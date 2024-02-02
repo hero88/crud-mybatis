@@ -75,7 +75,8 @@
 </html>
 <script type="module" src="../js/main.js"></script>
 
-<script>
+<script type="module">
+    import { accessToken, gBASE_URL } from "../js/main.js";
     if (accessToken) {
         $("#account").html(
             `<a href="../customer/user.html"><i class="fa-solid fa-user" title="User Info" style="font-size: 25px; padding: 8px"></i></a>
