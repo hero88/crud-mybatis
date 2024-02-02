@@ -70,6 +70,7 @@ const SignUp = () => {
                         </FormControl>
                         <FormMessage />
                       </FormItem>
+                    
                     )}
                   />
                   {/* Password */}

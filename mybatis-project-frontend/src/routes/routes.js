@@ -1,10 +1,8 @@
 import config from "@/config";
-import LoginLayout from "@/layouts/LoginLayout";
 import ProfileLayout from "@/layouts/ProfileLayout";
 import Coin from "@/pages/Coin";
 import Home from "@/pages/Home";
 import ListUser from "@/pages/ListUser";
-import Login from "@/pages/Login";
 import Profile from "@/pages/Profile";
 
 import AuthLayout from "@/layouts/AuthLayout";
@@ -17,7 +15,6 @@ const publicRoutes = [
   { path: config.routes.profile, component: Profile, layout: ProfileLayout },
   { path: config.routes.listUser, component: ListUser, layout: ProfileLayout },
   { path: config.routes.coin, component: Coin, layout: ProfileLayout },
-  { path: config.routes.login, component: Login, layout: LoginLayout },
   { path: config.routes.signin, component: SignIn, layout: AuthLayout },
   { path: config.routes.signup, component: SignUp, layout: AuthLayout },
 ];
