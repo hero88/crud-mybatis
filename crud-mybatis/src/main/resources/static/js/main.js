@@ -4,7 +4,6 @@ import dotenv from 'https://cdn.jsdelivr.net/npm/dotenv@16.4.1/+esm';
 dotenv.config();
 
 const gBASE_URL = process.env.HOST_API + '/api';
-console.log(gBASE_URL);
 
 //Hàm setCookie
 function setCookie(cname, cvalue, exdays, remember) {
@@ -60,4 +59,4 @@ if (accessToken) {
     });
 }
 
-export {accessToken, gBASE_URL};
+export { accessToken, gBASE_URL };
