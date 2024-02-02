@@ -16,11 +16,12 @@ on:
 
 jobs:
   test-java:
-    runs-on: self-hosted
+    runs-on: java-gr1
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
       with:
-        ref: ${{ github.event.before }}  # Use the commit before the push
+        # ref: ${{ github.event.before }}  # Use the commit before the push
+        ref: "hero88-patch-1"
 
     - name: copy_file
       run: |
