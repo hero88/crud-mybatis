@@ -1,6 +1,6 @@
 "use strict";
 // main.js
-import dotenv from 'https://cdn.jsdelivr.net/npm/dotenv@16.4.1/dist/main.js';
+import dotenv from 'https://cdn.jsdelivr.net/npm/dotenv@16.4.1/+esm';
 
 dotenv.config();
 
