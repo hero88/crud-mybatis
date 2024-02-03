@@ -1,3 +1,4 @@
+import { instance } from "./config/config.js";
 const baseURL = instance.defaults.baseURL;
 var api = baseURL+"v1/user";
 

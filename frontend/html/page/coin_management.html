@@ -184,8 +184,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
-    <script>
-        const apiUrl = 'http://localhost:8080/api/v1/coins/find-by-user-logged';
+    <script type="module">
+        import { instance } from "./config/config.js";
+        const baseURL = instance.defaults.baseURL;
+        const apiUrl = baseURL+'v1/coins/find-by-user-logged';
 
         const headers = {
             'Authorization': 'Bearer ' + getCookie('token'),
@@ -221,12 +223,12 @@
 
             if (id) {
 
-                url = 'http://localhost:8080/api/v1/coins/' + id;
+                url = baseURL+'v1/coins/' + id;
                 // coinData.id=null;
 
                 updateCoin(url, coinData);
             } else {
-                url = 'http://localhost:8080/api/v1/coins';
+                url = baseURL+'v1/coins';
                 addToCoin(url, coinData);
             }
 
@@ -300,7 +302,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    axios.delete('http://localhost:8080/api/v1/coins/' + id, { headers })
+                    axios.delete(baseURL+'v1/coins/' + id, { headers })
                         .then(res => {
                             Swal.fire({
                                 title: "Deleted!",
@@ -326,7 +328,7 @@
         }
 
         function findById(id) {
-            axios.get('http://localhost:8080/api/v1/coins/' + id, { headers })
+            axios.get(baseURL+'v1/coins/' + id, { headers })
                 .then(res => {
 
                     // console.log(res)
@@ -343,7 +345,7 @@
         function populateCoinOptions() {
             const selectElement = $('#coinmarket_id');
 
-            axios.get('http://localhost:8080/api/v1/coins/home')
+            axios.get(baseURL+'v1/coins/home')
                 .then(response => {
                     if (response.status !== 200) {
                         throw new Error(`Error: ${response.status}`);

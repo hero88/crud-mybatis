@@ -9,6 +9,8 @@ $(".open-ui-login").click(function () {
     $("#container-login").show(800);
 });
 
+import { instance } from "../config/config.js";
+
 const baseURL = instance.defaults.baseURL;
 
 $(".btn-login").click(function () {
