@@ -1,4 +1,7 @@
-var api = "http://localhost:8080/api/v1/user";
+import { instance } from "./config/config.js";
+const baseURL = instance.defaults.baseURL;
+
+var api = baseURL+"v1/user";
 var data = new URLSearchParams(window.location.search).get('username');
 
 const getOneUser = async (username) => {

@@ -1,8 +1,9 @@
+import { instance } from "../config/config.js";
 const baseURL = instance.defaults.baseURL;
 const ctx = document.getElementById("myChart");
 var id = new URLSearchParams(window.location.search).get("id");
 axios
-  .get(baseURL + "v1/history-coin", {
+  .get(baseURL + "v1/coins/history-coin", {
     params: {
       id: id,
     },
