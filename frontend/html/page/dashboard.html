@@ -155,7 +155,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module">
-        import { instance } from "./config/config.js";
+        import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
         const apiUrl = baseURL+'v1/coins/myCoins';
         const authToken = getCookie('token');

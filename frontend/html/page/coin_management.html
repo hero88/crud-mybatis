@@ -185,7 +185,7 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <script type="module">
-        import { instance } from "./config/config.js";
+        import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
         const apiUrl = baseURL+'v1/coins/find-by-user-logged';
 
