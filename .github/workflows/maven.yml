@@ -10,9 +10,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main", "hero88-patch-1" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "hero88-patch-1" ]
+    branches: [ "main" ]
 
 jobs:
   test-java:
@@ -26,7 +26,5 @@ jobs:
     - name: copy_file
       run: |
         sudo rsync -a . /home/azureuser/crud_training/java_gr2/ --exclude .git
-        cp /home/azureuser/crud_training/java_gr2/.env /home/azureuser/crud_training/java_gr2/crud-mybatis/.env
         cd /home/azureuser/crud_training/java_gr2/crud-mybatis/
-        npm install
         mvn spring-boot:run
