@@ -187,7 +187,7 @@
     <script type="module">
         import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
-        const apiUrl = baseURL+'v1/coins/find-by-user-logged';
+        const apiUrl = baseURL + 'v1/coins/find-by-user-logged';
 
         const headers = {
             'Authorization': 'Bearer ' + getCookie('token'),
@@ -197,7 +197,7 @@
         // if( getCookie('accessToken')){}
         populateCoinOptions()
 
-        function saveOrUpdate() {
+        window.saveOrUpdate = function () {
 
             const selectedOption = $('#coinmarket_id option:selected');
 
@@ -212,7 +212,7 @@
 
 
             const coinData = {
-            
+
                 coinmarketId: coinmarketId,
                 name: name,
                 symbol: symbol,
@@ -223,18 +223,18 @@
 
             if (id) {
 
-                url = baseURL+'v1/coins/' + id;
+                url = baseURL + 'v1/coins/' + id;
                 // coinData.id=null;
 
                 updateCoin(url, coinData);
             } else {
-                url = baseURL+'v1/coins';
+                url = baseURL + 'v1/coins';
                 addToCoin(url, coinData);
             }
 
         }
 
-        function addToCoin(url, coinData) {
+        window.addToCoin = function (url, coinData) {
             axios.post(url, coinData, { headers })
                 .then(res => {
                     fetchDataAndPopulateTable(apiUrl)
@@ -265,7 +265,7 @@
                 })
         }
 
-        function updateCoin(url, coinData) {
+        window.updateCoin = function (url, coinData) {
             axios.put(url, coinData, { headers })
                 .then(res => {
                     fetchDataAndPopulateTable(apiUrl)
@@ -289,7 +289,7 @@
                 })
         }
 
-        function deleteCoin(id) {
+        window.deleteCoin = function (id) {
 
             Swal.fire({
                 title: "Are you sure?",
@@ -302,7 +302,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    axios.delete(baseURL+'v1/coins/' + id, { headers })
+                    axios.delete(baseURL + 'v1/coins/' + id, { headers })
                         .then(res => {
                             Swal.fire({
                                 title: "Deleted!",
@@ -319,16 +319,15 @@
         }
 
 
-        function setNull() {
+        window.setNull = function () {
             $('#select_coin').show()
             $('#coinmarket_id').val(1)
             $('#coin_id').val("")
             $('#quantity').val(1)
             $('#exampleModal').modal('hide');
         }
-
-        function findById(id) {
-            axios.get(baseURL+'v1/coins/' + id, { headers })
+        window.findById = function (id) {
+            axios.get(baseURL + 'v1/coins/' + id, { headers })
                 .then(res => {
 
                     // console.log(res)
@@ -345,7 +344,7 @@
         function populateCoinOptions() {
             const selectElement = $('#coinmarket_id');
 
-            axios.get(baseURL+'v1/coins/home')
+            axios.get(baseURL + 'v1/coins/home')
                 .then(response => {
                     if (response.status !== 200) {
                         throw new Error(`Error: ${response.status}`);
