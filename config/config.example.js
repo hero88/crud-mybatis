@@ -1,0 +1,1 @@
+export const HOST_URL="your host url";
