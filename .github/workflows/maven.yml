@@ -18,7 +18,7 @@ jobs:
   test-java:
     runs-on: java-gr2
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         # ref: ${{ github.event.before }}  # Use the commit before the push
         ref: "develop-java-gr2"
