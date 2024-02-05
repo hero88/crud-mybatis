@@ -28,7 +28,8 @@ jobs:
         sudo rsync -a . /home/azureuser/crud_training/java_gr2/ --exclude .git
         cp /home/azureuser/crud_training/java_gr2/env.js /home/azureuser/crud_training/java_gr2/frontend/axios/config/env.js
         cp /home/azureuser/crud_training/java_gr2/.env /home/azureuser/crud_training/java_gr2/mybatis-spring-boot-coinmarket/src/main/resources/.env
-        cd /home/azureuser/crud_training/java_gr2/mybatis-spring-boot-coinmarket/
                 
     - name: run_the_app
-      run: mvn spring-boot:run
+      run: |
+        cd /home/azureuser/crud_training/java_gr2/mybatis-spring-boot-coinmarket/
+        mvn spring-boot:run
