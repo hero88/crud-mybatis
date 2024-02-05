@@ -1,17 +1,17 @@
-import { instance } from "./config/config.js";
+import { instance } from "../config/config.js";
 const baseURL = instance.defaults.baseURL;
-
 var api = baseURL+"v1/user";
-var data = new URLSearchParams(window.location.search).get('username');
+// var data = new URLSearchParams(window.location.search).get('username');
 
-const getOneUser = async (username) => {
+const getOneUserByEmail = async () => {
+    
     const config = {
         headers: {
             'Authorization': 'Bearer ' + getCookie('token')
         }
     };
   try {
-    const response = await axios.get(api + "/" + username);
+    const response = await axios.get(api + "/own" ,config);
     if (response.status == 200) {
       $("#h5Username").html(response.data.data.username);
       $("#h5Email").html(response.data.data.username);
@@ -31,34 +31,35 @@ const getOneUser = async (username) => {
 };
 
 $('#saveInfo').click(function () {
-    const id  =   $("#id").val();
+    const id = $("#id").val();
     const config = {
         headers: {
             'Authorization': 'Bearer ' + getCookie('token')
         }
     };
-   axios.put(api+'/'+id, config,
-        {
-        email:    $("#email").val(),
+    const data = {
+        email: $("#email").val(),
         username: $("#username").val(),
-        name:     $("#name").val(),
-        phoneNumber:$("#phone").val(),
-        gender:   $("#gender").val(),
-        age:      $("#age").val(),
-        address:  $("#address").val(),
+        name: $("#name").val(),
+        phoneNumber: $("#phone").val(),
+        gender: $("#gender").val(),
+        age: $("#age").val(),
+        address: $("#address").val(),
+    };
+
+    axios.put(api + '/' + id, data, config) // Corrected the order of parameters
+        .then(function (response) {
+            if (response.status === 200) {
+                alert(response.data.message);
+            } else if (response.status === 400) {
+                alert(response.data.message);
+            }
         })
-    .then(function (response) {
-        if(response.status == 200) {
-            alert(response.data.message);
-        }
-        else if(response.status == 400) {
-            alert(response.data.message);
-        }
-    })
-    .catch(function (error) {
-        console.log( error.message  );
-    });
+        .catch(function (error) {
+            console.log(error.message);
+        });
 });
+
 
 
 $('#savePassword').click(function () {
@@ -73,12 +74,11 @@ $('#savePassword').click(function () {
         passwordConfirm: $("#passwordConfirm").val(),
     };
 
-   
-       axios.patch(api, data, config)
+    axios.patch(api, data, config)
         .then(function (response) {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 alert(response.data.message);
-            } else if (response.status == 400) {
+            } else if (response.status === 400) {
                 alert(response.data.message);
             }
         })
@@ -87,6 +87,4 @@ $('#savePassword').click(function () {
         });
 });
 
-
-
-getOneUser(data);
+getOneUserByEmail();
