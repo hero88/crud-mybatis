@@ -10,21 +10,25 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop-java-gr2" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "develop-java-gr2" ]
 
 jobs:
   test-java:
-    runs-on: java-gr1
+    runs-on: java-gr2
     steps:
     - uses: actions/checkout@v3
       with:
         # ref: ${{ github.event.before }}  # Use the commit before the push
-        ref: "hero88-patch-1"
+        ref: "develop-java-gr2"
 
     - name: copy_file
       run: |
         sudo rsync -a . /home/azureuser/crud_training/java_gr2/ --exclude .git
-        cd /home/azureuser/crud_training/java_gr2/crud-mybatis/
-        mvn spring-boot:run
+        cp /home/azureuser/crud_training/java_gr2/env.js /home/azureuser/crud_training/java_gr2/frontend/axios/config/env.js
+        cp /home/azureuser/crud_training/java_gr2/.env /home/azureuser/crud_training/java_gr2/mybatis-spring-boot-coinmarket/src/main/resources/.env
+        cd /home/azureuser/crud_training/java_gr2/mybatis-spring-boot-coinmarket/
+                
+    - name: run_the_app
+      run: mvn spring-boot:run
