@@ -83,6 +83,9 @@
 					<li class="nav-item">
 						<a class="nav-link" href="../../html/page/dashboard.html">Dashboard</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="../../html/page/coin_management.html">User coin</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -201,7 +204,6 @@
 					return response.data;
 				})
 				.then(data => {
-					console.log(data.data.data.cryptoCurrencyList);
 					populateTable(data.data.data.cryptoCurrencyList);
 				})
 				.catch(error => {
