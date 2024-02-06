@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.allxone.coinmarket.enums.AuthenticationType;
 import com.allxone.coinmarket.mapper.UsersMapper;
 import com.allxone.coinmarket.model.Email;
 import com.allxone.coinmarket.model.Users;
@@ -28,18 +29,23 @@ public class RegisterService {
 	private final PasswordEncoder encoder;
 	
 	public void register(Users user) {
-		user.setPassword(encoder.encode(user.getPassword()));
-		user.setIsActive(false);
-		user.setCreatedAt(new Date());
-		user.setUpdatedAt(new Date());
-		userMapper.insert(user);
 		Users userTmp = userMapper.findUserByEmail(user.getEmail());
-		Email mail = new Email();
-		mail.setFrom("musicstreaming2023@gmail.com");
-		mail.setTo(user.getEmail());
-		mail.setSubject("COIN MARKET: ACTIVE YOUR ACCOUNT");
-		mail.setBody(sendMailTemplateSer.getContentForConfirm(user.getEmail(), "templateMail", "activated", applicationUrl(req,"/activated-account?id="+userTmp.getId())));
-		mailService.enqueue(mail);
+		if(userTmp==null) {
+			user.setPassword(encoder.encode(user.getPassword()));
+			user.setIsActive(false);
+			user.setCreatedAt(new Date());
+			user.setUpdatedAt(new Date());
+			user.setType(AuthenticationType.EMAIL);
+			userMapper.insertSelective(user);
+			userTmp = userMapper.findUserByEmail(user.getEmail());
+			Email mail = new Email();
+			mail.setFrom("musicstreaming2023@gmail.com");
+			mail.setTo(user.getEmail());
+			mail.setSubject("COIN MARKET: ACTIVE YOUR ACCOUNT");
+			mail.setBody(sendMailTemplateSer.getContentForConfirm(user.getEmail(), "templateMail", "activated", applicationUrl(req,"/activated-account?id="+userTmp.getId())));
+			mailService.enqueue(mail);
+		}
+		
 	}
 	
 	private String applicationUrl(HttpServletRequest request, String path) {

@@ -66,4 +66,6 @@ public interface UserRoleMapper {
     int updateByExample(@Param("row") UserRole row, @Param("example") UserRoleExample example);
     
     List<UserRole> findRoleByUserId(Long id);
+    
+    UserRole findUserRoleByUserIdAndRoleId(Integer idRole, Long idUser);
 }
