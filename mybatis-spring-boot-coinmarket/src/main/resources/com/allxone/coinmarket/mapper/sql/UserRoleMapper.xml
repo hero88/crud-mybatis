@@ -195,4 +195,8 @@
    <select id="findRoleByUserId" parameterType="long" resultType="list">
     	select * from user_role where userId = #{id}
   </select>
+  
+  <select id="findUserRoleByUserIdAndRoleId" resultType="com.allxone.coinmarket.model.UserRole">
+    	select * from user_role where role_id = #{idRole} and user_id = #{idUser} 
+  </select>
 </mapper>

@@ -22,7 +22,7 @@ $(".btn-login").click(function () {
     }).then(function (resp) {
         alert("Login successful")
         setCookie("token", resp.data.data.access_token, 30)
-        window.location.href = "http://127.0.0.1:5500/html/page/home.html";
+        window.location.href = window.location.origin+"/frontend/html/page/home.html";
     }).catch(function (error) {
         console.log(error);
     });
