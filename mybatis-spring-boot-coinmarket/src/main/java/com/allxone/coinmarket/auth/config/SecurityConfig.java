@@ -65,12 +65,9 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/login/**", "/api/error")
-					.permitAll()
-					.anyRequest()
-					.authenticated())
+				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.oauth2Login(oauth2 -> oauth2.loginPage("/api/login").successHandler(customSuccessHandler));
+				.oauth2Login(oauth2 -> oauth2.successHandler(customSuccessHandler));
 
 		UserFactory jwtUserFactory = UserFactory.getInstance();
 		jwtUserFactory.setRoleMapper(rolesMapper);
