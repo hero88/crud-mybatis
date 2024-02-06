@@ -13,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 public class ActivatedAccountController {
 	
 	private final UserService userService;
+
+	private final HttpServletRequest req;
 	
 	@GetMapping("/activated-successful")
 	public String success() {
-		return "";
+		return "redirect://"+req.getServerName() + ":" + req.getServerPort()+"/java_gr2/frontend/html/page/SignInSignUp.html";
 	}
 	
 	@GetMapping("/activated-account")
