@@ -18,12 +18,12 @@ public class ActivatedAccountController {
 	
 	@GetMapping("/activated-successful")
 	public String success(HttpServletRequest req) {
-		return "redirect://"+ req.getServerName() + "/java_gr2/frontend/html/page/SignInSignUp.html";
+		return "redirect:/"+ req.getServerName() + "/java_gr2/frontend/html/page/SignInSignUp.html";
 	}
 	
 	@GetMapping("/activated-account")
 	public String activatedAccount(@RequestParam("id") Long id){
 		userService.changeStatusUser(id, true, "activated");
-		return "redirect://activated-successful";
+		return "redirect:/activated-successful";
 	}
 }

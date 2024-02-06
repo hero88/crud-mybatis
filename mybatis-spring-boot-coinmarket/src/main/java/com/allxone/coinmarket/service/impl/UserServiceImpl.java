@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.allxone.coinmarket.auth.UserDetail.GetSubject;
 import com.allxone.coinmarket.dto.request.PasswordDTO;
 import com.allxone.coinmarket.exception.auth.AuthenticateException;
+import com.allxone.coinmarket.mapper.RolesMapper;
 import com.allxone.coinmarket.mapper.UserRoleMapper;
 import com.allxone.coinmarket.mapper.UsersMapper;
 import com.allxone.coinmarket.model.Roles;
@@ -40,17 +41,18 @@ public class UserServiceImpl implements UserService {
 	private final GetSubject getSubjectJWT;
 
 	private final RoleService roleService;
+	
+	private final RolesMapper roleMapper;
 
 	@Override
 	public Users changeStatusUser(Long id, Boolean status, String type) {
 		UsersExample example = new UsersExample();
 		example.createCriteria().andIdEqualTo(id);
 		Users user = userMapper.selectByExample(example).get(0);
-		if(type.equalsIgnoreCase("activated")) {	
-			UserRoleExample usRoleExample = new UserRoleExample();
-			usRoleExample.createCriteria().andRoleIdEqualTo(2).andUserIdEqualTo(user.getId());
+		if(type.equalsIgnoreCase("activated")) {
 			user.setEmailVerificationAt(new Date());
-			UserRole useRole = userRoleMapper.selectByExample(usRoleExample).get(0);
+			Roles role = roleMapper.selectByPrimaryKey(2);
+			UserRole useRole = userRoleMapper.findUserRoleByUserIdAndRoleId(role.getId(),user.getId());	
 			if(useRole==null) {
 				useRole = new UserRole();
 				useRole.setRoleId(2);
