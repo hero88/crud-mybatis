@@ -1,5 +1,6 @@
 package com.allxone.coinmarket.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ public class ActivatedAccountController {
 	
 	private final UserService userService;
 
+	@Autowired
 	private final HttpServletRequest req;
 	
 	@GetMapping("/activated-successful")
