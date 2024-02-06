@@ -16,13 +16,13 @@ const baseURL = instance.defaults.baseURL;
 $(".btn-login").click(function () {
     var mailLogin = $('.mailLogin').val();
     var passLogin = $('.passLogin').val();
-    axios.post(baseURL+'v1/login', {
+    axios.post(baseURL + 'v1/login', {
         email: mailLogin,
         password: passLogin
     }).then(function (resp) {
         alert("Login successful")
-        setCookie("token",resp.data.data.access_token,30)
-        //window.location.href = "";
+        setCookie("token", resp.data.data.access_token, 30)
+        window.location.href = "http://127.0.0.1:5500/html/page/home.html";
     }).catch(function (error) {
         console.log(error);
     });
@@ -35,14 +35,14 @@ $(".btn-register").click(function () {
     var ageRegister = $('.age-register').val();
     var passRegister = $('.pass-register').val();
     var confirmPass = $('.confirm-pass-register').val();
-    var genderRegister =  $('input[name="gender"]:checked').val();
+    var genderRegister = $('input[name="gender"]:checked').val();
     var phoneNumberRegister = $('.phone-register').val();
     var AddressRegister = $('.address-register').val();
 
     if (confirmPass !== passRegister) {
         alert('Password is not match')
     } else {
-        axios.post(baseURL+'v1/register', {
+        axios.post(baseURL + 'v1/register', {
             username: usernameRegister,
             password: passRegister,
             name: fullnameRegister,
@@ -59,8 +59,8 @@ $(".btn-register").click(function () {
     }
 });
 
-$(".btn-send-mail-forgot").click(function(){
-    axios.get(baseURL+'v1/sendmail-forgot-password', {
+$(".btn-send-mail-forgot").click(function () {
+    axios.get(baseURL + 'v1/sendmail-forgot-password', {
         params: {
             email: $('#mail-forgot').val(),
         },
