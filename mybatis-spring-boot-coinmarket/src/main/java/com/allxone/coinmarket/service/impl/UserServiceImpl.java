@@ -202,4 +202,10 @@ public class UserServiceImpl implements UserService {
 		throw new AuthenticateException("Vui lòng đăng nhập");
 	}
 
+	@Override
+	public Users getOneUserByRequest(HttpServletRequest request) {
+		String email = getSubjectJWT.getEmailByRequest(request);
+		return isCheckUserExistByEmail(email);
+	}
+
 }

@@ -26,9 +26,9 @@ public class UserController {
 
     private final ModelMapper mapDTO;
 
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getOneUser(@PathVariable String username) {
-        Users users = userService.getOneUserByUsername(username);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOneUser(@PathVariable Long id) {
+        Users users = userService.getOneUserById(id);
         if (users != null) {
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
                     .message("successful")
@@ -41,6 +41,23 @@ public class UserController {
                 .success(false)
                 .build());
     }
+    
+    @GetMapping("/own")
+    public ResponseEntity<?> getUserByRequest(HttpServletRequest request) {
+        Users users = userService.getOneUserByRequest(request);
+        if (users != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                    .message("successful")
+                    .success(true)
+                    .data(users)
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.builder()
+                .message("User dose not exist")
+                .success(false)
+                .build());
+    }
+    
 
     @GetMapping()
     public ResponseEntity<?> getAllUser() {
@@ -72,7 +89,7 @@ public class UserController {
         Users user = mapDTO.map(userDTO, Users.class);
         Users userUpdate = userService.updateUser(id, user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
-                .message("Update Fail")
+                .message("Update successful")
                 .success(true)
                 .data(userUpdate)
                 .build());
@@ -83,7 +100,7 @@ public class UserController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         if (userService.deleteUser(id)) {
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
-                    .message("successful")
+                    .message("Delete successful")
                     .success(true)
                     .build());
         }

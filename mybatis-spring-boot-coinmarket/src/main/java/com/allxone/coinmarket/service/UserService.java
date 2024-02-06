@@ -15,6 +15,8 @@ public interface UserService {
 
 	Users getOneUserById(Long id);
 
+	Users getOneUserByRequest(HttpServletRequest request);
+	
 	boolean createUser(Users user);
 
 	Users updateUser(Long id,Users user);
