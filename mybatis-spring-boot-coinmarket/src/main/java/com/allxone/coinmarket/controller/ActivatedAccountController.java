@@ -1,6 +1,5 @@
 package com.allxone.coinmarket.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -16,13 +15,10 @@ import lombok.RequiredArgsConstructor;
 public class ActivatedAccountController {
 	
 	private final UserService userService;
-
-	@Autowired
-	private final HttpServletRequest req;
 	
 	@GetMapping("/activated-successful")
-	public String success() {
-		return "redirect://"+req.getServerName() + ":" + req.getServerPort()+"/java_gr2/frontend/html/page/SignInSignUp.html";
+	public String success(HttpServletRequest req) {
+		return "redirect://"+ req.getServerName() + "/java_gr2/frontend/html/page/SignInSignUp.html";
 	}
 	
 	@GetMapping("/activated-account")
