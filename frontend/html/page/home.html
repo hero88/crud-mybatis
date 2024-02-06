@@ -185,7 +185,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script type="module">
 		import { instance } from "../../axios/config/config.js";
+		console.log(instance);
 		const baseURL = instance.defaults.baseURL;
+		console.log(baseURL);
 		const apiUrl = baseURL+'v1/coins/home';
 		document.getElementById('limitSelect').addEventListener('change', function () {
 			const selectedValue = this.value;
