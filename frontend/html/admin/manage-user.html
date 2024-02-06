@@ -12,8 +12,8 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="../../axios/cookie.js"></script>
-        <script src="../../axios/user/user-profile.js"></script>
+        <script  src="../../axios/cookie.js"></script>
+    
 <style>
     .custab{
     border: 1px solid #ccc;
@@ -26,6 +26,12 @@
     box-shadow: 3px 3px 0px transparent;
     transition: 0.5s;
     }
+    #div-password{
+      display: none;
+    }
+    #createUser{
+      display: none;
+    }
 </style>
 </head>
 
@@ -33,7 +39,7 @@
 
 
     <div class="container mt-4">
-        <a data-bs-toggle="modal" data-bs-target="#modalCreate" class="btn btn-primary btn-xs"><b>+</b> Create User</a>
+        <a id="modelUser" data-bs-toggle="modal" data-bs-target="#modalEdit" class="btn btn-primary btn-xs"><b>+</b> Create User</a>
         <div class="row col-md-12 col-md-offset-2 custyle">
         <table class="table   custab" id="userTable">
         <thead>
@@ -82,10 +88,18 @@
                     <label for="" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" >
                 </div>
+                <div class="mb-3" id="div-password">
+                  <label for="" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" >
+              </div>
                 <div class="mb-3">
                     <label for="" class="form-label">Phone</label>
                     <input type="text" class="form-control" id="phone" >
                 </div>
+                <div class="mb-3">
+                  <label for="" class="form-label">Gender</label>
+                  <input type="text" class="form-control" id="gender" >
+              </div>
                 <div class="mb-3">
                     <label for="" class="form-label">Age</label>
                     <input type="number" class="form-control" id="age" >
@@ -97,61 +111,16 @@
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button  id="createUser" type="button" class="btn btn-success" data-bs-dismiss="modal">Create User</button>
+          <button id="modal-close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Create -->
-  <!-- <div class="modal fade" id="modalCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="contrainer">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="name@gmail.com">
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="password" class="form-control" id="email" placeholder="name@gmail.com">
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" >
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" >
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Phone</label>
-                    <input type="text" class="form-control" id="phone" >
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Age</label>
-                    <input type="number" class="form-control" id="age" >
-                </div>
-                  <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control" id="address" rows="3"></textarea>
-                  </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
 
-    <script src="../../axios/admin/manage-user.js"></script>
-    <script src="../../axios/config.js"></script>
+    <script  type="module" src="../../axios/admin/manage-user.js"></script>
+    <script  type="module" src="../../axios/config/config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

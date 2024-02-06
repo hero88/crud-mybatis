@@ -1,4 +1,5 @@
-import { instance } from "./config/config.js";
+
+import { instance } from "../config/config.js";
 const baseURL = instance.defaults.baseURL;
 var api = baseURL+"v1/user";
 
@@ -12,11 +13,12 @@ const getAllUser = async () => {
             'Authorization': 'Bearer ' + getCookie('token')
         }
     };
-    
+
     try {
         const response = await axios.get(api);
         const data = response.data.data;
         const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';
         data.forEach(user => {
             const row = tableBody.insertRow();
             const cell1 = row.insertCell(0);
@@ -36,13 +38,14 @@ const getAllUser = async () => {
 
             // Create Edit button
             const editButton = document.createElement('a');
-            editButton.className = 'btn btn-info btn-xs';
+            editButton.className = 'btn btn-info btn-xs mx-2';
             editButton.type = 'button';
             editButton.setAttribute('data-bs-toggle', 'modal');
             editButton.setAttribute('data-bs-target', '#modalEdit');
+            editButton.setAttribute('id', 'modalView');
             editButton.textContent = 'View';
             editButton.onclick = function () {
-                getOneUser(user.username); 
+                getOneUser(user.id); 
             };
             cell7.appendChild(editButton);
 
@@ -61,6 +64,7 @@ const getAllUser = async () => {
 };
 
 
+
 const deleteUser = async(id)=>{
     const config = {
         headers: {
@@ -72,6 +76,7 @@ const deleteUser = async(id)=>{
       const del = await  axios.delete(api+'/'+id, config);
       if(del.status == 200){
         alert(del.data.message);
+        getAllUser();
       }
       else if(response.status == 400) {
         alert(del.data.message);
@@ -80,3 +85,76 @@ const deleteUser = async(id)=>{
         console.log(error.message);
     }
 }
+
+const getOneUser = async (id) => {
+    const config = {
+        headers: {
+            'Authorization': 'Bearer ' + getCookie('token')
+        }
+    };
+  try {
+    const response = await axios.get(api + "/" + id,config);
+    if (response.status == 200) {
+      $("#h5Username").html(response.data.data.username);
+      $("#h5Email").html(response.data.data.username);
+      $("#email").val(response.data.data.email);
+      $("#username").val(response.data.data.username);
+      $("#name").val(response.data.data.name);
+      $("#phone").val(response.data.data.phoneNumber);
+      $("#age").val(response.data.data.age);
+      $("#gender").val(response.data.data.gender);
+      $("#address").val(response.data.data.address);
+      $("#id").val(response.data.data.id);
+    }
+  
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+$('#modelUser').click(function () {
+
+    $('#div-password').css('display', 'block');
+    $('#createUser').css('display', 'block');
+    $("#email").val(''),
+    $("#username").val(''),
+    $("#password").val(''),
+    $("#name").val(''),
+    $("#phone").val(''),
+    $("#gender").val(''),
+    $("#age").val(''),
+    $("#address").val('')
+});
+
+
+$('#createUser').click(function () {
+
+    const config = {
+        headers: {
+            'Authorization': 'Bearer ' + getCookie('token')
+        }
+    };
+    const data = {
+        email: $("#email").val(),
+        username: $("#username").val(),
+        password: $("#password").val(),
+        name: $("#name").val(),
+        phoneNumber: $("#phone").val(),
+        gender: $("#gender").val(),
+        age: $("#age").val(),
+        address: $("#address").val(),
+    };
+
+    axios.post(api , data, config) 
+        .then(function (response) {
+            if (response.status === 200) {
+                alert("Created successfully");
+                getAllUser();
+            } else if (response.status === 400) {
+                alert("Email exist");
+            }
+        })
+        .catch(function (error) {
+            console.log(error.message);
+        });
+});
