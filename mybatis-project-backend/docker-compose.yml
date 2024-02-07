@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  database-service:
+    container_name: allxone-database
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: CRUDAllXone
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123456
+    ports:
+      - 3306:3306
