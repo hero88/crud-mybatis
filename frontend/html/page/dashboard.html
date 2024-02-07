@@ -199,7 +199,7 @@
             data.forEach(crypto => {
                 const row = tableBody.insertRow();
                 row.addEventListener("click", () => {
-                    window.location.href = `http://127.0.0.1:5500/html/page/historyCoinChart.html?id=${crypto.id}`; // Thay đổi "your-url" thành URL mong muốn
+                    window.location.href = `https://cicd.upnewskill.asia/java_gr2/frontend/html/page/historyCoinChart.html?id=${crypto.id}`; // Thay đổi "your-url" thành URL mong muốn
                 });
                 Object.keys(mapping).forEach((key, index) => {
                     const cell = row.insertCell(index);
