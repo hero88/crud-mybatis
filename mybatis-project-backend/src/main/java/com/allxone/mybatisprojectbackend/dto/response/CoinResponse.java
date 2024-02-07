@@ -1,0 +1,17 @@
+package com.allxone.mybatisprojectbackend.dto.response;
+
+import lombok.Data;
+
+import java.time.Instant;
+
+@Data
+public class CoinResponse {
+    private Long id;
+    private String userId;
+    private String name;
+    private String symbol;
+    private String coinMarketId;
+    private Long quantity;
+    private Instant createdAt;
+    private Instant updatedAt;
+}

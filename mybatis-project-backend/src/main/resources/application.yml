@@ -5,9 +5,12 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
-  type-aliases-package: duolingobasicbackenduserservice
+  type-aliases-package: com.allxone.mybatisprojectbackend.model
 coinmarketcap-data:
   api:
     url: https://api.coinmarketcap.com/data-api/v3/cryptocurrency
