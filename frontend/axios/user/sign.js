@@ -20,9 +20,13 @@ $(".btn-login").click(function () {
         email: mailLogin,
         password: passLogin
     }).then(function (resp) {
-        alert("Login successful")
-        setCookie("token", resp.data.data.access_token, 30)
-        window.location.href = window.location.origin+"/frontend/html/page/home.html";
+        if(resp.data.data.status == 1){
+            alert("Login successful")
+            setCookie("token", resp.data.data.access_token, 30)
+            window.location.href = window.location.origin+"/java_gr2/frontend/html/page/home.html";
+        }else{
+            alert("Login fail. Check your information")
+        }
     }).catch(function (error) {
         console.log(error);
     });
