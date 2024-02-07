@@ -24,6 +24,6 @@ public class ActivatedAccountController {
 	@GetMapping("/activated-account")
 	public String activatedAccount(@RequestParam("id") Long id,HttpServletRequest req){
 		userService.changeStatusUser(id, true, "activated");
-		return "redirect:/"+ req.getServerName() + "activated-successful";
+		return "redirect:/"+ req.getServerName() + "/activated-successful";
 	}
 }
