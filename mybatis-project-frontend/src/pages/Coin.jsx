@@ -59,10 +59,10 @@ function Coin() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-8"></TableHead>
-              <TableHead className="p-0 min-w-6">#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Market pair count</TableHead>
-              <TableHead>quantity</TableHead>
+              <TableHead className="text-black p-0 min-w-6">#</TableHead>
+              <TableHead className="text-black">Name</TableHead>
+              <TableHead className="text-black">Market pair count</TableHead>
+              <TableHead className="text-black">Quantity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

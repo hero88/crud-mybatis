@@ -124,7 +124,7 @@ function Home() {
     }
 
     return (
-      <span className={`${textColor} flex items-center`}>
+      <span className={`${textColor} flex items-center justify-end`}>
         {icon} {formattedNumber}%
       </span>
     );
@@ -132,30 +132,49 @@ function Home() {
 
   return (
     <div>
-
       <div className="min-h-svh">
         <Table className="px-12">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-8"></TableHead>
-              <TableHead className="p-0 min-w-6">#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>1h %</TableHead>
-              <TableHead>24h %</TableHead>
-              <TableHead>7d %</TableHead>
-              <TableHead>Market Cap</TableHead>
-              <TableHead>Volume(24h)</TableHead>
-              <TableHead>Circulating Supply</TableHead>
+              <TableHead className="w-8 text-black"></TableHead>
+              <TableHead className="p-0 min-w-6 text-black text-[12px] font-boldx">
+                #
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold">
+                Name
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                Price
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                1h %
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                24h %
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                7d %
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                Market Cap
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                Volume(24h)
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold text-end">
+                Circulating Supply
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {data.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>
-                  <PiStarThin />
+                <TableCell className="font-semibold">
+                  <PiStarThin className="font-semibold text-gray-500" />
                 </TableCell>
-                <TableCell className="p-0 min-w-6">{index + 1}</TableCell>
+                <TableCell className="p-0 min-w-6 text-gray-500 font-semibold">
+                  {index + 1}
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center">
                     <div className="me-2">
@@ -163,29 +182,37 @@ function Home() {
                         src={`https://s2.coinmarketcap.com/static/img/coins/32x32/${item.id}.png`}
                         alt={item.name}
                         className="coin-logo"
-                        width={32}
-                        height={32}
+                        width={25}
+                        height={25}
                       />
                     </div>
                     <div className="items-center">
-                      <span className="me-2">{item.name}</span>
-                      <span className="">{item.symbol}</span>
+                      <span className="me-2 font-semibold">{item.name}</span>
+                      <span className="font-semibold text-gray-500">
+                        {item.symbol}
+                      </span>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{formatNumber(item.quotes[0].price)}</TableCell>
-                <TableCell>
+                <TableCell className="font-semibold text-end">
+                  {formatNumber(item.quotes[0].price)}
+                </TableCell>
+                <TableCell className="font-semibold text-end">
                   {renderChange(item.quotes[0].percentChange1h)}
                 </TableCell>
-                <TableCell>
+                <TableCell className="font-semibold text-end">
                   {renderChange(item.quotes[0].percentChange24h)}
                 </TableCell>
-                <TableCell>
+                <TableCell className="font-semibold text-end">
                   {renderChange(item.quotes[0].percentChange7d)}
                 </TableCell>
-                <TableCell>{formatNumber(item.quotes[0].marketCap)}</TableCell>
-                <TableCell>{formatNumber(item.quotes[0].volume24h)}</TableCell>
-                <TableCell>
+                <TableCell className="font-semibold text-end">
+                  {formatNumber(item.quotes[0].marketCap)}
+                </TableCell>
+                <TableCell className="font-semibold text-end">
+                  {formatNumber(item.quotes[0].volume24h)}
+                </TableCell>
+                <TableCell className="font-semibold text-end">
                   {formatNumber(parseFloat(item.circulatingSupply), 0)}{" "}
                   {item.symbol}
                 </TableCell>

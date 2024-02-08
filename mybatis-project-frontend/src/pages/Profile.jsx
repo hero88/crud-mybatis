@@ -1,13 +1,11 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
+import { number, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { format } from "date-fns";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,33 +13,54 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { CalendarIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 
 function Profile() {
-  const formSchema = z.object({});
-
-  const onSubmit = (values) => {
-    console.log(values);
-  };
+  const formSchema = z.object({
+    username: z.string(),
+    email: z.string(),
+    fullname: z.string(),
+    phone: z.string(),
+    address: z.string(),
+    age: z.string(),
+    gender: z.string(),
+  });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      username: "",
+      email: "",
+      fullname: "",
+      phone: "",
+      address: "",
+      age: 0,
+      gender: "",
+    },
   });
 
+  const onSubmit = (values) => {
+    const { username, email, fullname, phone, address, age, gender } = values;
+
+    let updatedUser = {
+      username,
+      email,
+      fullname,
+      phone,
+      address,
+      age: parseInt(age),
+      gender,
+    };
+
+    console.log(updatedUser);
+  };
+
   return (
-    <div className="centerSide w-7/12 px-8">
-      <h2>About me</h2>
-      <h3>Your Avatar</h3>
-      <div className="flex gap-8 items-center">
+    <div className="w-full px-8">
+      <h2 className="pb-4 text-2xl font-bold">Profile</h2>
+      <hr />
+      <h2 className="pb-4 text-xl font-semibold py-5">About me</h2>
+      <hr />
+      <div className="flex gap-8 items-center py-6">
         <div>
           <Avatar className="h-32 w-32">
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -52,18 +71,36 @@ function Profile() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mt-12 flex flex-col gap-4"
+          className="mt-8 flex flex-col gap-4 w-7/12"
         >
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Username"
+                    {...field}
+                    className="px-6 h-12 border-gray-400"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Email"
                     {...field}
-                    className="rounded-3xl px-8 h-12 border-gray-400"
+                    className="px-6 h-12 border-gray-400"
                   />
                 </FormControl>
                 <FormMessage />
@@ -72,14 +109,15 @@ function Profile() {
           />
           <FormField
             control={form.control}
-            name="firstName"
+            name="fullname"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Full name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="First Name"
+                    placeholder="Full name"
                     {...field}
-                    className="rounded-3xl px-8 h-12 border-gray-400"
+                    className="px-6 h-12 border-gray-400"
                   />
                 </FormControl>
                 <FormMessage />
@@ -88,102 +126,84 @@ function Profile() {
           />
           <FormField
             control={form.control}
-            name="lastName"
+            name="phone"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Phone number</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Last Name"
+                    placeholder="Phone number"
                     {...field}
-                    className="rounded-3xl px-8 h-12 border-gray-400"
+                    className="px-6 h-12 border-gray-400"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <RadioGroup defaultValue="option-one">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="male" id="male" />
-              <Label htmlFor="male">male</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="female" id="female" />
-              <Label htmlFor="female">female</Label>
-            </div>
-          </RadioGroup>
           <FormField
             control={form.control}
-            name="lastName"
+            name="address"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Address</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Last Name"
+                    placeholder="Address"
                     {...field}
-                    className="rounded-3xl px-8 h-12 border-gray-400"
+                    className="px-6 h-12 border-gray-400"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="lastName"
+            name="age"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Age (max is 90)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Last Name"
+                    placeholder="Age"
                     {...field}
-                    className="rounded-3xl px-8 h-12 border-gray-400"
+                    type="number"
+                    className="px-6 h-12 border-gray-400"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="dob"
+            name="gender"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Date of birth</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription>
+              <FormItem>
+                <FormLabel>Gender:</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={"male"}
+                    className="flex space-x-2"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="male" id="male" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Male</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="female" id="female" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Female</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

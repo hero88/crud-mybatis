@@ -56,8 +56,9 @@ const SignIn = () => {
           if (userCred) {
             userCred.getIdToken().then((token) => {
               console.log(token);
+              console.log(userCred);
             });
-            // navigate("/", { replace: true });
+            navigate("/", { replace: true });
           } else {
             navigate("/login");
           }
@@ -67,23 +68,23 @@ const SignIn = () => {
   };
 
   const onSubmit = (values) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    navigate("/", { replace: true });
+
     console.log(values);
   };
 
   return (
     <>
       <div className="flex justify-center">
-        <div className="flex flex-col md:flex-row xl:flex-row justify-center p-8 xl:space-x-20 md:space-x-16">
+        <div className="flex flex-col md:flex-row xl:flex-row justify-center mt-8 xl:space-x-20 md:space-x-16">
           {/* Left site */}
-          <div className="flex flex-1 flex-col justify-center xl:max-w-[430px] md:max-w-[430px] pt-8">
+          <div className="flex flex-1 flex-col justify-center xl:max-w-[430px] md:max-w-[430px] pt-6">
             <div className="flex flex-col flex-1 text-center">
               <h2 className="text-black font-semibold text-5xl">
                 Welcome back!
               </h2>
 
-              <p className="text-black mt-6">
+              <p className="text-black mt-4">
                 Simplify digital coin and NFTs content with <b> Our App</b>. Get
                 started for free
               </p>
@@ -91,7 +92,7 @@ const SignIn = () => {
 
             <div>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="mt-12">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10">
                   <FormField
                     control={form.control}
                     name="username"
@@ -172,7 +173,7 @@ const SignIn = () => {
             </div>
 
             {/* Choose Register */}
-            <div className="flex flex-1 justify-center mt-24 pb-6">
+            <div className="flex flex-1 justify-center mt-20">
               <span className="font-medium">
                 Not a member?{" "}
                 <Link to={"/sign-up"}>
@@ -187,7 +188,7 @@ const SignIn = () => {
           <div className="w-1/2 xl:flex md:flex sm:hidden">
             <Carousel
               plugins={[plugin.current]}
-              className="flex items-center md:w-[500px] xl:w-[570px]"
+              className="flex items-center md:w-[500px] xl:w-[600px]"
               onMouseEnter={plugin.current.stop}
               onMouseLeave={plugin.current.play}
             >
@@ -196,7 +197,7 @@ const SignIn = () => {
                   <CarouselItem key={index}>
                     <div>
                       <Card className="rounded-2xl">
-                        <CardContent className="h-[700px] p-0 md:w-[500px] xl:w-[570px]">
+                        <CardContent className="h-[700px] p-0 md:w-[500px] xl:w-[600px]">
                           <img
                             src={item}
                             className="w-full h-full rounded-2xl"
