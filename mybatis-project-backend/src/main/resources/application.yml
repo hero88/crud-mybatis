@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/CRUDAllXone
@@ -11,9 +10,17 @@ spring:
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.allxone.mybatisprojectbackend.model
+  config-location: classpath:/mybatis-config.xml
 coinmarketcap-data:
   api:
     url: https://api.coinmarketcap.com/data-api/v3/cryptocurrency
+application:
+  security:
+    jwt:
+      secret-key: parzival1405
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000
 springdoc:
   use-fqn: true
   swagger-ui:

@@ -4,15 +4,53 @@
 
 <mapper namespace="com.allxone.mybatisprojectbackend.mapper.UserMapper">
     <resultMap id="userResultMap" type="com.allxone.mybatisprojectbackend.model.User" >
-        <result column="USERNAME" property="username" />
-        <result column="PASSWORD" property="password" />
+        <id property="id" column="id"/>
+        <result column="firstname" property="firstname" />
+        <result column="lastname" property="lastname" />
+        <result column="email" property="email" />
+        <result column="role" property="role" />
     </resultMap>
 
-    <select id="getAllUsers" resultMap="userResultMap">
-            SELECT usr.USERNAME
-                 , usr.PASSWORD
-                FROM USER usr
-            WHERE 1 = 1
+    <resultMap id="userResultMapWithTokens" type="com.allxone.mybatisprojectbackend.model.User" >
+        <id property="id" column="id"/>
+        <result column="firstname" property="firstname" />
+        <result column="lastname" property="lastname" />
+        <result column="email" property="email" />
+        <result column="role" property="role" />
+    </resultMap>
+
+    <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO coin (FIRSTNAME, LASTNAME, EMAIL, ROLE)
+        VALUES (#{firstname}, #{lastname}, #{email}, #{role})
+    </insert>
+
+    <select id="getUserById" resultMap="userResultMap" >
+        SELECT usr.ID
+             , usr.FIRSTNAME
+             , usr.LASTNAME
+             , usr.EMAIL
+             , usr.ROLE
+        FROM user usr
+        WHERE usr.ID = #{id}
     </select>
+
+    <select id="findByEmail" resultMap="userResultMap" >
+        SELECT usr.ID
+             , usr.FIRSTNAME
+             , usr.LASTNAME
+             , usr.EMAIL
+             , usr.ROLE
+        FROM user usr
+        WHERE usr.EMAIL = #{email}
+    </select>
+
+    <update id="updateUser" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
+        UPDATE user
+        SET FIRSTNAME           = #{firstname},
+            LASTNAME         = #{lastname},
+            EMAIL = #{email},
+            ROLE       = #{role}
+        WHERE ID = #{id}
+    </update>
 
 </mapper>
