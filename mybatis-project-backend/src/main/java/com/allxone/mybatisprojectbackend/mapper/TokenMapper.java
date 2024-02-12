@@ -1,5 +1,6 @@
-package com.allxone.mybatisprojectbackend.token;
+package com.allxone.mybatisprojectbackend.mapper;
 
+import com.allxone.mybatisprojectbackend.model.Token;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -15,7 +15,7 @@ import static com.allxone.mybatisprojectbackend.enumaration.Permission.ADMIN_DEL
 import static com.allxone.mybatisprojectbackend.enumaration.Permission.ADMIN_CREATE;
 @RequiredArgsConstructor
 public enum Role {
-    USER(Collections.emptySet()),
+    USER(Set.of(ADMIN_READ)),
     ADMIN(
             Set.of(
                     ADMIN_READ,

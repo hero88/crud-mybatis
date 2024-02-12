@@ -1,5 +1,6 @@
-package com.allxone.mybatisprojectbackend.token;
+package com.allxone.mybatisprojectbackend.model;
 
+import com.allxone.mybatisprojectbackend.enumaration.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

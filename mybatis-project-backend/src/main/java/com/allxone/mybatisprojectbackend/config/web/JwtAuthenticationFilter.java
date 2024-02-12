@@ -1,7 +1,7 @@
 package com.allxone.mybatisprojectbackend.config.web;
 
 import com.allxone.mybatisprojectbackend.service.Impl.JwtService;
-import com.allxone.mybatisprojectbackend.token.TokenMapper;
+import com.allxone.mybatisprojectbackend.mapper.TokenMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

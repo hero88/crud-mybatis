@@ -1,7 +1,7 @@
 package com.allxone.mybatisprojectbackend.service.Impl;
 
-import com.allxone.mybatisprojectbackend.token.Token;
-import com.allxone.mybatisprojectbackend.token.TokenMapper;
+import com.allxone.mybatisprojectbackend.model.Token;
+import com.allxone.mybatisprojectbackend.mapper.TokenMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

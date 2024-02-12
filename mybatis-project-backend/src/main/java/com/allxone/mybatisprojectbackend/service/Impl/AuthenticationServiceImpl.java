@@ -6,11 +6,9 @@ import com.allxone.mybatisprojectbackend.dto.response.AuthenticationResponse;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.AuthenticationService;
-import com.allxone.mybatisprojectbackend.service.UserService;
-import com.allxone.mybatisprojectbackend.token.Token;
-import com.allxone.mybatisprojectbackend.token.TokenMapper;
-import com.allxone.mybatisprojectbackend.token.TokenService;
-import com.allxone.mybatisprojectbackend.token.TokenType;
+import com.allxone.mybatisprojectbackend.model.Token;
+import com.allxone.mybatisprojectbackend.mapper.TokenMapper;
+import com.allxone.mybatisprojectbackend.enumaration.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +27,8 @@ import java.util.List;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
-    private final TokenService tokenService;
+    private final UserMapper userMapper;
+    private final TokenMapper tokenMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -45,10 +41,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
-        User savedUser = userService.saveUser(user);
+        userMapper.saveUser(user);
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -63,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         request.getPassword()
                 )
         );
-        User user = userService.findByEmail(request.getEmail()).orElseThrow();
+        User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
@@ -82,18 +78,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .expired(false)
                 .revoked(false)
                 .build();
-        tokenService.saveToken(token);
+        tokenMapper.saveToken(token);
     }
 
     private void revokeAllUserTokens(User user) {
-        List<Token> validUserTokens = tokenService.findAllValidTokenByUser(user.getId());
+        List<Token> validUserTokens = tokenMapper.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
             token.setExpired(true);
             token.setRevoked(true);
         });
-        tokenService.saveAllTokens(validUserTokens);
+        validUserTokens.forEach(tokenMapper::saveToken);
     }
 
     @Override
@@ -111,7 +107,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 //        extract email
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            User user = this.userService.findByEmail(userEmail).orElseThrow();
+            User user = this.userMapper.findByEmail(userEmail).orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
@@ -122,24 +118,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
-        }
-    }
-
-    @Override
-    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            return;
-        }
-        jwt = authHeader.substring(7);
-        var storedToken = tokenService.findByToken(jwt)
-                .orElse(null);
-        if (storedToken != null) {
-            storedToken.setExpired(true);
-            storedToken.setRevoked(true);
-            tokenService.saveToken(storedToken);
-            SecurityContextHolder.clearContext();
         }
     }
 }

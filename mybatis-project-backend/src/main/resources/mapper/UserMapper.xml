@@ -20,8 +20,8 @@
     </resultMap>
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO coin (FIRSTNAME, LASTNAME, EMAIL, ROLE)
-        VALUES (#{firstname}, #{lastname}, #{email}, #{role})
+        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE)
+        VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role})
     </insert>
 
     <select id="getUserById" resultMap="userResultMap" >

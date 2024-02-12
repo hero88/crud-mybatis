@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import static com.allxone.mybatisprojectbackend.enumaration.Role.USER;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -46,7 +47,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers("/api/**").hasAnyRole(ADMIN.name(),USER.name())
                                 .requestMatchers(GET, "/api/**").hasAnyAuthority(ADMIN_READ.name())
                                 .requestMatchers(POST, "/api/**").hasAnyAuthority(ADMIN_CREATE.name())
                                 .requestMatchers(PUT, "/api/**").hasAnyAuthority(ADMIN_UPDATE.name())

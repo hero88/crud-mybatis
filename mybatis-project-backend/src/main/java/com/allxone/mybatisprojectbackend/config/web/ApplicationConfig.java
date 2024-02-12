@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.config.web;
 
+import com.allxone.mybatisprojectbackend.mapper.UserMapper;
 import com.allxone.mybatisprojectbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -26,7 +27,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userService.findByEmail(username)
+        return username -> userMapper.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

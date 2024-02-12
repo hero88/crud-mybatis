@@ -1,6 +1,5 @@
 package com.allxone.mybatisprojectbackend.mapper;
 
-import com.allxone.mybatisprojectbackend.model.Coin;
 import com.allxone.mybatisprojectbackend.model.User;
 import org.apache.ibatis.annotations.Mapper;
 

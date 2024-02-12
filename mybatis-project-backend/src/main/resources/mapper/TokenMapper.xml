@@ -2,9 +2,9 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.allxone.mybatisprojectbackend.token.TokenMapper">
-    <resultMap id="tokenResultMap" type="com.allxone.mybatisprojectbackend.token.Token">
-        <id property="id" column="id"/>
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.TokenMapper">
+    <resultMap id="tokenResultMap" type="com.allxone.mybatisprojectbackend.model.Token">
+        <result property="id" column="id"/>
         <result property="token" column="token"/>
         <result property="tokenType" column="token_type"/>
         <result property="revoked" column="revoked"/>
@@ -18,10 +18,10 @@
     </insert>
 
     <update id="updateToken" parameterType="Token" useGeneratedKeys="true" keyProperty="id">
-        UPDATE coin
-        SET REVOKED           = #{revoked},
-            EXPIRED         = #{expired},
-        WHERE ID = #{id}
+        UPDATE token
+        SET REVOKED = #{revoked},
+            EXPIRED = #{expired},
+            WHERE ID = #{id}
     </update>
 
     <select id="getTokenById" parameterType="long" resultMap="tokenResultMap">
@@ -46,7 +46,7 @@
         WHERE c.TOKEN = #{token}
     </select>
 
-    <select id="findAllValidTokenByUser" parameterType="Long" resultType="tokenResultMap">
+    <select id="findAllValidTokenByUser" parameterType="Long" resultMap="tokenResultMap">
         SELECT c.ID,
                c.TOKEN,
                c.TOKEN_TYPE,

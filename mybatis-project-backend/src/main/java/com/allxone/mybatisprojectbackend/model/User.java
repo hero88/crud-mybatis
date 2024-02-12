@@ -1,7 +1,6 @@
 package com.allxone.mybatisprojectbackend.model;
 
 import com.allxone.mybatisprojectbackend.enumaration.Role;
-import com.allxone.mybatisprojectbackend.token.Token;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +23,6 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private Role role;
-    private List<Token> tokens;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

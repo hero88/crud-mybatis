@@ -16,10 +16,5 @@ public interface AuthenticationService {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException;
-    void logout(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
-    );
 
 }
