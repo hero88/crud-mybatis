@@ -4,34 +4,67 @@ import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin("*") //frontend link
 public class UserAPI {
 
     @Autowired
     UserService userService;
 
-
     @GetMapping("/getAllUsers")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> doGetAllUsers() {
 
         HashMap<String, Object> result = new HashMap<String, Object>();
 
-        try{
+        try {
             List<User> data = userService.getAllUsers();
             result.put("success", true);
-            result.put("message", "Call API getAllUsers successfully111111");
+            result.put("message", "Call API doGetAllUsers successfully");
             result.put("data", data);
-        }catch (Exception e){
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "Call API doGetAllUsers fail");
+            result.put("data", null);
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<?> deleteUser(@RequestParam("id") Long id) {
+
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            userService.deleteUser(id);
+            result.put("success", true);
+            result.put("message", "Call API doDeleteUser successfully");
+            result.put("data", id);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "Call API doDeleteUser fail");
+            result.put("data", null);
+        }
+
+        return ResponseEntity.ok(result);
+
+    }
+
+    @PutMapping("/updateUser")
+    public ResponseEntity<?> doUpdateUser(@RequestBody User user){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            userService.updateUser(user);
+            result.put("success", true);
+            result.put("message", "Call API getAllUsers successfully");
+            result.put("data", "Testing token");
+        } catch (Exception e) {
             result.put("success", false);
             result.put("message", "Call API getAllUsers fail");
             result.put("data", null);
@@ -39,7 +72,5 @@ public class UserAPI {
 
         return ResponseEntity.ok(result);
     }
-
-
 
 }

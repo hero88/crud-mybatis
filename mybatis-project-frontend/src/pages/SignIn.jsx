@@ -20,7 +20,12 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+} from "firebase/auth";
 import { app } from "@/config/firebase.config";
 import PasswordInput from "@/components/shared/PasswordInput";
 import { SignInValidation } from "@/lib/validation";
@@ -45,10 +50,31 @@ const SignIn = () => {
   const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   const firebaseAuth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+  const googleProvider = new GoogleAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
 
   const handleLoginWithGoogle = async () => {
-    await signInWithPopup(firebaseAuth, provider).then((userCred) => {
+    await signInWithPopup(firebaseAuth, googleProvider).then((userCred) => {
+      if (userCred) {
+        localStorage.setItem("auth", "true");
+
+        firebaseAuth.onAuthStateChanged((userCred) => {
+          if (userCred) {
+            userCred.getIdToken().then((token) => {
+              console.log(token);
+              console.log(userCred);
+            });
+            navigate("/", { replace: true });
+          } else {
+            navigate("/login");
+          }
+        });
+      }
+    });
+  };
+
+  const handleLoginWithFacebook = async () => {
+    await signInWithPopup(firebaseAuth, facebookProvider).then((userCred) => {
       if (userCred) {
         localStorage.setItem("auth", "true");
 
@@ -167,7 +193,10 @@ const SignIn = () => {
               <div className="mx-3 w-14 h-14 flex items-center justify-center bg-black rounded-full cursor-pointer hover:bg-[#554739]">
                 <FaApple className="text-white text-2xl" />
               </div>
-              <div className="mx-3 w-14 h-14 flex items-center justify-center bg-black rounded-full cursor-pointer hover:bg-[#554739]">
+              <div
+                onClick={handleLoginWithFacebook}
+                className="mx-3 w-14 h-14 flex items-center justify-center bg-black rounded-full cursor-pointer hover:bg-[#554739]"
+              >
                 <FaFacebook className="text-white text-2xl" />
               </div>
             </div>

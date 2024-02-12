@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.CoinMapper">
+    <resultMap id="coinResultMap" type="com.allxone.mybatisprojectbackend.model.Coin">
+        <result column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="SYMBOL" property="symbol"/>
+        <result column="COINMARKET_ID" property="coinMarketId"/>
+        <result column="QUANTITY" property="quantity"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="CREATED_AT" property="createdAt"/>
+        <result column="UPDATED_AT" property="updatedAt"/>
+    </resultMap>
+
+    <select id="getAllCoins" resultMap="coinResultMap">
+        select con.ID
+             , con.NAME
+             , con.SYMBOL
+             , con.COINMARKET_ID
+             , con.QUANTITY
+             , con.USER_ID
+             , con.CREATED_AT
+             , con.UPDATED_AT
+        FROM COINS con
+        WHERE 1 = 1
+    </select>
+
+    <insert id="addCoin">
+        INSERT INTO COINS( NAME
+                         , SYMBOL
+                         , COINMARKET_ID
+                         , QUANTITY
+                         , USER_ID
+                         , CREATED_AT
+                         , UPDATED_AT)
+        VALUES (#{name}, #{symbol}, #{quantity}, #{userId}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateCoin">
+        UPDATE COINS
+        SET QUANTITY = #{quantity}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteCoin">
+        DELETE
+        FROM COINS
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
