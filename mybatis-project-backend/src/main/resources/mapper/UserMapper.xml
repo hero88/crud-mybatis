@@ -9,6 +9,9 @@
         <result column="lastname" property="lastname" />
         <result column="email" property="email" />
         <result column="role" property="role" />
+        <result column="isActive" property="is_active" />
+        <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
+        <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
     </resultMap>
 
     <resultMap id="userResultMapWithTokens" type="com.allxone.mybatisprojectbackend.model.User" >
@@ -20,8 +23,8 @@
     </resultMap>
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE)
-        VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role})
+        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, CREATED_AT, UPDATED_AT)
+        VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role}, false, NOW(), NOW())
     </insert>
 
     <select id="getUserById" resultMap="userResultMap" >
@@ -38,6 +41,7 @@
         SELECT usr.ID
              , usr.FIRSTNAME
              , usr.LASTNAME
+             , usr.IS_ACTIVE
              , usr.EMAIL
              , usr.ROLE
         FROM user usr
@@ -46,11 +50,16 @@
 
     <update id="updateUser" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
         UPDATE user
-        SET FIRSTNAME           = #{firstname},
-            LASTNAME         = #{lastname},
-            EMAIL = #{email},
-            ROLE       = #{role}
+        SET FIRSTNAME = #{firstname},
+            LASTNAME  = #{lastname},
+            EMAIL     = #{email},
+            IS_ACTIVE     = #{isActive},
+            ROLE      = #{role}
         WHERE ID = #{id}
     </update>
 
+    <delete id="deleteUserById" parameterType="long">
+        DELETE FROM user
+        WHERE id = #{id}
+    </delete>
 </mapper>

@@ -2,6 +2,7 @@ package com.allxone.mybatisprojectbackend.service.Impl;
 
 import com.allxone.mybatisprojectbackend.dto.request.ChangePasswordRequest;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
+import com.allxone.mybatisprojectbackend.model.Token;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -57,5 +58,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userMapper.getUserById(id);
+    }
+
+    @Override
+    public void activatedUser(User user) {
+        user.setActive(true);
+        userMapper.updateUser(user);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userMapper.deleteUserById(id);
     }
 }

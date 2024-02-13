@@ -25,23 +25,26 @@ CREATE TABLE coin
 
 CREATE TABLE user
 (
-    id        BIGINT AUTO_INCREMENT NOT NULL,
-    firstname VARCHAR(255)          NULL,
-    lastname  VARCHAR(255)          NULL,
-    email     VARCHAR(255)          NULL,
-    password  VARCHAR(255)          NULL,
-    role      VARCHAR(255)          NULL,
+    id         BIGINT AUTO_INCREMENT NOT NULL,
+    firstname  VARCHAR(255)          NULL,
+    lastname   VARCHAR(255)          NULL,
+    email      VARCHAR(255)          NULL,
+    password   VARCHAR(255)          NULL,
+    is_active   TINYINT(1)            NULL,
+    role       VARCHAR(255)          NULL,
+    created_at datetime              NULL,
+    updated_at datetime              NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
 CREATE TABLE token
 (
-    id        BIGINT AUTO_INCREMENT NOT NULL,
-    token     VARCHAR(255)              NULL,
-    token_type VARCHAR(255)              NULL,
-    revoked   TINYINT(1)                NULL,
-    expired   TINYINT(1)                NULL,
-    user_id    BIGINT                    NULL,
+    id         BIGINT AUTO_INCREMENT NOT NULL,
+    token      VARCHAR(255)          NULL,
+    token_type VARCHAR(255)          NULL,
+    revoked    TINYINT(1)            NULL,
+    expired    TINYINT(1)            NULL,
+    user_id    BIGINT                NULL,
 
     CONSTRAINT pk_token PRIMARY KEY (id)
 )

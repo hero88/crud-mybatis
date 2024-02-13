@@ -2,6 +2,7 @@ package com.allxone.mybatisprojectbackend.service;
 
 import com.allxone.mybatisprojectbackend.dto.request.ChangePasswordRequest;
 import com.allxone.mybatisprojectbackend.model.Coin;
+import com.allxone.mybatisprojectbackend.model.Token;
 import com.allxone.mybatisprojectbackend.model.User;
 
 import java.security.Principal;
@@ -16,4 +17,6 @@ public interface UserService {
     User saveUser(User user);
     User updateUser(User user);
     User getUserById(Long id);
+    void activatedUser(User user);
+    void deleteUser(Long id);
 }

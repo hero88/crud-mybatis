@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 
 @AllArgsConstructor
@@ -21,7 +22,10 @@ public class User implements UserDetails {
     private String firstname;
     private String lastname;
     private String email;
+    private boolean isActive;
     private String password;
+    private Instant createdAt;
+    private Instant updatedAt;
     private Role role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -55,6 +59,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActive;
     }
 }

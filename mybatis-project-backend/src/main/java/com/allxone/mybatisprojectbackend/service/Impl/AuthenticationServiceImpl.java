@@ -3,6 +3,7 @@ package com.allxone.mybatisprojectbackend.service.Impl;
 import com.allxone.mybatisprojectbackend.dto.request.AuthenticationRequest;
 import com.allxone.mybatisprojectbackend.dto.request.UserRegisterRequest;
 import com.allxone.mybatisprojectbackend.dto.response.AuthenticationResponse;
+import com.allxone.mybatisprojectbackend.event.RegistrationEvent;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.AuthenticationService;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenMapper tokenMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public AuthenticationResponse register(UserRegisterRequest request) {
@@ -41,9 +44,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+
         userMapper.saveUser(user);
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
+
+        RegistrationEvent registrationEvent = new RegistrationEvent(user,jwtToken);
+        publisher.publishEvent(registrationEvent);
+
         saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -53,13 +61,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
         User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
+        if(user == null || !user.isActive()){
+            throw new RuntimeException();
+        }
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
