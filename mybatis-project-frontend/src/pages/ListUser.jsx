@@ -7,32 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
 import { useEffect, useState } from "react";
-const fakeData = {
-  data: {
-    listUser: [
-      {
-        id: 1,
-        email: "bqhuu130375@gmail.com",
-        name: "Bui Quang Huu",
-        gender: "Male",
-        address: "HCM",
-        age: "2001-05-14T00:00:00.000Z",
-        phoneNumber: "0975247624",
-        role: "User",
-      },
-    ],
-  },
-};
+
 function ListUser() {
-  const [data, seTableCellData] = useState([]);
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
     const callGetAllUsersApi = async () => {
       try {
-        // const response = await getAllUsersApi();
-        // const newData = response.data.data.listUser;
-        seTableCellData(fakeData.data.listUser);
+        const { data: response } = await axios.get(
+          "http://localhost:5555/api/v1/users/getAllUsers"
+        );
+
+        setUserList(response.data);
       } catch (error) {
         console.error("Error when calling table data:", error);
       }
@@ -52,6 +40,8 @@ function ListUser() {
   return (
     <div className="w-full px-8">
       <div className="min-h-svh">
+        <h2 className="pb-4 text-2xl font-bold">User List</h2>
+        <hr />
         <Table className="px-12">
           <TableHeader>
             <TableRow>
@@ -83,7 +73,7 @@ function ListUser() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((user, index) => (
+            {userList.map((user, index) => (
               <TableRow key={index}>
                 <TableCell className="p-0 min-w-6 font-semibold text-gray-800">
                   {index + 1}
