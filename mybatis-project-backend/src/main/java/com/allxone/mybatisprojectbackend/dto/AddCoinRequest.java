@@ -15,5 +15,6 @@ public class AddCoinRequest {
     private String name;
     private String symbol;
     private int coinMarketId;
+    private int quantity;
     private Long userId;
 }

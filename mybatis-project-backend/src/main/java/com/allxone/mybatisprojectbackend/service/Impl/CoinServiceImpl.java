@@ -36,7 +36,7 @@ public class CoinServiceImpl implements CoinService {
                 .name(newCoin.getName())
                 .symbol(newCoin.getSymbol())
                 .coinMarketId(newCoin.getCoinMarketId())
-                .quantity(1)
+                .quantity(newCoin.getQuantity())
                 .userId(newCoin.getUserId())
                 .createdAt(currentTimestamp)
                 .updatedAt(currentTimestamp)
@@ -48,4 +48,11 @@ public class CoinServiceImpl implements CoinService {
     public void updateCoin(Long id, int quantity) {
         coinMapper.updateCoin(id, quantity);
     }
+
+    @Override
+    public List<Coin> getCoinsByUserId(Long userId) {
+        return coinMapper.getCoinsByUserId(userId);
+    }
+
+
 }

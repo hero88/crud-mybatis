@@ -15,4 +15,6 @@ public interface CoinMapper {
     public void addCoin(Coin coin);
 
     public void updateCoin(Long id, int quantity);
+
+    public List<Coin> getCoinsByUserId(@Param("userId") Long userId);
 }

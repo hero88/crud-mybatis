@@ -13,4 +13,6 @@ public interface CoinService {
     public void addCoin(AddCoinRequest newCoin);
 
     public void updateCoin(Long id, int quantity);
+
+    public List<Coin> getCoinsByUserId(Long userId);
 }

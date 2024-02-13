@@ -35,7 +35,7 @@
                          , USER_ID
                          , CREATED_AT
                          , UPDATED_AT)
-        VALUES (#{name}, #{symbol}, #{quantity}, #{userId}, #{createdAt}, #{updatedAt})
+        VALUES (#{name}, #{symbol}, #{coinMarketId},#{quantity}, #{userId}, #{createdAt}, #{updatedAt})
     </insert>
 
     <update id="updateCoin">
@@ -49,5 +49,18 @@
         FROM COINS
         WHERE id = #{id}
     </delete>
+
+    <select id="getCoinsByUserId">
+        select con.ID
+             , con.NAME
+             , con.SYMBOL
+             , con.COINMARKET_ID
+             , con.QUANTITY
+             , con.USER_ID
+             , con.CREATED_AT
+             , con.UPDATED_AT
+        FROM COINS con
+        WHERE USER_ID = #{userId}
+    </select>
 
 </mapper>

@@ -155,5 +155,24 @@ public class CoinAPI {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/getCoinsByUserId")
+    public ResponseEntity<?> doGetCoinsByUserId(@RequestParam("userId") Long userId){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            List<Coin> data = coinService.getCoinsByUserId(userId);
+            result.put("success", true);
+            result.put("message", "Call API doGetCoinsByUserId successfully");
+            result.put("data", data);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "Call API doGetCoinsByUserId fail");
+            result.put("data", null);
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
 
 }
