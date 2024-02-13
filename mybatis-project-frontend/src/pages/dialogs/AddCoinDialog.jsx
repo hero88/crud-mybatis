@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 
@@ -43,18 +44,35 @@ function AddCoinDialog({ type }) {
     setOpen(false);
   };
 
-  const handleSubmit = () =>{
-    setOpenDialog(false);
-  }
+  const handleAddNewCoin = async () => {
+    const newCoin = {
+      name: "test",
+      symbol: "test",
+      coinMarketId: 1,
+      quantity: 1,
+      userId: 1,
+    };
 
+    const { data: response } = axios.post(
+      `http://localhost:5555/api/v1/coins/addCoin`,
+      newCoin
+    );
+
+    console.log(response);
+
+    setOpenDialog(false);
+  };
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          {type == "ADD" ? "Add Coin" : "Update Coin"}
-        </Button>
-      </DialogTrigger>
+      <div className="flex space-x-3">
+        <Input placeholder="search..." />
+        <DialogTrigger asChild>
+          <Button variant="outline" className="bg-blue-400">
+            {type == "ADD" ? "Add Coin" : "Update Coin"}
+          </Button>
+        </DialogTrigger>
+      </div>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
@@ -112,7 +130,7 @@ function AddCoinDialog({ type }) {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => handleSubmit()}>Save changes</Button>
+          <Button onClick={() => handleAddNewCoin()}>Save changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
