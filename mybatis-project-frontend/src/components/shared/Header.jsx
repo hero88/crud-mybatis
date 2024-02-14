@@ -9,6 +9,14 @@ import {
   HoverCardTrigger,
 } from "../ui/hover-card";
 import CustomSearchBar from "./CustomSearchBar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 function Header() {
   const navigate = useNavigate();
@@ -46,13 +54,58 @@ function Header() {
         </div>
         <div className="flex space-x-2">
           {userId ? (
-            <Avatar
-              className="h-8 w-8"
-              onClick={() => navigate(`/profile/detail/${userId}`)}
-            >
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar
+                    className="h-8 w-8 cursor-pointer"
+                    onClick={() => navigate(`/profile/detail/${userId}`)}
+                  >
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="mr-9 min-w-56 px-3 pt-3 pb-4">
+                  <DropdownMenuLabel className="flex items-center space-x-3">
+                    <div>
+                      <Avatar
+                        className="h-12 w-12 cursor-pointer"
+                        onClick={() => navigate(`/profile/detail/${userId}`)}
+                      >
+                        <AvatarImage
+                          src="https://github.com/shadcn.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </div>
+                    <div>
+                      <p className="text-base">Hi, Kenny Will</p>
+                      <p className="text-sm text-gray-500 font-semibold">
+                        sth@gmail.com
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <Link to={`/profile/detail/${userId}`}>
+                    <DropdownMenuItem className="py-2 font-medium text-sm">
+                      Profile
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuItem className="py-2 font-medium text-sm">
+                    Dashboard
+                  </DropdownMenuItem>
+                  <Link to={`/sign-in`}>
+                    <DropdownMenuItem className="py-2 font-medium text-sm">
+                      Log out
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
           ) : (
             <>
               <Button
