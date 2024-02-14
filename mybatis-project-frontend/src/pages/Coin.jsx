@@ -1,5 +1,4 @@
 import PaginationCustom from "@/components/shared/PaginationCustom";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import { PiStarThin } from "react-icons/pi";
 import AddCoinDialog from "./dialogs/AddCoinDialog";
 import axios from "axios";
 
@@ -41,7 +39,7 @@ function Coin() {
   return (
     <>
       <div className="centerSide w-8/12 px-8">
-        <h2 className="pb-4 text-2xl font-bold">Your Coins</h2>
+        <h2 className="pb-4 text-2xl font-bold">Your Assets</h2>
         <hr className="pb-8" />
         <AddCoinDialog type="ADD" />
         {/* list coin of user */}

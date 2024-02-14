@@ -58,7 +58,7 @@ function ProfileLayout({ children }) {
               variant="ghost"
             >
               <CiBitcoin className="text-2xl" strokeWidth={0.7} />
-              <p className="ml-2">Coins</p>
+              <p className="ml-2">Dashboard</p>
             </Button>
           </aside>
         </div>
