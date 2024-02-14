@@ -135,12 +135,22 @@ function Home() {
 
   return (
     <div>
-      <div className="min-h-svh">
-        <Table className="px-12">
+      <div className="min-h-svh px-8 pt-7">
+        <div className="pb-6">
+          <p className="font-bold text-xl">
+            Today&apos;s Cryptocurrency Prices by Market Cap
+          </p>{" "}
+          <div className="text-[15px] text-gray-600">
+            The global crypto market cap is{" "}
+            <span className="font-medium">$1.92T</span>, a 2.41% increase over
+            the last day. <p className="underline">Read More</p>
+          </div>
+        </div>
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-8 text-black"></TableHead>
-              <TableHead className="p-0 min-w-6 text-black text-[12px] font-boldx">
+              <TableHead className="p-0 min-w-6 text-black text-[12px] font-bold">
                 #
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
