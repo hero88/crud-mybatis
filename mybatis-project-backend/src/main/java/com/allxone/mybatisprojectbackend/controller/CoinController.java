@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/coin")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+//@PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class CoinController {
 
     private final CoinService coinService;
@@ -37,7 +37,7 @@ public class CoinController {
     ;
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('admin:create')")
+//    @PreAuthorize("hasAuthority('admin:create')")
     public CommonResponse<Coin> saveCoin(@RequestBody Coin coin) {
 
         try {
@@ -51,7 +51,7 @@ public class CoinController {
     ;
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('admin:delete')")
+//    @PreAuthorize("hasAuthority('admin:delete')")
     public CommonResponse<Long> deleteCoinById(@PathVariable Long id) {
 
         try {
@@ -65,7 +65,7 @@ public class CoinController {
     ;
 
     @PutMapping("")
-    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
+//    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
     public CommonResponse<Coin> updateCoin(@RequestBody Coin coin) {
 
         try {
