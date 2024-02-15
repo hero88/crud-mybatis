@@ -81,7 +81,7 @@ function Home() {
     const callGetAllCoinsApi = async () => {
       try {
         const { data: response } = await axios.get(
-          `http://localhost:5555/api/v1/coins/getCoinMarketData`
+          `http://localhost:5555/api/crypto/coinmarketcap`
         );
         console.log(response.data.data.cryptoCurrencyList);
         setMarketCoinList(response.data.data.cryptoCurrencyList);
