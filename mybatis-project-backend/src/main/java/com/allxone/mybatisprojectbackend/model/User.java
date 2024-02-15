@@ -21,9 +21,13 @@ public class User implements UserDetails {
     private Long id;
     private String firstname;
     private String lastname;
+    private Boolean gender;
+    private String address;
+    private Integer age;
     private String email;
-    private boolean isActive;
     private String password;
+    private String phoneNumber;
+    private boolean isActive;
     private Instant createdAt;
     private Instant updatedAt;
     private Role role;

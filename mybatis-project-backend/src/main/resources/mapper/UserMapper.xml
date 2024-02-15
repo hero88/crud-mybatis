@@ -10,6 +10,10 @@
         <result column="email" property="email" />
         <result column="role" property="role" />
         <result column="isActive" property="is_active" />
+        <result column="gender" property="gender" />
+        <result column="address" property="address" />
+        <result column="age" property="age" />
+        <result column="phoneNumber" property="phone_number" />
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
         <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
     </resultMap>
@@ -23,8 +27,10 @@
     </resultMap>
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, CREATED_AT, UPDATED_AT)
-        VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role}, false, NOW(), NOW())
+        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONENUMBER, CREATED_AT,
+                          UPDATED_AT)
+        VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role}, false, #{gender}, #{address}, #{age}, #{phoneNumber}, NOW(),
+                NOW())
     </insert>
 
     <select id="getUserById" resultMap="userResultMap" >
@@ -33,6 +39,13 @@
              , usr.LASTNAME
              , usr.EMAIL
              , usr.ROLE
+             , usr.IS_ACTIVE
+             , usr.GENDER
+             , usr.ADDRESS
+             , usr.AGE
+             , usr.PHONENUMBER
+             , usr.CREATED_AT
+             , usr.UPDATED_AT
         FROM user usr
         WHERE usr.ID = #{id}
     </select>
@@ -50,11 +63,14 @@
 
     <update id="updateUser" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
         UPDATE user
-        SET FIRSTNAME = #{firstname},
-            LASTNAME  = #{lastname},
-            EMAIL     = #{email},
-            IS_ACTIVE     = #{isActive},
-            ROLE      = #{role}
+        SET FIRSTNAME  = #{firstname},
+            LASTNAME   = #{lastname},
+            EMAIL      = #{email},
+            IS_ACTIVE  = #{isActive},
+            GENDER     = #{gender},
+            ADDRESS    = #{address},
+            AGE        = #{age},
+            UPDATED_AT = NOW()
         WHERE ID = #{id}
     </update>
 
