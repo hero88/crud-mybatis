@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void activatedUser(User user) {
-        user.setActive(true);
+        user.setIsActive(true);
         userMapper.updateUser(user);
     }
 

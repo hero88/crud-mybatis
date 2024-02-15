@@ -30,7 +30,7 @@ CREATE TABLE user
     lastname     VARCHAR(255)          NULL,
     email        VARCHAR(255)          NULL,
     password     VARCHAR(255)          NULL,
-    is_active    TINYINT(1)            NULL,
+    is_active    BOOLEAN               NULL,
     gender       BOOLEAN               NULL,
     address      VARCHAR(255)          NULL,
     age          INT                   NULL,

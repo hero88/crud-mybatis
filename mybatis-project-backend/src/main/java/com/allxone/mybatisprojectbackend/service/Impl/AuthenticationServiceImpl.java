@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.service.Impl;
 
+import com.allxone.mybatisprojectbackend.convert.UserConvert;
 import com.allxone.mybatisprojectbackend.dto.request.AuthenticationRequest;
 import com.allxone.mybatisprojectbackend.dto.request.UserRegisterRequest;
 import com.allxone.mybatisprojectbackend.dto.response.AuthenticationResponse;
@@ -73,7 +74,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
-        if(user == null || !user.isActive()){
+        System.out.print(user);
+        if(user == null || !user.isEnabled()){
             throw new RuntimeException();
         }
         String jwtToken = jwtService.generateToken(user);
@@ -83,6 +85,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .user(UserConvert.toDto(user))
                 .build();
     }
 

@@ -18,6 +18,7 @@ public class UserConvert {
                 .age(user.getAge())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .isActive(user.getIsActive())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
