@@ -5,7 +5,6 @@ import com.allxone.mybatisprojectbackend.convert.UserConvert;
 import com.allxone.mybatisprojectbackend.dto.request.ChangePasswordRequest;
 import com.allxone.mybatisprojectbackend.dto.request.UserRequest;
 import com.allxone.mybatisprojectbackend.dto.response.UserResponse;
-import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +26,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PatchMapping
+    @PatchMapping("/changePassword")
     public ResponseEntity<?> changePassword(
             @RequestBody ChangePasswordRequest request,
             Principal connectedUser
@@ -37,7 +35,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("")
+    @GetMapping("/getAllUsers")
 //    @PreAuthorize("hasAuthority('admin:read')")
     public CommonResponse<List<UserResponse>> getAllUsers() {
         try {
@@ -49,7 +47,7 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteUserById/{id}")
 //    @PreAuthorize("hasAuthority('admin:delete')")
     public CommonResponse<Long> deleteUserById(@PathVariable Long id) {
 
@@ -61,7 +59,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping("/updateUser")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
     public CommonResponse<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
 
@@ -74,7 +72,7 @@ public class UserController {
 
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/getUser/{id}")
 //    @PreAuthorize("hasAnyAuthority('admin:read','user:read')")
     public CommonResponse<UserResponse> getUser(@PathVariable Long id) {
         try {

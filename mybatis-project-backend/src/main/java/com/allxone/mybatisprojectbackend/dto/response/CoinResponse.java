@@ -9,7 +9,7 @@ import java.time.Instant;
 @Builder
 public class CoinResponse {
     private Long id;
-    private String userId;
+    private Long userId;
     private String name;
     private String symbol;
     private String coinMarketId;

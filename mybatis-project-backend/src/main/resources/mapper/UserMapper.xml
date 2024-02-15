@@ -27,7 +27,7 @@
     </resultMap>
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONENUMBER, CREATED_AT,
+        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER, CREATED_AT,
                           UPDATED_AT)
         VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role}, false, #{gender}, #{address}, #{age}, #{phoneNumber}, NOW(),
                 NOW())
@@ -43,7 +43,7 @@
              , usr.GENDER
              , usr.ADDRESS
              , usr.AGE
-             , usr.PHONENUMBER
+             , usr.PHONE_NUMBER
              , usr.CREATED_AT
              , usr.UPDATED_AT
         FROM user usr
@@ -70,6 +70,7 @@
             GENDER     = #{gender},
             ADDRESS    = #{address},
             AGE        = #{age},
+            PHONE_NUMBER = #{phoneNumber}
             UPDATED_AT = NOW()
         WHERE ID = #{id}
     </update>

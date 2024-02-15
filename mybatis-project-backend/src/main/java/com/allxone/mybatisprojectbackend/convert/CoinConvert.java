@@ -14,6 +14,8 @@ public class CoinConvert {
                 .symbol(coin.getSymbol())
                 .coinMarketId(coin.getCoinMarketId())
                 .quantity(coin.getQuantity())
+                .createdAt(coin.getCreatedAt())
+                .updatedAt(coin.getUpdatedAt())
                 .build();
     }
 

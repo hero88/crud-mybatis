@@ -3,11 +3,7 @@ package com.allxone.mybatisprojectbackend.convert;
 import com.allxone.mybatisprojectbackend.dto.request.UserRequest;
 import com.allxone.mybatisprojectbackend.dto.response.UserResponse;
 import com.allxone.mybatisprojectbackend.model.User;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
 
 @Component
 public class UserConvert {
@@ -22,6 +18,8 @@ public class UserConvert {
                 .age(user.getAge())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
