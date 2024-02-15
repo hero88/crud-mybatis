@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
-    private static final String[] WHITE_LIST_URL = {"/api/auth/**",
+    private static final String[] WHITE_LIST_URL = {"/api/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/swagger-ui/**",
@@ -47,11 +47,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/api/**").hasAnyRole(ADMIN.name(),USER.name())
-                                .requestMatchers(GET, "/api/**").hasAnyAuthority(ADMIN_READ.name())
-                                .requestMatchers(POST, "/api/**").hasAnyAuthority(ADMIN_CREATE.name())
-                                .requestMatchers(PUT, "/api/**").hasAnyAuthority(ADMIN_UPDATE.name())
-                                .requestMatchers(DELETE, "/api/**").hasAnyAuthority(ADMIN_DELETE.name())
+                                .requestMatchers("/api/crypto/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
+//                                .requestMatchers("/api/**").hasAnyRole(ADMIN.name(),USER.name())
+//                                .requestMatchers(GET, "/api/**").hasAnyAuthority(ADMIN_READ.name())
+//                                .requestMatchers(POST, "/api/**").hasAnyAuthority(ADMIN_CREATE.name())
+//                                .requestMatchers(PUT, "/api/**").hasAnyAuthority(ADMIN_UPDATE.name())
+//                                .requestMatchers(DELETE, "/api/**").hasAnyAuthority(ADMIN_DELETE.name())
                                 .anyRequest()
                                 .authenticated()
                 )
