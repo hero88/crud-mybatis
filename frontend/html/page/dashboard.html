@@ -203,8 +203,8 @@
 
             const mapping = {
                 'Name': crypto => `<img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${crypto.id}.png" style="width: 24px; height: 24px;"> <strong>${crypto.name}</strong> <span style="color: rgb(128, 138, 157);">${crypto.symbol}</span>`,
-                'Price': crypto => `${crypto.price.toLocaleString()}`,
-                'Holdings': crypto => `${crypto.amount.toLocaleString()}`,
+                'Price': crypto => `${crypto.price.toLocaleString()} USD`,
+                'Holdings': crypto => `${crypto.amount.toLocaleString()} USD`,
                 'Quantity': crypto => `${crypto.quantity}`,
             };
 
@@ -233,21 +233,36 @@
             }
             return null;
         }
-        function randomColor() {
-            var r = Math.floor(Math.random() * 256);
-            var g = Math.floor(Math.random() * 256);
-            var b = Math.floor(Math.random() * 256);
-            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+
+        var backgroundColors = [];
+        var colorDistanceThreshold = 150;
+
+        function calculateColorDistance(color1, color2) {
+            // Tính khoảng cách Euclidean giữa hai màu trong không gian RGB
+            var rDiff = color1.r - color2.r;
+            var gDiff = color1.g - color2.g;
+            var bDiff = color1.b - color2.b;
+            return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+        }
+
+        function randomBrightColor() {
+            var newColor;
+            do {
+                var r = Math.floor(Math.random() * 128) + 128;
+                var g = Math.floor(Math.random() * 128) + 128;
+                var b = Math.floor(Math.random() * 128) + 128;
+                newColor = { r: r, g: g, b: b };
+            } while (backgroundColors.some(existingColor => calculateColorDistance(existingColor, newColor) < colorDistanceThreshold));
+            return 'rgb(' + newColor.r + ', ' + newColor.g + ', ' + newColor.b + ')';
         }
 
         function chatPie(data) {
             var values = [];
-            var backgroundColors = [];
             var names = [];
 
             data.forEach(function (dataObj) {
-                values.push(dataObj.quantity);
-                backgroundColors.push(randomColor());
+                values.push(dataObj.amount);
+                backgroundColors.push(randomBrightColor());
                 names.push(dataObj.name);
             });
             var data = {
