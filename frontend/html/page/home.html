@@ -6,6 +6,7 @@
 	<meta charset="UTF-8">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>
 		.hsdhf h1 {
 			margin: 0;
@@ -63,13 +64,13 @@
 <body style="background-color: #fff;">
 	<!-- <div class="container-xxl"> -->
 	<!-- <div class="row hsdhf"> -->
-	<div class="container-fluid" id="loginContainer" style="display: none;">
+	<!-- <div class="container-fluid" id="loginContainer" style="display: none;">
 		<div class="row justify-content-end pt-2">
 			<div class="col-auto">
 				<a class="btn btn-primary" href="../../html/page/SignInSignUp.html">Login</a>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 	<nav class="navbar navbar-expand-xxl pb-5">
 		<div class="container-fluid">
@@ -84,7 +85,7 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
+				<ul class="navbar-nav me-auto mb-2 mb-xxl-0">
 					<li class="nav-item">
 						<a class="nav-link active" aria-current="page"
 							href="../../html/page/home.html">Cryptocurrencies</a>
@@ -96,9 +97,28 @@
 						<a class="nav-link" href="../../html/page/coin_management.html">User coin</a>
 					</li>
 				</ul>
+				<div class="dropdown">
+					<div class="row p-2" style="display: none;" id="buttonLogin">
+						<a class="btn btn-primary" href="../../html/page/SignInSignUp.html">Login</a>
+					</div>
+					<div class="row" style="display: none;" id="menu">
+						<a class="align-items-center link-dark text-decoration-none" href="#" id="dropdownUser1"
+							data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="../../img/user.png" alt="Profile Picture" width="32" height="32"
+								class="rounded-circle me-2">
+						</a>
+						<span id="name"></span>
+						<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+							<li><a class="dropdown-item" href="../../html/user/user-profile.html">Profile</a></li>
+							<li><a class="dropdown-item" href="#">Change Password</a></li>
+							<li><button class="dropdown-item" id="logoutButton">Logout</button></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</nav>
+
 	<!-- </div> -->
 	<!-- </div> -->
 	<div class="container-xxl" style="background-color: #fff;">
@@ -198,11 +218,12 @@
 		import { instance } from "../../axios/config/config.js";
 		const baseURL = instance.defaults.baseURL;
 		const apiUrl = baseURL + 'v1/coins/home';
+		const apiProfile = baseURL + 'v1/user/own';
 		document.getElementById('limitSelect').addEventListener('change', function () {
 			const selectedValue = this.value;
 			fetchDataAndPopulateTable(apiUrl + "?limit=" + selectedValue);
 		});
-		// get cookies
+		// hàm get cookies
 		function getCookie(cookieName) {
 			var name = cookieName + "=";
 			var decodedCookie = decodeURIComponent(document.cookie);
@@ -215,17 +236,19 @@
 			}
 			return null;
 		}
-
+		// hiển thị menu và nut login
 		document.addEventListener("DOMContentLoaded", function () {
-			var loginContainer = document.getElementById("loginContainer");
+			var buttonLogin = document.getElementById("buttonLogin");
+			var menu = document.getElementById("menu");
 			// Kiểm tra xem cookie có tồn tại không
 			var cookieExists = getCookie('token');
 			// Nếu cookie không tồn tại, hiển thị phần tử loginContainer
 			if (!cookieExists) {
-				loginContainer.style.display = "block";
+				buttonLogin.style.display = "block";
+			} else {
+				menu.style.display = "block";
 			}
 		});
-
 		// Hàm fetch dữ liệu và điền vào bảng
 		function fetchDataAndPopulateTable(apiUrl) {
 			axios.get(apiUrl)
@@ -242,9 +265,6 @@
 					console.error('Error fetching data:', error);
 				});
 		}
-
-		// Gọi hàm lần đầu
-		fetchDataAndPopulateTable(apiUrl);
 
 		function populateTable(data) {
 			const tableBody = document.getElementById('cryptoTable').getElementsByTagName('tbody')[0];
@@ -285,6 +305,48 @@
 			const formattedValue = Number(value).toFixed(2);
 			return value < 0 ? formattedValue.fontcolor('red') : formattedValue.fontcolor('green');
 		}
+
+		function profile(apiUrl) {
+			var authToken = getCookie('token');
+			var name = document.getElementById('name');
+			const requestConfig = {
+				headers: {
+					'Authorization': `Bearer ${authToken}`,
+				}
+			};
+			axios.get(apiUrl, requestConfig)
+				.then(response => {
+					if (response.status !== 200) {
+						throw new Error(`Error: ${response.status}`);
+					}
+					return response.data;
+				})
+				.then(data => {
+					var profile = data;
+					name.textContent = profile.data.name;
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
+		}
+
+		function logout() {
+			var cookies = document.cookie.split(";");
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i];
+				var eqPos = cookie.indexOf("=");
+				var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+				document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+			}
+			window.location.href = window.location.origin + "/java_gr2/frontend/html/page/SignInSignUp.html"; // Thay đổi đường dẫn nếu cần
+		}
+
+		document.getElementById("logoutButton").addEventListener("click", function () {
+			logout();
+		});
+		// Gọi hàm lần đầu get data về bảng
+		fetchDataAndPopulateTable(apiUrl);
+		profile(apiProfile);
 	</script>
 </body>
 
