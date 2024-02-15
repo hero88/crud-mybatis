@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,13 +18,18 @@ import java.util.Collection;
 @Getter
 @Setter
 @Builder
+@ToString
 public class User implements UserDetails {
     private Long id;
     private String firstname;
     private String lastname;
+    private Boolean gender;
+    private String address;
+    private Integer age;
     private String email;
-    private boolean isActive;
     private String password;
+    private String phoneNumber;
+    private Boolean isActive;
     private Instant createdAt;
     private Instant updatedAt;
     private Role role;

@@ -1,10 +1,10 @@
 package com.allxone.mybatisprojectbackend.controller;
 
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
-import com.allxone.mybatisprojectbackend.model.Coin;
+import com.allxone.mybatisprojectbackend.dto.request.CoinRequest;
+import com.allxone.mybatisprojectbackend.dto.response.CoinResponse;
 import com.allxone.mybatisprojectbackend.service.CoinService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,33 +24,40 @@ public class CoinController {
 
     private final CoinService coinService;
 
-    @GetMapping("")
-    public CommonResponse<List<Coin>> getAllCoins() {
+    @GetMapping("/getAllCoins")
+    public CommonResponse<List<CoinResponse>> getAllCoins() {
         try {
-            List<Coin> data = coinService.getAllCoins();
+            List<CoinResponse> data = coinService.getAllCoins();
+            return CommonResponse.success(data);
+        } catch (Exception e) {
+            System.out.print(e);
+            return CommonResponse.error(null);
+        }
+    }
+
+    @GetMapping("/getCoinById/{id}")
+    public CommonResponse<CoinResponse> getCoinById(@PathVariable Long id) {
+        try {
+            CoinResponse data = coinService.getCoinById(id);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    ;
-
-    @PostMapping("")
+    @PostMapping("/saveCoin")
 //    @PreAuthorize("hasAuthority('admin:create')")
-    public CommonResponse<Coin> saveCoin(@RequestBody Coin coin) {
+    public CommonResponse<CoinResponse> saveCoin(@RequestBody CoinRequest coinRequest) {
 
         try {
-            Coin data = coinService.saveCoin(coin);
+            CoinResponse data = coinService.saveCoin(coinRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    ;
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteCoinById/{id}")
 //    @PreAuthorize("hasAuthority('admin:delete')")
     public CommonResponse<Long> deleteCoinById(@PathVariable Long id) {
 
@@ -62,20 +69,16 @@ public class CoinController {
         }
     }
 
-    ;
-
-    @PutMapping("")
+    @PutMapping("/updateCoin")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
-    public CommonResponse<Coin> updateCoin(@RequestBody Coin coin) {
+    public CommonResponse<CoinResponse> updateCoin(@RequestBody CoinRequest coinRequest) {
 
         try {
-            Coin data = coinService.updateCoin(coin);
+            CoinResponse data = coinService.updateCoin(coinRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
 
     }
-
-    ;
 }

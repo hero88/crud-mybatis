@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.controller;
 
+import com.allxone.mybatisprojectbackend.convert.UserConvert;
 import com.allxone.mybatisprojectbackend.dto.request.AuthenticationRequest;
 import com.allxone.mybatisprojectbackend.dto.request.UserRegisterRequest;
 import com.allxone.mybatisprojectbackend.dto.response.AuthenticationResponse;
@@ -44,7 +45,7 @@ public class AuthenticationController {
         HashMap<String, Object> result = new HashMap<String, Object>();
 
         if (theToken.isExpired()){
-            userService.deleteUser(user.getId());
+            userService.deleteUserById(user.getId());
             result.put("success", false);
             result.put("message", "The token has expired, please register again and check your email");
             result.put("data", null);
@@ -56,6 +57,7 @@ public class AuthenticationController {
             result.put("data", null);
         }
 
+        userService.activatedUser(user);
         result.put("success", true);
         result.put("message", "Email verified successfully. Now you can login to your account");
         result.put("data", null);

@@ -35,7 +35,6 @@
     <select id="getAllCoins" resultMap="coinResultMap">
         SELECT c.ID
              , c.USER_ID
-             , c.USERID
              , c.NAME
              , c.SYMBOL
              , c.COIN_MARKET_ID

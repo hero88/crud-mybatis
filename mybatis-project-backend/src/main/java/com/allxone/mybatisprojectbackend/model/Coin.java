@@ -1,6 +1,7 @@
 package com.allxone.mybatisprojectbackend.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,11 @@ import java.time.Instant;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Coin {
 
     private Long id;
-    private String userId;
+    private Long userId;
     private String name;
     private String symbol;
     private String coinMarketId;

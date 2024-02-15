@@ -1,8 +1,8 @@
 package com.allxone.mybatisprojectbackend.service;
 
 import com.allxone.mybatisprojectbackend.dto.request.ChangePasswordRequest;
-import com.allxone.mybatisprojectbackend.model.Coin;
-import com.allxone.mybatisprojectbackend.model.Token;
+import com.allxone.mybatisprojectbackend.dto.request.UserRequest;
+import com.allxone.mybatisprojectbackend.dto.response.UserResponse;
 import com.allxone.mybatisprojectbackend.model.User;
 
 import java.security.Principal;
@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> getAllUsers();
+    List<UserResponse> getAllUsers();
     Optional<User> findByEmail(String email);
     void changePassword(ChangePasswordRequest request, Principal connectedUser);
-    User saveUser(User user);
-    User updateUser(User user);
+    UserResponse saveUser(UserRequest userRequest);
+    UserResponse updateUser(UserRequest userRequest);
     User getUserById(Long id);
     void activatedUser(User user);
-    void deleteUser(Long id);
+    void deleteUserById(Long id);
 }
