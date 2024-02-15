@@ -7,11 +7,12 @@ spring:
   sql:
     init:
       mode: always
+      data-locations: classpath:data.sql
   mail:
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: buithang12396@gmail.com
+    password: xudnhajooqvwvpit
     properties:
       mail:
         smtp:

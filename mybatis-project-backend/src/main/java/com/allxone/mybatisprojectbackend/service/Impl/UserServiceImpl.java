@@ -1,8 +1,10 @@
 package com.allxone.mybatisprojectbackend.service.Impl;
 
+import com.allxone.mybatisprojectbackend.convert.UserConvert;
 import com.allxone.mybatisprojectbackend.dto.request.ChangePasswordRequest;
+import com.allxone.mybatisprojectbackend.dto.request.UserRequest;
+import com.allxone.mybatisprojectbackend.dto.response.UserResponse;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
-import com.allxone.mybatisprojectbackend.model.Token;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +24,11 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public List<User> getAllUsers() {
-        List<User> result = userMapper.getAllUsers();
-        return result;
+    public List<UserResponse> getAllUsers() {
+        return userMapper.getAllUsers()
+                .stream()
+                .map(UserConvert::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -44,15 +49,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public UserResponse saveUser(UserRequest userRequest) {
+        User user = UserConvert.toUser(userRequest);
         userMapper.saveUser(user);
-        return getUserById(user.getId());
+        return UserConvert.toDto(getUserById(user.getId()));
     }
 
     @Override
-    public User updateUser(User user) {
+    public UserResponse updateUser(UserRequest userRequest) {
+        User user = UserConvert.toUser(userRequest);
         userMapper.updateUser(user);
-        return getUserById(user.getId());
+        return UserConvert.toDto(getUserById(user.getId()));
     }
 
     @Override
@@ -62,12 +69,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void activatedUser(User user) {
-        user.setActive(true);
+        user.setIsActive(true);
         userMapper.updateUser(user);
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUserById(Long id) {
         userMapper.deleteUserById(id);
     }
 }

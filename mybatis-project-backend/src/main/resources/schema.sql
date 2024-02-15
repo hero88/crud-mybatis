@@ -15,7 +15,7 @@ CREATE TABLE coin
     id             BIGINT AUTO_INCREMENT NOT NULL,
     created_at     datetime              NULL,
     updated_at     datetime              NULL,
-    user_id        VARCHAR(255)          NULL,
+    user_id        BIGINT                NULL,
     name           VARCHAR(255)          NULL,
     symbol         VARCHAR(255)          NULL,
     coin_market_id VARCHAR(255)          NULL,
@@ -25,15 +25,19 @@ CREATE TABLE coin
 
 CREATE TABLE user
 (
-    id         BIGINT AUTO_INCREMENT NOT NULL,
-    firstname  VARCHAR(255)          NULL,
-    lastname   VARCHAR(255)          NULL,
-    email      VARCHAR(255)          NULL,
-    password   VARCHAR(255)          NULL,
-    is_active   TINYINT(1)            NULL,
-    role       VARCHAR(255)          NULL,
-    created_at datetime              NULL,
-    updated_at datetime              NULL,
+    id           BIGINT AUTO_INCREMENT NOT NULL,
+    firstname    VARCHAR(255)          NULL,
+    lastname     VARCHAR(255)          NULL,
+    email        VARCHAR(255)          NULL,
+    password     VARCHAR(255)          NULL,
+    is_active    BOOLEAN               NULL,
+    gender       BOOLEAN               NULL,
+    address      VARCHAR(255)          NULL,
+    age          INT                   NULL,
+    role         VARCHAR(255)          NULL,
+    phone_number VARCHAR(255)          NULL,
+    created_at   datetime              NULL,
+    updated_at   datetime              NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
