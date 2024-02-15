@@ -20,8 +20,7 @@ import {
 
 function Header() {
   const navigate = useNavigate();
-
-  // let userId = window.localStorage.getItem("userId");
+  
   let userId = 1;
   return (
     <>

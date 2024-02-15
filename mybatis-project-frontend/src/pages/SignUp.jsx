@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SignUpValidation } from "@/lib/validation";
+import { register } from "@/services/UserAPI";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -41,7 +41,10 @@ const SignUp = () => {
       confirmPassword,
     });
 
-    // const {response: data} =  await axios.post(``)
+    if (password === confirmPassword) {
+      const response = await register({email, password});
+      console.log(response);
+    }
 
     // if (response.success === true) {
     //   navigate("/", { replace: true });

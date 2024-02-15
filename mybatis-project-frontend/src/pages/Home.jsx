@@ -12,67 +12,7 @@ import {
 import { PiStarThin } from "react-icons/pi";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import PaginationCustom from "@/components/shared/PaginationCustom";
-import axios from "axios";
-
-// const fakeData = {
-//   data: {
-//     cryptoCurrencyList: [
-//       {
-//         id: 1,
-//         name: "Bitcoin",
-//         symbol: "BTC",
-//         slug: "bitcoin",
-//         cmcRank: 1,
-//         marketPairCount: 10802,
-//         circulatingSupply: 19613681,
-//         selfReportedCirculatingSupply: 0,
-//         totalSupply: 19613681,
-//         maxSupply: 21000000,
-//         ath: 68789.62593892214,
-//         atl: 0.04864654,
-//         high24h: 43838.946844106074,
-//         low24h: 42691.06527138428,
-//         isActive: 1,
-//         lastUpdated: "2024-01-31T03:21:00.000Z",
-//         dateAdded: "2010-07-13T00:00:00.000Z",
-//         quotes: [
-//           {
-//             name: "USD",
-//             price: 42908.72592128142,
-//             volume24h: 23196978931.11611,
-//             volume7d: 156145021761.53314,
-//             volume30d: 761154014236.3904,
-//             marketCap: 841598062336.4448,
-//             selfReportedMarketCap: 0,
-//             percentChange1h: 0.4723818,
-//             percentChange24h: -1.48161478,
-//             percentChange7d: 7.94910944,
-//             lastUpdated: "2024-01-31T03:21:00.000Z",
-//             percentChange30d: 1.04424785,
-//             percentChange60d: 10.69923164,
-//             percentChange90d: 19.75202018,
-//             fullyDilluttedMarketCap: 901083244346.91,
-//             marketCapByTotalSupply: 841598062336.4448,
-//             dominance: 50.9483,
-//             turnover: 0.02756301,
-//             yTableCellPriceChangePercentage: -2.8496,
-//             percentChange1y: 87.69554836,
-//           },
-//         ],
-//         isAudited: false,
-//         badges: [1],
-//       },
-//     ],
-//     totalCount: 8815,
-//   },
-//   status: {
-//     timestamp: "2024-01-31T03:22:19.945Z",
-//     error_code: 0,
-//     error_message: "SUCCESS",
-//     elapsed: 21,
-//     credit_count: 0,
-//   },
-// };
+import { getMarketCapCoins } from "@/services/CoinAPI";
 
 function Home() {
   const [marketCoinList, setMarketCoinList] = useState([]);
@@ -80,13 +20,11 @@ function Home() {
   useEffect(() => {
     const callGetAllCoinsApi = async () => {
       try {
-        const { data: response } = await axios.get(
-          `http://localhost:5555/api/crypto/coinmarketcap`
-        );
-        console.log(response.data.data.cryptoCurrencyList);
-        setMarketCoinList(response.data.data.cryptoCurrencyList);
+        const { data: response } = await getMarketCapCoins();
+        console.log(response);
+        setMarketCoinList(response.data.cryptoCurrencyList);
       } catch (error) {
-        console.error("Error when calling table data:", error);
+        console.error(error);
       }
     };
 

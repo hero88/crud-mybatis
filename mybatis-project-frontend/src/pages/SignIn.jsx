@@ -29,6 +29,7 @@ import {
 import { app } from "@/config/firebase.config";
 import PasswordInput from "@/components/shared/PasswordInput";
 import { SignInValidation } from "@/lib/validation";
+import { login } from "@/services/UserAPI";
 
 const imagesInit = [
   "/src/assets/side-img-1.jpg",
@@ -42,7 +43,7 @@ const SignIn = () => {
   const form = useForm({
     resolver: zodResolver(SignInValidation),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -93,9 +94,14 @@ const SignIn = () => {
     });
   };
 
-  const onSubmit = (values) => {
-    navigate("/", { replace: true });
+  const handleLoginNormally = async (userForm) => {
+    const response = await login(userForm);
+    console.log(response);
+  };
 
+  const onSubmit = (values) => {
+    handleLoginNormally(values);
+    // navigate("/", { replace: true });
     console.log(values);
   };
 
@@ -121,12 +127,13 @@ const SignIn = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10">
                   <FormField
                     control={form.control}
-                    name="username"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Input
-                            placeholder="Username"
+                            placeholder="Email"
+                            type="email"
                             {...field}
                             className="rounded-3xl px-8 h-12 border-gray-400"
                           />
@@ -141,12 +148,6 @@ const SignIn = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          {/* <Input
-                            placeholder="Password"
-                            {...field}
-                            className="rounded-3xl px-8 h-12 mt-3 border-gray-400"
-                            type="password"
-                          /> */}
                           <PasswordInput
                             {...field}
                             placeholder="Password"
