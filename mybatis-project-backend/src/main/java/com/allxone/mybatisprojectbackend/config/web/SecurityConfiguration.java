@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
-    private static final String[] WHITE_LIST_URL = {"/api/auth/**",
+    private static final String[] WHITE_LIST_URL = {"/api/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/swagger-ui/**",
