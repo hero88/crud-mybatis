@@ -49,6 +49,21 @@
         WHERE usr.ID = #{id}
     </select>
 
+    <select id="getAllUsers" resultMap="userResultMap">
+        SELECT usr.ID
+             , usr.NAME
+             , usr.EMAIL
+             , usr.ROLE
+             , usr.IS_ACTIVE
+             , usr.GENDER
+             , usr.ADDRESS
+             , usr.AGE
+             , usr.PHONE_NUMBER
+             , usr.CREATED_AT
+             , usr.UPDATED_AT
+        FROM user usr
+    </select>
+
     <select id="findByEmail" resultMap="userResultMap">
         SELECT usr.ID
              , usr.NAME

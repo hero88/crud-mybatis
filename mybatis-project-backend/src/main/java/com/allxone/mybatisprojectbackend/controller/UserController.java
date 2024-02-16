@@ -42,6 +42,7 @@ public class UserController {
             List<UserResponse> data = userService.getAllUsers();
             return CommonResponse.success(data);
         } catch (Exception e) {
+            System.out.println(e);
             return CommonResponse.error(null);
         }
     }
