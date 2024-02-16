@@ -11,8 +11,7 @@ public class UserConvert {
     public static UserResponse toDto(User user) {
         return UserResponse.builder()
                 .id(user.getId())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
+                .name(user.getName())
                 .gender(user.getGender())
                 .address(user.getAddress())
                 .age(user.getAge())
@@ -27,8 +26,7 @@ public class UserConvert {
     public static User toUser(UserRequest UserRequest) {
         return User.builder()
                 .id(UserRequest.getId())
-                .firstname(UserRequest.getFirstname())
-                .lastname(UserRequest.getLastname())
+                .name(UserRequest.getName())
                 .gender(UserRequest.getGender())
                 .address(UserRequest.getAddress())
                 .age(UserRequest.getAge())
