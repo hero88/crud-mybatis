@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -48,11 +49,19 @@ const SignIn = () => {
     },
   });
 
+  const [error, setError] = useState("");
+
   const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   const firebaseAuth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   const handleLoginWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, googleProvider).then((userCred) => {
@@ -95,14 +104,19 @@ const SignIn = () => {
   };
 
   const handleLoginNormally = async (userForm) => {
-    const response = await login(userForm);
-    console.log(response);
+    const { data: response } = await login(userForm);
+    localStorage.setItem("token", JSON.stringify(response.data.accessToken));
+    localStorage.setItem("profile", JSON.stringify(response.data.user));
+
+    if (response.data.accessToken !== null) {
+      navigate("/", { replace: true });
+    } else {
+      setError("Your username or password is incorrect!");
+    }
   };
 
   const onSubmit = (values) => {
     handleLoginNormally(values);
-    // navigate("/", { replace: true });
-    console.log(values);
   };
 
   return (
@@ -130,6 +144,11 @@ const SignIn = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
+                        {error && (
+                          <FormLabel className="font-semibold text-red-500">
+                            {error}
+                          </FormLabel>
+                        )}
                         <FormControl>
                           <Input
                             placeholder="Email"

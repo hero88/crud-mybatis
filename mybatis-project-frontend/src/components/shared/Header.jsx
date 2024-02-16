@@ -17,11 +17,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useEffect, useState } from "react";
 
 function Header() {
   const navigate = useNavigate();
-  
-  let userId = 1;
+
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("profile");
+    localStorage.removeItem("token");
+    navigate("/sign-in");
+  };
+
   return (
     <>
       <div className="px-6 pt-3 pb-2 flex justify-between">
@@ -52,19 +64,16 @@ function Header() {
           </span>
         </div>
         <div className="flex space-x-2">
-          {userId ? (
+          {user?.id ? (
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar
-                    className="h-8 w-8 cursor-pointer"
-                    onClick={() => navigate(`/profile/detail/${userId}`)}
+                    className="h-9 w-9 cursor-pointer"
+                    onClick={() => navigate(`/profile/detail/${user?.id}`)}
                   >
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarImage src="" alt="@shadcn" />
+                    <AvatarFallback>{user?.firstname.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="mr-9 min-w-56 px-3 pt-3 pb-4">
@@ -72,24 +81,25 @@ function Header() {
                     <div>
                       <Avatar
                         className="h-12 w-12 cursor-pointer"
-                        onClick={() => navigate(`/profile/detail/${userId}`)}
+                        onClick={() => navigate(`/profile/detail/${user?.id}`)}
                       >
-                        <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt="@shadcn"
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src="" alt="@shadcn" />
+                        <AvatarFallback>
+                          {user?.firstname.charAt(0)}
+                        </AvatarFallback>
                       </Avatar>
                     </div>
                     <div>
-                      <p className="text-base">Hi, Kenny Will</p>
+                      <p className="text-base">
+                        Hi, {user?.firstname + user?.lastname}
+                      </p>
                       <p className="text-sm text-gray-500 font-semibold">
-                        sth@gmail.com
+                        {user?.email}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <Link to={`/profile/detail/${userId}`}>
+                  <Link to={`/profile/detail/${user?.id}`}>
                     <DropdownMenuItem className="py-2 font-medium text-sm">
                       Profile
                     </DropdownMenuItem>
@@ -97,11 +107,13 @@ function Header() {
                   <DropdownMenuItem className="py-2 font-medium text-sm">
                     Dashboard
                   </DropdownMenuItem>
-                  <Link to={`/sign-in`}>
-                    <DropdownMenuItem className="py-2 font-medium text-sm">
-                      Log out
-                    </DropdownMenuItem>
-                  </Link>
+
+                  <DropdownMenuItem
+                    className="py-2 font-medium text-sm"
+                    onClick={() => handleLogout()}
+                  >
+                    Log out
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
@@ -112,13 +124,13 @@ function Header() {
                 className="b-1 border-blue-500 text-blue-500 rounded-lg px-4"
                 size="sm"
               >
-                Log In
+                <Link to={`/sign-in`}>Log In</Link>
               </Button>
               <Button
                 className="b-1 bg-blue-500 text-white rounded-lg px-4"
                 size="sm"
               >
-                Sign up
+                <Link to={`/sign-up`}>Sign up</Link>
               </Button>
             </>
           )}

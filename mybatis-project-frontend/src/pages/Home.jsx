@@ -17,6 +17,8 @@ import { getMarketCapCoins } from "@/services/CoinAPI";
 function Home() {
   const [marketCoinList, setMarketCoinList] = useState([]);
 
+  // const user = localStorage
+
   useEffect(() => {
     const callGetAllCoinsApi = async () => {
       try {

@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const SignInValidation = z.object({
-  username: z.string().min(1, {
+  email: z.string().min(1, {
     message: "Email is missing",
   }),
   password: z.string().min(1, {

@@ -12,6 +12,7 @@ API.interceptors.request.use((req) => {
       localStorage.getItem("token")
     )}`;
   }
+
   return req;
 });
 

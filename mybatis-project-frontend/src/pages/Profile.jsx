@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useEffect, useState } from "react";
 
 function Profile() {
   const formSchema = z.object({
@@ -24,6 +25,19 @@ function Profile() {
     age: z.string(),
     gender: z.string(),
   });
+
+  const [user, setUser] = useState({});
+
+  const [userForm, setUserForm] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    age: 0,
+    gender: "",
+  });
+
+  const { firstname, lastname, email, phone, age, gender } = userForm;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -37,6 +51,14 @@ function Profile() {
       gender: "",
     },
   });
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, []);
+
+  const handleFieldChange = (e) => {
+    setUserForm({ ...userForm, [e.target.name]: e.target.value });
+  };
 
   const onSubmit = (values) => {
     const { username, email, fullname, phone, address, age, gender } = values;
@@ -62,8 +84,9 @@ function Profile() {
       <hr />
       <div className="flex gap-8 items-center py-6">
         <div>
-          <Avatar className="h-32 w-32">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <Avatar className="h-32 w-32 cursor-pointer">
+            <AvatarImage src="" alt="@shadcn" />
+            <AvatarFallback>{user?.firstname}</AvatarFallback>
           </Avatar>
         </div>
         <Button>Edit avatar</Button>
