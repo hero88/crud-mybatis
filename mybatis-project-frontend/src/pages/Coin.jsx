@@ -9,23 +9,39 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import AddCoinDialog from "./dialogs/AddCoinDialog";
-import axios from "axios";
+import { getAllCoins, getMarketCapCoins } from "@/services/CoinAPI";
 
 function Coin() {
+  const [user, setUser] = useState({});
+
   const [userCoinList, setUserCoinList] = useState([]);
+  const [marketCoinList, setMarketCoinList] = useState();
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, []);
 
   useEffect(() => {
     const callGetAllCoinsOfUserApi = async () => {
       try {
-        const { data: response } = await axios.get(
-          `http://localhost:5555/api/v1/coins/getCoinsByUserId?userId=1`
-        );
+        const { data: response } = await getAllCoins();
 
         setUserCoinList(response.data);
       } catch (error) {
         console.error("Error when calling table data:", error);
       }
     };
+
+    const callGetAllCoinsApi = async () => {
+      try {
+        const { data: response } = await getMarketCapCoins();
+        setMarketCoinList(response.data.cryptoCurrencyList);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    callGetAllCoinsApi();
 
     callGetAllCoinsOfUserApi();
 
@@ -81,7 +97,10 @@ function Coin() {
                     </div>
                   </TableCell>
                   <TableCell className="font-semibold">
-                    {coin.marketPairCount || "Empty"}
+                    {
+                      marketCoinList?.find((coin) => coin.name === coin.name)
+                        ?.marketPairCount
+                    }
                   </TableCell>
                   <TableCell className="font-semibold">
                     {coin.quantity}

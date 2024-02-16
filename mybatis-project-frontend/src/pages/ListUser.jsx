@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
+import { getAllUsers } from "@/services/UserAPI";
 import { useEffect, useState } from "react";
 
 function ListUser() {
@@ -16,11 +16,10 @@ function ListUser() {
   useEffect(() => {
     const callGetAllUsersApi = async () => {
       try {
-        const { data: response } = await axios.get(
-          "http://localhost:5555/api/v1/users/getAllUsers"
-        );
+        const response = await getAllUsers();
 
-        setUserList(response.data);
+        console.log(response);
+        // setUserList(response.data);
       } catch (error) {
         console.error("Error when calling table data:", error);
       }

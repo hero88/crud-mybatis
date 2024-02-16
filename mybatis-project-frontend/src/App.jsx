@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes } from "./routes";
 import { Fragment } from "react";
 import { DefaultLayout } from "./layouts";
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             );
           })}
         </Routes>
+        <Toaster />
       </div>
     </Router>
   );

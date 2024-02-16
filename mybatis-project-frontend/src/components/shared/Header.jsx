@@ -73,7 +73,9 @@ function Header() {
                     onClick={() => navigate(`/profile/detail/${user?.id}`)}
                   >
                     <AvatarImage src="" alt="@shadcn" />
-                    <AvatarFallback>{user?.firstname.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="bg-blue-300 font-semibold">
+                      {user?.firstname.charAt(0).toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="mr-9 min-w-56 px-3 pt-3 pb-4">
@@ -85,7 +87,7 @@ function Header() {
                       >
                         <AvatarImage src="" alt="@shadcn" />
                         <AvatarFallback>
-                          {user?.firstname.charAt(0)}
+                          {user?.firstname.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </div>

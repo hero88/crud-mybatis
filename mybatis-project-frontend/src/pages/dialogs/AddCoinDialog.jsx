@@ -20,31 +20,40 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import axios from "axios";
+import { addCoin, getMarketCapCoins } from "@/services/CoinAPI";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
-
-const coins = [
-  { label: "Bitcoin", value: 1 },
-  { label: "Ethereum", value: 1027 },
-  { label: "Tether USDt", value: 825 },
-  { label: "BNB", value: 1839 },
-  { label: "Solana", value: 5426 },
-  { label: "USDC", value: 3408 },
-];
+import { useEffect, useState } from "react";
 
 function AddCoinDialog({ type }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState();
+  const [selectedValue, setSelectedValue] = useState();
   const [openDialog, setOpenDialog] = useState(false);
+  const [marketCoinList, setMarketCoinList] = useState();
+
+  useEffect(() => {
+    const callGetAllCoinsApi = async () => {
+      try {
+        const { data: response } = await getMarketCapCoins();
+        setMarketCoinList(response.data.cryptoCurrencyList);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    callGetAllCoinsApi();
+  }, []);
 
   const handleSelectedCoin = (currentValue) => {
-    setValue(currentValue === value ? "" : currentValue);
+    setSelectedValue(currentValue === selectedValue ? "" : currentValue);
     setOpen(false);
   };
 
-  const handleAddNewCoin = async () => {
+  const handleAddNewCoin = async (selectedCoin) => {
+
+    const {name, } = selectedCoin;
+
     const newCoin = {
       name: "test",
       symbol: "test",
@@ -53,14 +62,11 @@ function AddCoinDialog({ type }) {
       userId: 1,
     };
 
-    const { data: response } = axios.post(
-      `http://localhost:5555/api/v1/coins/addCoin`,
-      newCoin
-    );
+    const { data: response } = await addCoin(newCoin);
 
-    console.log(response);
+    console.log(selectedCoin);
 
-    setOpenDialog(false);
+    // setOpenDialog(false);
   };
 
   return (
@@ -90,34 +96,40 @@ function AddCoinDialog({ type }) {
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  className="w-[200px] justify-between"
+                  className="w-[250px] justify-between"
                 >
-                  {value
-                    ? coins.find((coin) => coin.value === value)?.label
+                  {selectedValue
+                    ? marketCoinList?.find(
+                        (coin) => coin.name === selectedValue.name
+                      )?.name
                     : "Select coin..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
+              <PopoverContent className="w-[250px] p-0">
                 <Command>
                   <CommandInput placeholder="Search coin..." />
-                  <CommandGroup>
-                    {coins.map((coin) => (
-                      <CommandItem
-                        key={coin.value}
-                        value={coin.value}
-                        onSelect={() => handleSelectedCoin(coin.value)}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            value === coin.value ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {coin.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                  <ScrollArea className="h-72">
+                    <CommandGroup>
+                      {marketCoinList?.map((coin) => (
+                        <CommandItem
+                          key={coin.id}
+                          value={coin.name}
+                          onSelect={() => handleSelectedCoin(coin)}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedValue === coin
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {coin.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
                 </Command>
               </PopoverContent>
             </Popover>
@@ -126,11 +138,18 @@ function AddCoinDialog({ type }) {
             <Label htmlFor="username" className="text-right">
               Quantity
             </Label>
-            <Input id="quantity" className="col-span-3" />
+            <Input
+              id="quantity"
+              className="col-span-3"
+              type="number"
+              defaultValue={1}
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => handleAddNewCoin()}>Save changes</Button>
+          <Button onClick={() => handleAddNewCoin(selectedValue)}>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

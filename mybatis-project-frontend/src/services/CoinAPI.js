@@ -17,7 +17,7 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const getAllCoins = () => API.get("api/coin");
+export const getAllCoins = () => API.get("api/coin/getAllCoins");
 
 export const getMarketCapCoins = () => {
   try {
@@ -31,7 +31,7 @@ export const getMarketCapCoins = () => {
   }
 };
 
-export const getCoinsByUserId = (id) => API.get(`/?userId=${id}`);
+export const getCoinsByUserId = (id) => API.get(`getCoinById/${id}`);
 
 export const addCoin = (newCoin) => API.post("/", newCoin);
 
