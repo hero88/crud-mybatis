@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,7 @@ import {
 import { app } from "@/config/firebase.config";
 import PasswordInput from "@/components/shared/PasswordInput";
 import { SignInValidation } from "@/lib/validation";
+import { login } from "@/services/UserAPI";
 
 const imagesInit = [
   "/src/assets/side-img-1.jpg",
@@ -42,16 +44,24 @@ const SignIn = () => {
   const form = useForm({
     resolver: zodResolver(SignInValidation),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
+
+  const [error, setError] = useState("");
 
   const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   const firebaseAuth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   const handleLoginWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, googleProvider).then((userCred) => {
@@ -93,10 +103,20 @@ const SignIn = () => {
     });
   };
 
-  const onSubmit = (values) => {
-    navigate("/", { replace: true });
+  const handleLoginNormally = async (userForm) => {
+    const { data: response } = await login(userForm);
+    localStorage.setItem("token", JSON.stringify(response.data.accessToken));
+    localStorage.setItem("profile", JSON.stringify(response.data.user));
 
-    console.log(values);
+    if (response.data.accessToken !== null) {
+      navigate("/", { replace: true });
+    } else {
+      setError("Your username or password is incorrect!");
+    }
+  };
+
+  const onSubmit = (values) => {
+    handleLoginNormally(values);
   };
 
   return (
@@ -121,12 +141,18 @@ const SignIn = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10">
                   <FormField
                     control={form.control}
-                    name="username"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
+                        {error && (
+                          <FormLabel className="font-semibold text-red-500">
+                            {error}
+                          </FormLabel>
+                        )}
                         <FormControl>
                           <Input
-                            placeholder="Username"
+                            placeholder="Email"
+                            type="email"
                             {...field}
                             className="rounded-3xl px-8 h-12 border-gray-400"
                           />
@@ -141,12 +167,6 @@ const SignIn = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          {/* <Input
-                            placeholder="Password"
-                            {...field}
-                            className="rounded-3xl px-8 h-12 mt-3 border-gray-400"
-                            type="password"
-                          /> */}
                           <PasswordInput
                             {...field}
                             placeholder="Password"
