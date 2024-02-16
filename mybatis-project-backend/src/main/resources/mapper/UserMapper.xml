@@ -5,8 +5,7 @@
 <mapper namespace="com.allxone.mybatisprojectbackend.mapper.UserMapper">
     <resultMap id="userResultMap" type="com.allxone.mybatisprojectbackend.model.User">
         <id property="id" column="id"/>
-        <result property="firstname" column="firstname"/>
-        <result property="lastname" column="lastname"/>
+        <result property="name" column="name"/>
         <result property="email" column="email"/>
         <result property="role" column="role"/>
         <result property="isActive" column="is_active"/>
@@ -20,25 +19,23 @@
 
     <resultMap id="userResultMapWithTokens" type="com.allxone.mybatisprojectbackend.model.User">
         <id property="id" column="id"/>
-        <result column="firstname" property="firstname"/>
-        <result column="lastname" property="lastname"/>
+        <result column="name" property="name"/>
         <result column="email" property="email"/>
         <result column="role" property="role"/>
     </resultMap>
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER,
+        INSERT INTO user (NAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER,
                           CREATED_AT,
                           UPDATED_AT)
-        VALUES (#{firstname}, #{lastname}, #{email}, #{password}, #{role}, false, #{gender}, #{address}, #{age},
+        VALUES (#{name}, #{email}, #{password}, #{role}, false, #{gender}, #{address}, #{age},
                 #{phoneNumber}, NOW(),
                 NOW())
     </insert>
 
     <select id="getUserById" resultMap="userResultMap">
         SELECT usr.ID
-             , usr.FIRSTNAME
-             , usr.LASTNAME
+             , usr.NAME
              , usr.EMAIL
              , usr.ROLE
              , usr.IS_ACTIVE
@@ -54,8 +51,7 @@
 
     <select id="findByEmail" resultMap="userResultMap">
         SELECT usr.ID
-             , usr.FIRSTNAME
-             , usr.LASTNAME
+             , usr.NAME
              , usr.EMAIL
              , usr.ROLE
              , usr.IS_ACTIVE
@@ -71,8 +67,7 @@
 
     <update id="updateUser" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
         UPDATE user
-        SET FIRSTNAME    = #{firstname},
-            LASTNAME     = #{lastname},
+        SET NAME         = #{name},
             EMAIL        = #{email},
             IS_ACTIVE    = #{isActive},
             GENDER       = #{gender},

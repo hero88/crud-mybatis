@@ -11,7 +11,7 @@
 	<groupId>com.allxone</groupId>
 	<artifactId>mybatis-project-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>mybatis-project-backend</name>
 	<description>mybatis-project-backend</description>
 	<properties>
@@ -110,6 +110,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>6.13.0</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

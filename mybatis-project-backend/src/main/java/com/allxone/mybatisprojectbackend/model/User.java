@@ -21,8 +21,7 @@ import java.util.Collection;
 @ToString
 public class User implements UserDetails {
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String name;
     private Boolean gender;
     private String address;
     private Integer age;
