@@ -16,10 +16,15 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { getUserById, updateUser } from "@/services/UserAPI";
+import {
+  changeUserPassword,
+  getUserById,
+  updateUser,
+} from "@/services/UserAPI";
 import axios from "axios";
 import { Dialog } from "@radix-ui/react-dialog";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -28,6 +33,7 @@ import {
 } from "@/components/ui/dialog";
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
+import PasswordInput from "@/components/shared/PasswordInput";
 
 function Profile() {
   const { toast } = useToast();
@@ -50,7 +56,15 @@ function Profile() {
     address: "",
   });
 
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmationPassword: "",
+  });
+
   const { name, email, phoneNumber, age, gender, address } = user;
+
+  const { currentPassword, newPassword, confirmationPassword } = passwordForm;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -71,8 +85,12 @@ function Profile() {
     console.log(JSON.parse(localStorage.getItem("profile")));
   }, []);
 
-  const handleFieldChange = (e) => {
+  const handleUserFieldChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handlePasswordFieldChange = (e) => {
+    setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
   };
 
   const handleUpdateUser = async () => {
@@ -86,36 +104,85 @@ function Profile() {
       phoneNumber,
       address,
       age: parseInt(age),
-      gender: true,
+      gender: gender === "male" ? true : false,
     };
 
     console.log(updatedUser);
-    const { data: response } = await axios.put(
-      `http://localhost:5555/api/users/updateUser`,
-      updatedUser
-    );
+    // const { data: response } = await axios.put(
+    //   `http://localhost:5555/api/users/updateUser`,
+    //   updatedUser
+    // );
 
-    if (response.data) {
-      const { data: newUserResponse } = await getUserById(user.id);
+    // if (response.data) {
+    //   const { data: newUserResponse } = await getUserById(user.id);
 
-      console.log(newUserResponse);
+    //   console.log(newUserResponse);
 
-      localStorage.setItem("profile", JSON.stringify(newUserResponse.data));
+    //   localStorage.setItem("profile", JSON.stringify(newUserResponse.data));
 
-      setUser(newUserResponse.data);
+    //   setUser(newUserResponse.data);
 
-      toast({
-        title: "Update user successfully.",
-        description: "Your profile has been updated",
-        action: <ToastAction altText="Nice">Nice</ToastAction>,
-      });
-    } else {
+    //   toast({
+    //     title: "Update user successfully.",
+    //     description: "Your profile has been updated",
+    //     action: <ToastAction altText="Nice">Nice</ToastAction>,
+    //   });
+    // } else {
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Uh oh! Something went wrong.",
+    //     description: "There was a problem with updating.",
+    //     action: <ToastAction altText="Try again">Try again</ToastAction>,
+    //   });
+    // }
+  };
+
+  const handleChangePassword = async () => {
+    if (
+      currentPassword === "" ||
+      newPassword === "" ||
+      confirmationPassword === ""
+    ) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with updating.",
+        description: "Please don't let any field empty.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
+      return;
+    } else if (newPassword !== confirmationPassword) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Your confirm password not match the new password.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      return;
+    } else {
+      let newPasswordUpdated = {
+        currentPassword,
+        newPassword,
+        confirmationPassword,
+      };
+
+      console.log(newPasswordUpdated);
+
+      // const { data: response } = await changeUserPassword(newPassword);
+
+      // if (response.data) {
+      //     toast({
+      //       title: "Update user successfully.",
+      //       description: "Your profile has been updated",
+      //       action: <ToastAction altText="Nice">Nice</ToastAction>,
+      //     });
+      // } else {
+      //     toast({
+      //       variant: "destructive",
+      //       title: "Uh oh! Something went wrong.",
+      //       description: "There was a problem with updating.",
+      //       action: <ToastAction altText="Try again">Try again</ToastAction>,
+      //     });
+      // }
     }
   };
 
@@ -139,57 +206,66 @@ function Profile() {
               </AvatarFallback>
             </Avatar>
           </div>
-          {/* <Button
-            className=""
-            onClick={() => {
-              toast({
-                variant: "destructive",
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem with updating.",
-                action: (
-                  <ToastAction altText="Try again">Try again</ToastAction>
-                ),
-              });
-            }}
-          >
-            Change password
-          </Button> */}
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline">Edit Profile</Button>
+              <Button>Change password</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[560px]">
               <AlertDialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
+                <DialogTitle>Change password</DialogTitle>
                 <DialogDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
+                  Make changes to your password here. Click save when
+                  you&apos;re done.
                 </DialogDescription>
               </AlertDialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
+                  <Label htmlFor="current-password" className="text-right">
+                    Current password
                   </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
+
+                  <div className="col-span-3">
+                    <PasswordInput
+                      id="current-password"
+                      value={currentPassword}
+                      name="currentPassword"
+                      onChange={(e) => handlePasswordFieldChange(e)}
+                    />
+                  </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
+                  <Label htmlFor="new-password" className="text-right">
+                    New passowrd
                   </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
+                  <div className="col-span-3">
+                    <PasswordInput
+                      id="new-password"
+                      value={newPassword}
+                      name="newPassword"
+                      onChange={(e) => handlePasswordFieldChange(e)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="confirm-password" className="text-right">
+                    Confirm password
+                  </Label>
+                  <div className="col-span-3">
+                    <PasswordInput
+                      id="confirm-password"
+                      value={confirmationPassword}
+                      name="confirmationPassword"
+                      onChange={(e) => handlePasswordFieldChange(e)}
+                    />
+                  </div>
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Save changes</Button>
+                <DialogClose asChild>
+                  <Button type="submit" onClick={handleChangePassword}>
+                    Save changes
+                  </Button>
+                </DialogClose>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -228,7 +304,7 @@ function Profile() {
                       {...field}
                       className="px-6 h-12 border-gray-400"
                       name="email"
-                      onChange={(e) => handleFieldChange(e)}
+                      onChange={(e) => handleUserFieldChange(e)}
                       value={email}
                     />
                   </FormControl>
@@ -248,7 +324,7 @@ function Profile() {
                       {...field}
                       className="px-6 h-12 border-gray-400"
                       name="name"
-                      onChange={(e) => handleFieldChange(e)}
+                      onChange={(e) => handleUserFieldChange(e)}
                       value={name}
                     />
                   </FormControl>
@@ -268,7 +344,7 @@ function Profile() {
                       {...field}
                       className="px-6 h-12 border-gray-400"
                       name="phoneNumber"
-                      onChange={(e) => handleFieldChange(e)}
+                      onChange={(e) => handleUserFieldChange(e)}
                       value={phoneNumber}
                     />
                   </FormControl>
@@ -288,7 +364,7 @@ function Profile() {
                       {...field}
                       className="px-6 h-12 border-gray-400"
                       name="address"
-                      onChange={(e) => handleFieldChange(e)}
+                      onChange={(e) => handleUserFieldChange(e)}
                       value={address}
                     />
                   </FormControl>
@@ -310,7 +386,7 @@ function Profile() {
                       type="number"
                       className="px-6 h-12 border-gray-400"
                       name="age"
-                      onChange={(e) => handleFieldChange(e)}
+                      onChange={(e) => handleUserFieldChange(e)}
                       value={age}
                     />
                   </FormControl>
@@ -328,7 +404,9 @@ function Profile() {
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
+                      onChange={(e) => handleUserFieldChange(e)}
                       defaultValue={gender ? "male" : "female"}
+                      name="gender"
                       className="flex space-x-2"
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">

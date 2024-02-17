@@ -42,7 +42,7 @@ const SignUp = () => {
     });
 
     if (password === confirmPassword) {
-      const response = await register({email, password});
+      const response = await register({ email, password });
       console.log(response);
     }
 

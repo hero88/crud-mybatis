@@ -28,6 +28,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
+import NumberCounter from "@/components/shared/NumberCounter";
 
 function Coin() {
   const [user, setUser] = useState({});
@@ -70,12 +71,12 @@ function Coin() {
     return () => clearInterval(callGetAllCoinsApiEvery30s);
   }, []);
 
-  const handleUpdateCoin = async () => {};
+  // const handleUpdateCoin = async () => {};
 
   const handleDeleteCoin = async (coinId) => {
     // const { data: response } = await deleteCoinById(coinId);
     const { data: response } = await axios.delete(
-      `http://localhost:5555/api/coin/deleteCoinById/2`
+      `http://localhost:5555/api/coin/deleteCoinById/1`
     );
 
     getAllUserCoins();
@@ -100,10 +101,18 @@ function Coin() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-8"></TableHead>
-                <TableHead className="text-black p-0 min-w-6">#</TableHead>
-                <TableHead className="text-black">Name</TableHead>
-                <TableHead className="text-black">Market pair count</TableHead>
-                <TableHead className="text-black">Quantity</TableHead>
+                <TableHead className="text-black p-0 min-w-6 font-bold text-[12px]">
+                  #
+                </TableHead>
+                <TableHead className="text-black font-bold text-[12px]">
+                  Name
+                </TableHead>
+                <TableHead className="text-black font-bold text-[12px]">
+                  Market pair count
+                </TableHead>
+                <TableHead className="text-black font-bold text-[12px]">
+                  Quantity
+                </TableHead>
                 <TableHead className=""></TableHead>
               </TableRow>
             </TableHeader>
@@ -140,12 +149,12 @@ function Coin() {
                     }
                   </TableCell>
                   <TableCell className="font-semibold">
-                    {coin.quantity}
+                    <NumberCounter coin={coin} />
                   </TableCell>
                   <TableCell className="flex items-center space-x-1">
-                    <Button className="w-12 h-12">
+                    {/* <Button className="w-12 h-12">
                       <Pencil width={20} height={20} />
-                    </Button>
+                    </Button> */}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button className="w-12 h-12">

@@ -74,3 +74,13 @@ export const getUserById = (id) => {
     return null;
   }
 };
+
+export const changeUserPassword = (passwordForm) => {
+  try {
+    const res = API.patch(`api/users/changePassword`, passwordForm);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
