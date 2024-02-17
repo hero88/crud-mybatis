@@ -81,7 +81,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
-        if(user == null || !user.isEnabled()){
+        if(!user.isEnabled()){
             throw new RuntimeException();
         }
         String jwtToken = jwtService.generateToken(user);
