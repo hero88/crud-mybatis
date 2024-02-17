@@ -12,8 +12,6 @@ API.interceptors.request.use((req) => {
       localStorage.getItem("token")
     )}`;
   }
-  console.log(req);
-
   return req;
 });
 
@@ -31,10 +29,16 @@ export const getMarketCapCoins = () => {
   }
 };
 
-export const getCoinsByUserId = (id) => API.get(`getCoinById/${id}`);
+export const getCoinsByUserId = (id) => API.get(`api/coin/getCoinById/${id}`);
 
-export const addCoin = (newCoin) => API.post("/", newCoin);
+export const addCoin = (newCoin) => API.post("api/coin/saveCoin", newCoin);
 
-export const updateCoin = (newCoin) => API.put("/", newCoin);
+export const updateCoin = (updatedCoin) =>
+  API.put("api/coin/updateCoin", updatedCoin);
 
-export const deleteCoinById = (id) => API.delete(`/${id}`);
+export const deleteCoinById = (id) =>
+  API.delete(`api/coin/deleteCoinById/${id}`, {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  });

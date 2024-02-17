@@ -16,6 +16,18 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { getUserById, updateUser } from "@/services/UserAPI";
+import axios from "axios";
+import { Dialog } from "@radix-ui/react-dialog";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
 
 function Profile() {
   const { toast } = useToast();
@@ -30,7 +42,7 @@ function Profile() {
   });
 
   const [user, setUser] = useState({
-    firstname: "",
+    name: "",
     email: "",
     phoneNumber: "",
     age: "",
@@ -38,14 +50,14 @@ function Profile() {
     address: "",
   });
 
-  const { firstname, email, phoneNumber, age, gender, address } = user;
+  const { name, email, phoneNumber, age, gender, address } = user;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       // username: "",
       email: email,
-      fullname: firstname,
+      name: name,
       phone: phoneNumber,
       address: address,
       age: age,
@@ -63,23 +75,35 @@ function Profile() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async () => {
-    const { email, firstname, phoneNumber, address, age, gender } = user;
+  const handleUpdateUser = async () => {
+    const { id, email, name, phoneNumber, address, age, gender } = user;
 
     let updatedUser = {
       // username,
+      id,
+      name,
       email,
-      firstname,
       phoneNumber,
       address,
       age: parseInt(age),
-      gender,
+      gender: true,
     };
 
     console.log(updatedUser);
-    // const { data: response } = await updatedUser(updatedUser);
+    const { data: response } = await axios.put(
+      `http://localhost:5555/api/users/updateUser`,
+      updatedUser
+    );
 
-    if (user) {
+    if (response.data) {
+      const { data: newUserResponse } = await getUserById(user.id);
+
+      console.log(newUserResponse);
+
+      localStorage.setItem("profile", JSON.stringify(newUserResponse.data));
+
+      setUser(newUserResponse.data);
+
       toast({
         title: "Update user successfully.",
         description: "Your profile has been updated",
@@ -95,6 +119,10 @@ function Profile() {
     }
   };
 
+  const onSubmit = () => {
+    handleUpdateUser();
+  };
+
   return (
     <div className="w-full px-8">
       <h2 className="pb-4 text-2xl font-bold">Profile</h2>
@@ -106,12 +134,12 @@ function Profile() {
           <div>
             <Avatar className="h-32 w-32 cursor-pointer">
               <AvatarImage src="" alt="@shadcn" />
-              <AvatarFallback className="font-semibold">
-                {user?.firstname}
+              <AvatarFallback className="font-semibold text-4xl">
+                {user?.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </div>
-          <Button
+          {/* <Button
             className=""
             onClick={() => {
               toast({
@@ -125,7 +153,46 @@ function Profile() {
             }}
           >
             Change password
-          </Button>
+          </Button> */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Edit Profile</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <AlertDialogHeader>
+                <DialogTitle>Edit profile</DialogTitle>
+                <DialogDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </DialogDescription>
+              </AlertDialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value="Pedro Duarte"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    value="@peduarte"
+                    className="col-span-3"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
         <Form {...form}>
           <form
@@ -182,7 +249,7 @@ function Profile() {
                       className="px-6 h-12 border-gray-400"
                       name="name"
                       onChange={(e) => handleFieldChange(e)}
-                      value={firstname}
+                      value={name}
                     />
                   </FormControl>
                   <FormMessage />

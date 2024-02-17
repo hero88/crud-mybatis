@@ -31,6 +31,7 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem("profile");
     localStorage.removeItem("token");
+    localStorage.removeItem("auth");
     navigate("/sign-in");
   };
 
@@ -74,7 +75,7 @@ function Header() {
                   >
                     <AvatarImage src="" alt="@shadcn" />
                     <AvatarFallback className="bg-blue-300 font-semibold">
-                      {user?.firstname.charAt(0).toUpperCase()}
+                      {user?.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -87,13 +88,13 @@ function Header() {
                       >
                         <AvatarImage src="" alt="@shadcn" />
                         <AvatarFallback>
-                          {user?.firstname.charAt(0).toUpperCase()}
+                          {user?.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div>
                       <p className="text-base">
-                        Hi, {user?.firstname + user?.lastname}
+                        Hi, {user?.name}
                       </p>
                       <p className="text-sm text-gray-500 font-semibold">
                         {user?.email}

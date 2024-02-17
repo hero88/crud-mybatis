@@ -71,8 +71,7 @@ const SignIn = () => {
         firebaseAuth.onAuthStateChanged((userCred) => {
           if (userCred) {
             userCred.getIdToken().then((token) => {
-              console.log(token);
-              console.log(userCred);
+              localStorage.setItem("token", token);
             });
             navigate("/", { replace: true });
           } else {
@@ -91,8 +90,7 @@ const SignIn = () => {
         firebaseAuth.onAuthStateChanged((userCred) => {
           if (userCred) {
             userCred.getIdToken().then((token) => {
-              console.log(token);
-              console.log(userCred);
+              localStorage.setItem("token", token);
             });
             navigate("/", { replace: true });
           } else {

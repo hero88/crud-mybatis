@@ -1,5 +1,17 @@
 import PaginationCustom from "@/components/shared/PaginationCustom";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
   Table,
   TableBody,
   TableCell,
@@ -7,25 +19,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllUsers } from "@/services/UserAPI";
+import { deleteUserById, getAllUsers } from "@/services/UserAPI";
+import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function ListUser() {
   const [userList, setUserList] = useState([]);
 
-  useEffect(() => {
-    const callGetAllUsersApi = async () => {
-      try {
-        const response = await getAllUsers();
+  const handleGetAllUsers = async () => {
+    try {
+      const { data: response } = await getAllUsers();
+      setUserList(response.data);
+    } catch (error) {
+      console.error("Error when calling table data:", error);
+    }
+  };
 
-        console.log(response);
-        // setUserList(response.data);
-      } catch (error) {
-        console.error("Error when calling table data:", error);
-      }
-    };
-    callGetAllUsersApi();
+  useEffect(() => {
+    handleGetAllUsers();
   }, []);
+
+  const handleDeleteUser = async (userId) => {
+    const { data: response } = await deleteUserById(userId);
+
+    handleGetAllUsers();
+
+    console.log(response);
+  };
 
   const convertToAge = (dob) => {
     var birthdate = new Date(dob);
@@ -65,14 +85,14 @@ function ListUser() {
               <TableHead className="text-black text-[12px] font-bold">
                 Phone number
               </TableHead>
-              <TableHead className="text-black text-[12px] font-bold">
+              {/* <TableHead className="text-black text-[12px] font-bold">
                 Role
-              </TableHead>
+              </TableHead> */}
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {userList.map((user, index) => (
+            {userList?.map((user, index) => (
               <TableRow key={index}>
                 <TableCell className="p-0 min-w-6 font-semibold text-gray-800">
                   {index + 1}
@@ -84,7 +104,7 @@ function ListUser() {
                   {user.name}
                 </TableCell>
                 <TableCell className="font-semibold text-gray-800">
-                  {user.gender}
+                  {user.gender ? "male" : "female"}
                 </TableCell>
                 <TableCell className="font-semibold text-gray-800">
                   {user.address}
@@ -95,8 +115,37 @@ function ListUser() {
                 <TableCell className="font-semibold text-gray-800">
                   {user.phoneNumber}
                 </TableCell>
-                <TableCell className="font-semibold text-gray-800">
+                {/* <TableCell className="font-semibold text-gray-800">
                   {user.role}
+                </TableCell> */}
+                <TableCell className="flex items-center space-x-1">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button className="w-12 h-12">
+                        <Trash width={20} height={20} />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete this account and remove this person data from
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}

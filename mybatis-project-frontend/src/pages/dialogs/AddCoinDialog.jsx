@@ -21,28 +21,33 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { addCoin, getMarketCapCoins } from "@/services/CoinAPI";
+import { addCoin, getAllCoins } from "@/services/CoinAPI";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 
-function AddCoinDialog({ type }) {
+function AddCoinDialog({ type, user, userCoins, marketCoins, recallCoins }) {
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState();
   const [openDialog, setOpenDialog] = useState(false);
-  const [marketCoinList, setMarketCoinList] = useState();
+  const [localCoinList, setLocalCoinList] = useState([]);
+  const [addQuantity, setAddQuantity] = useState(1);
+
+  const { toast } = useToast();
 
   useEffect(() => {
-    const callGetAllCoinsApi = async () => {
+    const getAllLocalCoins = async () => {
       try {
-        const { data: response } = await getMarketCapCoins();
-        setMarketCoinList(response.data.cryptoCurrencyList);
+        const { data: response } = await getAllCoins();
+        setLocalCoinList(response.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    callGetAllCoinsApi();
+    getAllLocalCoins();
   }, []);
 
   const handleSelectedCoin = (currentValue) => {
@@ -51,22 +56,47 @@ function AddCoinDialog({ type }) {
   };
 
   const handleAddNewCoin = async (selectedCoin) => {
+    if (selectedCoin === null || selectedCoin === undefined) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! You can not let the coin empty",
+        description: "You can adding coin again.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } else if (addQuantity === "0") {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! You can not set the quantity at zero.",
+        description: "You can adding coin again.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } else {
+      const { id, name, symbol } = selectedCoin;
 
-    const {name, } = selectedCoin;
+      const newCoin = {
+        id: localCoinList.length,
+        name,
+        symbol,
+        coinMarketId: id,
+        quantity: addQuantity,
+        userId: user.id,
+      };
 
-    const newCoin = {
-      name: "test",
-      symbol: "test",
-      coinMarketId: 1,
-      quantity: 1,
-      userId: 1,
-    };
+      console.log(newCoin.quantity);
 
-    const { data: response } = await addCoin(newCoin);
+      const { data: response } = await addCoin(newCoin);
 
-    console.log(selectedCoin);
+      if (response.status === "ok") {
+        recallCoins();
+      } else {
+        console.log("fail");
+      }
 
-    // setOpenDialog(false);
+      setSelectedValue();
+      setAddQuantity(1);
+    }
+
+    setOpenDialog(false);
   };
 
   return (
@@ -99,7 +129,7 @@ function AddCoinDialog({ type }) {
                   className="w-[250px] justify-between"
                 >
                   {selectedValue
-                    ? marketCoinList?.find(
+                    ? marketCoins?.find(
                         (coin) => coin.name === selectedValue.name
                       )?.name
                     : "Select coin..."}
@@ -111,23 +141,27 @@ function AddCoinDialog({ type }) {
                   <CommandInput placeholder="Search coin..." />
                   <ScrollArea className="h-72">
                     <CommandGroup>
-                      {marketCoinList?.map((coin) => (
-                        <CommandItem
-                          key={coin.id}
-                          value={coin.name}
-                          onSelect={() => handleSelectedCoin(coin)}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              selectedValue === coin
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {coin.name}
-                        </CommandItem>
-                      ))}
+                      {marketCoins
+                        ?.filter((o1) => {
+                          return !userCoins.some((o2) => o1.name === o2.name);
+                        })
+                        .map((coin) => (
+                          <CommandItem
+                            key={coin.id}
+                            value={coin.name}
+                            onSelect={() => handleSelectedCoin(coin)}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedValue === coin
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {coin.name}
+                          </CommandItem>
+                        ))}
                     </CommandGroup>
                   </ScrollArea>
                 </Command>
@@ -142,7 +176,8 @@ function AddCoinDialog({ type }) {
               id="quantity"
               className="col-span-3"
               type="number"
-              defaultValue={1}
+              onChange={(e) => setAddQuantity(e.target.value)}
+              value={addQuantity}
             />
           </div>
         </div>

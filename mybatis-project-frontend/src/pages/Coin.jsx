@@ -9,7 +9,25 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import AddCoinDialog from "./dialogs/AddCoinDialog";
-import { getAllCoins, getMarketCapCoins } from "@/services/CoinAPI";
+import {
+  deleteCoinById,
+  getAllCoins,
+  getMarketCapCoins,
+} from "@/services/CoinAPI";
+import { Button } from "@/components/ui/button";
+import { Pencil, Trash } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import axios from "axios";
 
 function Coin() {
   const [user, setUser] = useState({});
@@ -21,43 +39,61 @@ function Coin() {
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, []);
 
+  const getAllUserCoins = async () => {
+    try {
+      const { data: response } = await getAllCoins();
+
+      setUserCoinList(response.data);
+    } catch (error) {
+      console.error("Error when calling table data:", error);
+    }
+  };
+
+  const getMarketCoins = async () => {
+    try {
+      const { data: response } = await getMarketCapCoins();
+      setMarketCoinList(response.data.cryptoCurrencyList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const callGetAllCoinsOfUserApi = async () => {
-      try {
-        const { data: response } = await getAllCoins();
-
-        setUserCoinList(response.data);
-      } catch (error) {
-        console.error("Error when calling table data:", error);
-      }
-    };
-
-    const callGetAllCoinsApi = async () => {
-      try {
-        const { data: response } = await getMarketCapCoins();
-        setMarketCoinList(response.data.cryptoCurrencyList);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    callGetAllCoinsApi();
-
-    callGetAllCoinsOfUserApi();
+    getAllUserCoins();
+    getMarketCoins();
 
     const callGetAllCoinsApiEvery30s = setInterval(() => {
-      callGetAllCoinsOfUserApi();
+      getAllUserCoins();
+      getMarketCoins();
     }, 30000);
 
     return () => clearInterval(callGetAllCoinsApiEvery30s);
   }, []);
+
+  const handleUpdateCoin = async () => {};
+
+  const handleDeleteCoin = async (coinId) => {
+    // const { data: response } = await deleteCoinById(coinId);
+    const { data: response } = await axios.delete(
+      `http://localhost:5555/api/coin/deleteCoinById/2`
+    );
+
+    getAllUserCoins();
+    console.log(response);
+  };
 
   return (
     <>
       <div className="centerSide w-8/12 px-8">
         <h2 className="pb-4 text-2xl font-bold">Your Assets</h2>
         <hr className="pb-8" />
-        <AddCoinDialog type="ADD" />
+        <AddCoinDialog
+          type="ADD"
+          user={user}
+          userCoins={userCoinList}
+          marketCoins={marketCoinList}
+          recallCoins={getAllUserCoins}
+        />
         {/* list coin of user */}
         <div className="min-h-svh mt-2">
           <Table className="px-12">
@@ -68,6 +104,7 @@ function Coin() {
                 <TableHead className="text-black">Name</TableHead>
                 <TableHead className="text-black">Market pair count</TableHead>
                 <TableHead className="text-black">Quantity</TableHead>
+                <TableHead className=""></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -98,12 +135,43 @@ function Coin() {
                   </TableCell>
                   <TableCell className="font-semibold">
                     {
-                      marketCoinList?.find((coin) => coin.name === coin.name)
+                      marketCoinList?.find((item) => item.name === coin.name)
                         ?.marketPairCount
                     }
                   </TableCell>
                   <TableCell className="font-semibold">
                     {coin.quantity}
+                  </TableCell>
+                  <TableCell className="flex items-center space-x-1">
+                    <Button className="w-12 h-12">
+                      <Pencil width={20} height={20} />
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button className="w-12 h-12">
+                          <Trash width={20} height={20} />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This coin will be
+                            removed.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteCoin(coin.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
