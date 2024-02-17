@@ -21,7 +21,7 @@ public class RegistrationEventListener implements ApplicationListener<Registrati
     @Override
     public void onApplicationEvent(RegistrationEvent event) {
         user = event.getUser();
-        String name = user.getFirstname() + " " + user.getLastname();
+        String name = user.getName();
         String email = user.getEmail();
         String url = "http://localhost:5555/api/auth/register/verifyEmail?token="+event.getJwtToken();
         try {

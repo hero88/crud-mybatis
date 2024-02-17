@@ -9,8 +9,7 @@ import java.time.Instant;
 @Builder
 public class UserResponse {
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String name;
     private Boolean gender;
     private String address;
     private Integer age;

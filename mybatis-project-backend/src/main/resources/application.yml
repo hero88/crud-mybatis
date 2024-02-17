@@ -12,7 +12,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: buithang12396@gmail.com
-    password: xudnhajooqvwvpit
+    password: upzjlugzwrsxdmfx
     properties:
       mail:
         smtp:
@@ -43,6 +43,50 @@ springdoc:
     show-common-extensions: true
 server:
   port: 5555
+#security:
+#  firebase-props:
+#    database-url:
+#    enable-strict-server-session: false
+#    enable-check-session-revoked: false
+#    enable-logout-everywhere: false
+#    session-expiry-in-days: 5
+#  cookie-props:
+#    max-age-in-minutes: 7200
+#    http-only: true
+#    secure: true
+#    domain: ${DOMAIN}
+#    path: /
+#  allow-credentials: true
+#  allowed-origins:
+#    - http://localhost:3000
+#  allowed-methods:
+#    - GET
+#    - POST
+#    - PUT
+#    - PATCH
+#    - DELETE
+#    - OPTIONS
+#  allowed-headers:
+#    - Authorization
+#    - Origin
+#    - Content-Type
+#    - Accept
+#    - Accept-Encoding
+#    - Accept-Language
+#    - Access-Control-Allow-Origin
+#    - Access-Control-Allow-Headers
+#    - Access-Control-Request-Method
+#    - X-Requested-With
+#    - X-Auth-Token
+#    - X-Xsrf-Token
+#    - Cache-Control
+#    - Id-Token
+#  allowed-public-apis:
+#    - /favicon.ico
+#    - /session/login
+#    - /public/**
+#  exposed-headers:
+#    - X-Xsrf-Token
 
 
 
