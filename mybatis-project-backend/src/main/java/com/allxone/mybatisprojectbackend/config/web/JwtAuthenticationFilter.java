@@ -1,7 +1,8 @@
 package com.allxone.mybatisprojectbackend.config.web;
 
-import com.allxone.mybatisprojectbackend.enumaration.Role;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
+import com.allxone.mybatisprojectbackend.mapper.UserRoleMapper;
+import com.allxone.mybatisprojectbackend.model.Role;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.Impl.JwtService;
 import com.allxone.mybatisprojectbackend.mapper.TokenMapper;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final TokenMapper tokenMapper;
     private final UserMapper userMapper;
+    private final UserRoleMapper userRoleMapper;
 
     @Override
     protected void doFilterInternal(
@@ -62,8 +65,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userDetails = this.userDetailsService.loadUserByUsername(decodedToken.getEmail());
             } catch (UsernameNotFoundException usernameNotFoundException) {
-                User user = User.builder().name(decodedToken.getName()).email(decodedToken.getEmail()).role(Role.USER).isActive(true).build();
+                User user = User.builder()
+                        .name(decodedToken.getName())
+                        .email(decodedToken.getEmail())
+                        .roles(Set.of(new Role(2,"USER")))
+                        .isActive(true).build();
                 userMapper.saveUser(user);
+                user.getRoles().forEach(role -> userRoleMapper.addRole(user.getId(),role.getId()));
                 userDetails = userMapper.getUserById(user.getId());
             }
 

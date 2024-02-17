@@ -1,6 +1,6 @@
 package com.allxone.mybatisprojectbackend.enumaration.handler;
 
-import com.allxone.mybatisprojectbackend.enumaration.Role;
+import com.allxone.mybatisprojectbackend.enumaration.ERole;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
@@ -11,29 +11,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@MappedTypes(Role.class)
+@MappedTypes(ERole.class)
 @MappedJdbcTypes(JdbcType.VARCHAR)
-public class RoleTypeHandler extends BaseTypeHandler<Role> {
+public class RoleTypeHandler extends BaseTypeHandler<ERole> {
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, Role parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, ERole parameter, JdbcType jdbcType) throws SQLException {
         ps.setString(i, parameter.name());
     }
 
     @Override
-    public Role getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    public ERole getNullableResult(ResultSet rs, String columnName) throws SQLException {
         String value = rs.getString(columnName);
-        return value != null ? Role.valueOf(value) : null;
+        return value != null ? ERole.valueOf(value) : null;
     }
 
     @Override
-    public Role getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public ERole getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         String value = rs.getString(columnIndex);
-        return value != null ? Role.valueOf(value) : null;
+        return value != null ? ERole.valueOf(value) : null;
     }
 
     @Override
-    public Role getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public ERole getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         String value = cs.getString(columnIndex);
-        return value != null ? Role.valueOf(value) : null;
+        return value != null ? ERole.valueOf(value) : null;
     }
 }
