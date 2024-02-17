@@ -1,5 +1,8 @@
 package com.allxone.mybatisprojectbackend.config.web;
 
+import com.allxone.mybatisprojectbackend.enumaration.Role;
+import com.allxone.mybatisprojectbackend.mapper.UserMapper;
+import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.Impl.JwtService;
 import com.allxone.mybatisprojectbackend.mapper.TokenMapper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenMapper tokenMapper;
+    private final UserMapper userMapper;
 
     @Override
     protected void doFilterInternal(
@@ -50,13 +55,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(7);
         //      extract email
+        FirebaseToken decodedToken;
         try {
-            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(jwt);
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(decodedToken.getEmail());
+            decodedToken = FirebaseAuth.getInstance().verifyIdToken(jwt);
+            UserDetails userDetails;
+            try {
+                userDetails = this.userDetailsService.loadUserByUsername(decodedToken.getEmail());
+            } catch (UsernameNotFoundException usernameNotFoundException) {
+                User user = User.builder().name(decodedToken.getName()).email(decodedToken.getEmail()).role(Role.USER).isActive(true).build();
+                userMapper.saveUser(user);
+                userDetails = userMapper.getUserById(user.getId());
+            }
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
-                    "ROLE_USER"
+                    null,
+                    userDetails.getAuthorities()
             );
             authentication.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request)

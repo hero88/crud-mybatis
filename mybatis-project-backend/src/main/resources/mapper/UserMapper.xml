@@ -26,75 +26,76 @@
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user (NAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER,
-                          CREATED_AT,
-                          UPDATED_AT)
-        VALUES (#{name}, #{email}, #{password}, #{role}, false, #{gender}, #{address}, #{age},
-                #{phoneNumber}, NOW(),
-                NOW())
+        CREATED_AT,
+        UPDATED_AT)
+        VALUES (#{name}, #{email}, #{password}, #{role}, #{isActive}, #{gender}, #{address}, #{age},
+        #{phoneNumber}, NOW(),
+        NOW())
     </insert>
 
     <select id="getUserById" resultMap="userResultMap">
         SELECT usr.ID
-             , usr.NAME
-             , usr.EMAIL
-             , usr.ROLE
-             , usr.IS_ACTIVE
-             , usr.GENDER
-             , usr.ADDRESS
-             , usr.AGE
-             , usr.PHONE_NUMBER
-             , usr.CREATED_AT
-             , usr.UPDATED_AT
+        , usr.NAME
+        , usr.EMAIL
+        , usr.ROLE
+        , usr.IS_ACTIVE
+        , usr.GENDER
+        , usr.ADDRESS
+        , usr.AGE
+        , usr.PHONE_NUMBER
+        , usr.CREATED_AT
+        , usr.UPDATED_AT
         FROM user usr
         WHERE usr.ID = #{id}
     </select>
 
     <select id="getAllUsers" resultMap="userResultMap">
         SELECT usr.ID
-             , usr.NAME
-             , usr.EMAIL
-             , usr.ROLE
-             , usr.IS_ACTIVE
-             , usr.GENDER
-             , usr.ADDRESS
-             , usr.AGE
-             , usr.PHONE_NUMBER
-             , usr.CREATED_AT
-             , usr.UPDATED_AT
+        , usr.NAME
+        , usr.EMAIL
+        , usr.ROLE
+        , usr.IS_ACTIVE
+        , usr.GENDER
+        , usr.ADDRESS
+        , usr.AGE
+        , usr.PHONE_NUMBER
+        , usr.CREATED_AT
+        , usr.UPDATED_AT
         FROM user usr
     </select>
 
     <select id="findByEmail" resultMap="userResultMap">
         SELECT usr.ID
-             , usr.NAME
-             , usr.EMAIL
-             , usr.ROLE
-             , usr.IS_ACTIVE
-             , usr.GENDER
-             , usr.ADDRESS
-             , usr.AGE
-             , usr.PHONE_NUMBER
-             , usr.CREATED_AT
-             , usr.UPDATED_AT
+        , usr.NAME
+        , usr.EMAIL
+        , usr.ROLE
+        , usr.IS_ACTIVE
+        , usr.GENDER
+        , usr.ADDRESS
+        , usr.AGE
+        , usr.PHONE_NUMBER
+        , usr.CREATED_AT
+        , usr.UPDATED_AT
         FROM user usr
         WHERE usr.EMAIL = #{email}
     </select>
 
     <update id="updateUser" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
         UPDATE user
-        SET NAME         = #{name},
-            EMAIL        = #{email},
-            IS_ACTIVE    = #{isActive},
-            GENDER       = #{gender},
-            ADDRESS      = #{address},
-            AGE          = #{age},
-            PHONE_NUMBER = #{phoneNumber} UPDATED_AT = NOW()
+        SET NAME = #{name},
+        EMAIL = #{email},
+        IS_ACTIVE = #{isActive},
+        GENDER = #{gender},
+        ADDRESS = #{address},
+        AGE = #{age},
+        PHONE_NUMBER = #{phoneNumber} ,
+        UPDATED_AT = NOW()
         WHERE ID = #{id}
     </update>
 
     <delete id="deleteUserById" parameterType="long">
         DELETE
         FROM user
-        WHERE id = #{id}
+        WHERE ID = #{id}
     </delete>
 </mapper>
