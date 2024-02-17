@@ -5,6 +5,7 @@ import com.allxone.mybatisprojectbackend.dto.request.ChangePasswordRequest;
 import com.allxone.mybatisprojectbackend.dto.request.UserRequest;
 import com.allxone.mybatisprojectbackend.dto.response.UserResponse;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
+import com.allxone.mybatisprojectbackend.mapper.UserRoleMapper;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+    private final UserRoleMapper userRoleMapper;
     private final PasswordEncoder passwordEncoder;
     @Override
     public List<UserResponse> getAllUsers() {
@@ -57,9 +59,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(UserRequest userRequest) {
-        User user = UserConvert.toUser(userRequest);
-        userMapper.updateUser(user);
-        return UserConvert.toDto(getUserById(user.getId()));
+        User updateUser = userMapper.getUserById(userRequest.getId());
+
+        updateUser.setName(userRequest.getName() != null ? userRequest.getName() : updateUser.getName());
+        updateUser.setGender(userRequest.getGender() != null ? userRequest.getGender() : updateUser.getGender());
+        updateUser.setAddress(userRequest.getAddress() != null ? userRequest.getAddress() : updateUser.getAddress());
+        updateUser.setAge(userRequest.getAge() != null ? userRequest.getAge() : updateUser.getAge());
+        updateUser.setPhoneNumber(userRequest.getPhoneNumber() != null ? userRequest.getPhoneNumber() : updateUser.getPhoneNumber());
+
+        userMapper.updateUser(updateUser);
+        return UserConvert.toDto(getUserById(updateUser.getId()));
     }
 
     @Override
@@ -75,6 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserById(Long id) {
+        userRoleMapper.deleteUserRoleByUsUserId(id);
         userMapper.deleteUserById(id);
     }
 }

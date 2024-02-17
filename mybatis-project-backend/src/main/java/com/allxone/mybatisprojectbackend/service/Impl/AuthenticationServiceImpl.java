@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse register(UserRegisterRequest request) {
         User user = User.builder()
-                .name(request.getLastname())
+                .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .isActive(false)
@@ -81,7 +81,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
-        if(user == null || !user.isEnabled()){
+        if(!user.isEnabled()){
             throw new RuntimeException();
         }
         String jwtToken = jwtService.generateToken(user);

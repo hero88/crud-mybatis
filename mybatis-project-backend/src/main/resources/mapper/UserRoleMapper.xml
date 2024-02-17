@@ -7,4 +7,9 @@
         INSERT INTO user_role (user_id, role_id)
         VALUES (#{userId}, #{roleId});
     </insert>
+    <delete id="deleteUserRoleByUsUserId" parameterType="long">
+        DELETE
+        FROM user_role
+        WHERE USER_ID = #{id}
+    </delete>
 </mapper>
