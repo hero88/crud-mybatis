@@ -56,6 +56,7 @@ public class UserController {
             userService.deleteUserById(id);
             return CommonResponse.success(id);
         } catch (Exception e) {
+            System.out.print(e);
             return CommonResponse.error(null);
         }
     }

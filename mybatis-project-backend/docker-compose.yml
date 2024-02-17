@@ -12,3 +12,14 @@ services:
       MYSQL_PASSWORD: 123456
     ports:
       - 3306:3306
+  allxone-mybatis-backend:
+    container_name: allxone-mybatis-backend
+    image: allxone-mybatis-backend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: stag
+    ports:
+      - 5555:5555
