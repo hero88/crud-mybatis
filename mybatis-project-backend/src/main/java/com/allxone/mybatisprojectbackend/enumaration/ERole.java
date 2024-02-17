@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import static com.allxone.mybatisprojectbackend.enumaration.Permission.*;
 
 @RequiredArgsConstructor
-public enum Role {
+public enum ERole {
     USER(
             Set.of(
                     USER_READ,
@@ -39,5 +39,9 @@ public enum Role {
                 .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;
+    }
+
+    public static ERole fromClassName(String className) {
+        return ERole.valueOf(className.toUpperCase());
     }
 }

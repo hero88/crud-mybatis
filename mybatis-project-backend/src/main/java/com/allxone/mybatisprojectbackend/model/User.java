@@ -1,6 +1,6 @@
 package com.allxone.mybatisprojectbackend.model;
 
-import com.allxone.mybatisprojectbackend.enumaration.Role;
+import com.allxone.mybatisprojectbackend.enumaration.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,10 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,10 +35,16 @@ public class User implements UserDetails {
     private Boolean isActive;
     private Instant createdAt;
     private Instant updatedAt;
-    private Role role;
+    private Set<Role> roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        for (Role role : roles) {
+            authorities.addAll(ERole.fromClassName(role.getName()).getAuthorities());
+        }
+
+        return authorities;
     }
 
     @Override

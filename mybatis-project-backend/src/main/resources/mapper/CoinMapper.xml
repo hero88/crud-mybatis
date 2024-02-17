@@ -56,7 +56,7 @@
 
     <delete id="deleteCoinById" parameterType="Long">
         DELETE
-        FROM COIN
+        FROM coin
         WHERE ID = #{id}
     </delete>
 

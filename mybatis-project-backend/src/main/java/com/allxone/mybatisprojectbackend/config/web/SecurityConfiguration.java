@@ -13,16 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.allxone.mybatisprojectbackend.enumaration.Role.USER;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
-import static com.allxone.mybatisprojectbackend.enumaration.Permission.ADMIN_READ;
-import static com.allxone.mybatisprojectbackend.enumaration.Permission.ADMIN_CREATE;
-import static com.allxone.mybatisprojectbackend.enumaration.Permission.ADMIN_DELETE;
-import static com.allxone.mybatisprojectbackend.enumaration.Permission.ADMIN_UPDATE;
-import static com.allxone.mybatisprojectbackend.enumaration.Role.ADMIN;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration

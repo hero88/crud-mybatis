@@ -1,6 +1,5 @@
 package com.allxone.mybatisprojectbackend.dto.request;
 
-import com.allxone.mybatisprojectbackend.enumaration.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,4 @@ public class UserRegisterRequest {
     private String address;
     private Integer age;
     private String phoneNumber;
-    private Role role;
 }

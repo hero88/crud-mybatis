@@ -7,7 +7,6 @@
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="email" column="email"/>
-        <result property="role" column="role"/>
         <result property="isActive" column="is_active"/>
         <result property="gender" column="gender"/>
         <result property="address" column="address"/>
@@ -15,86 +14,96 @@
         <result property="phoneNumber" column="phone_number"/>
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
         <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
+
+        <collection property="roles" ofType="Role">
+            <id property="id" column="role_id" />
+            <result property="name" column="role_name" />
+        </collection>
     </resultMap>
 
     <resultMap id="userResultMapWithTokens" type="com.allxone.mybatisprojectbackend.model.User">
         <id property="id" column="id"/>
         <result column="name" property="name"/>
         <result column="email" property="email"/>
-        <result column="role" property="role"/>
     </resultMap>
 
     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (NAME, EMAIL, PASSWORD, ROLE, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER,
-                          CREATED_AT,
-                          UPDATED_AT)
-        VALUES (#{name}, #{email}, #{password}, #{role}, false, #{gender}, #{address}, #{age},
-                #{phoneNumber}, NOW(),
-                NOW())
+        INSERT INTO user (NAME, EMAIL, PASSWORD, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER,
+        CREATED_AT,
+        UPDATED_AT)
+        VALUES (#{name}, #{email}, #{password}, #{isActive}, #{gender}, #{address}, #{age},
+        #{phoneNumber}, NOW(),
+        NOW())
     </insert>
 
     <select id="getUserById" resultMap="userResultMap">
-        SELECT usr.ID
-             , usr.NAME
-             , usr.EMAIL
-             , usr.ROLE
-             , usr.IS_ACTIVE
-             , usr.GENDER
-             , usr.ADDRESS
-             , usr.AGE
-             , usr.PHONE_NUMBER
-             , usr.CREATED_AT
-             , usr.UPDATED_AT
-        FROM user usr
-        WHERE usr.ID = #{id}
+        SELECT u.ID
+             , u.NAME
+             , u.EMAIL
+             , u.IS_ACTIVE
+             , u.GENDER
+             , u.ADDRESS
+             , u.AGE
+             , u.PHONE_NUMBER
+             , u.CREATED_AT
+             , u.UPDATED_AT
+             , r.id   AS role_id
+             , r.name AS role_name
+        FROM user u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+                 LEFT JOIN role r ON ur.role_id = r.id
+        WHERE u.ID = #{id}
     </select>
 
     <select id="getAllUsers" resultMap="userResultMap">
-        SELECT usr.ID
-             , usr.NAME
-             , usr.EMAIL
-             , usr.ROLE
-             , usr.IS_ACTIVE
-             , usr.GENDER
-             , usr.ADDRESS
-             , usr.AGE
-             , usr.PHONE_NUMBER
-             , usr.CREATED_AT
-             , usr.UPDATED_AT
-        FROM user usr
+        SELECT u.ID
+        , u.NAME
+        , u.EMAIL
+        , u.IS_ACTIVE
+        , u.GENDER
+        , u.ADDRESS
+        , u.AGE
+        , u.PHONE_NUMBER
+        , u.CREATED_AT
+        , u.UPDATED_AT
+        FROM user u
     </select>
 
     <select id="findByEmail" resultMap="userResultMap">
-        SELECT usr.ID
-             , usr.NAME
-             , usr.EMAIL
-             , usr.ROLE
-             , usr.IS_ACTIVE
-             , usr.GENDER
-             , usr.ADDRESS
-             , usr.AGE
-             , usr.PHONE_NUMBER
-             , usr.CREATED_AT
-             , usr.UPDATED_AT
-        FROM user usr
-        WHERE usr.EMAIL = #{email}
+        SELECT u.ID
+             , u.NAME
+             , u.EMAIL
+             , u.IS_ACTIVE
+             , u.GENDER
+             , u.ADDRESS
+             , u.AGE
+             , u.PHONE_NUMBER
+             , u.CREATED_AT
+             , u.UPDATED_AT
+             , r.id   AS role_id
+             , r.name AS role_name
+        FROM user u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+                 LEFT JOIN role r ON ur.role_id = r.id
+        WHERE u.EMAIL = #{email}
     </select>
 
     <update id="updateUser" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
         UPDATE user
-        SET NAME         = #{name},
-            EMAIL        = #{email},
-            IS_ACTIVE    = #{isActive},
-            GENDER       = #{gender},
-            ADDRESS      = #{address},
-            AGE          = #{age},
-            PHONE_NUMBER = #{phoneNumber} UPDATED_AT = NOW()
+        SET NAME = #{name},
+        EMAIL = #{email},
+        IS_ACTIVE = #{isActive},
+        GENDER = #{gender},
+        ADDRESS = #{address},
+        AGE = #{age},
+        PHONE_NUMBER = #{phoneNumber} ,
+        UPDATED_AT = NOW()
         WHERE ID = #{id}
     </update>
 
     <delete id="deleteUserById" parameterType="long">
         DELETE
         FROM user
-        WHERE id = #{id}
+        WHERE ID = #{id}
     </delete>
 </mapper>

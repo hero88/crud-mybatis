@@ -6,6 +6,8 @@ import com.allxone.mybatisprojectbackend.dto.request.UserRegisterRequest;
 import com.allxone.mybatisprojectbackend.dto.response.AuthenticationResponse;
 import com.allxone.mybatisprojectbackend.event.RegistrationEvent;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
+import com.allxone.mybatisprojectbackend.mapper.UserRoleMapper;
+import com.allxone.mybatisprojectbackend.model.Role;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.AuthenticationService;
 import com.allxone.mybatisprojectbackend.model.Token;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final UserRoleMapper userRoleMapper;
     private final TokenMapper tokenMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -42,10 +46,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .name(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .isActive(false)
+                .roles(Set.of(new Role(2,"USER")))
                 .build();
 
         userMapper.saveUser(user);
+        user.getRoles().forEach(role -> userRoleMapper.addRole(user.getId(),role.getId()));
+
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -56,6 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .user(UserConvert.toDto(user))
                 .build();
     }
 
@@ -73,7 +81,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
-        System.out.print(user);
         if(user == null || !user.isEnabled()){
             throw new RuntimeException();
         }
