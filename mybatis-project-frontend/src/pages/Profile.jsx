@@ -42,8 +42,6 @@ function Profile() {
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("profile")));
-
-    console.log(JSON.parse(localStorage.getItem("profile")));
   }, []);
 
   const handlePasswordFieldChange = (e) => {
@@ -80,18 +78,20 @@ function Profile() {
 
       console.log(newPasswordUpdated);
 
-      try {
-        const { data: response } = await changeUserPassword(newPasswordUpdated);
+      const response = await changeUserPassword(newPasswordUpdated);
 
-        if (response.code === 200) {
-          toast({
-            title: "Update user successfully.",
-            description: "Your profile has been updated",
-            action: <ToastAction altText="Nice">Nice</ToastAction>,
-          });
-        }
-      } catch (error) {
-        console.log(error);
+      if (response.status === 200) {
+        setPasswordForm({
+          currentPassword: "",
+          newPassword: "",
+          confirmationPassword: "",
+        });
+        toast({
+          title: "Update password successfully.",
+          description: "Your profile has been updated",
+          action: <ToastAction altText="Nice">Nice</ToastAction>,
+        });
+      } else {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
