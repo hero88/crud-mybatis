@@ -31,8 +31,13 @@ public class UserController {
             @RequestBody ChangePasswordRequest request,
             Principal connectedUser
     ) {
-        userService.changePassword(request, connectedUser);
-        return ResponseEntity.ok().build();
+        try {
+            userService.changePassword(request, connectedUser);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/getAllUsers")

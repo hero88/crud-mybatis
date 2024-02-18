@@ -26,7 +26,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userMapper.findByEmail(username)
+        return username -> userMapper.loadUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

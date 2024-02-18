@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,7 +77,8 @@ public class AuthenticationController {
             result.put("success", true);
             result.put("message", "Call API successfully");
             result.put("data",authenticationResponse );
-        }catch (Exception e){
+        }catch (AuthenticationException e){
+            System.out.println(e);
             result.put("success", false);
             result.put("message", "Account does not verify");
             result.put("data", null);

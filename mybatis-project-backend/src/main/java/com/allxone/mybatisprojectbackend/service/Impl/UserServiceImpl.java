@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserRoleMapper userRoleMapper;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public List<UserResponse> getAllUsers() {
         return userMapper.getAllUsers()
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.findByEmail(email);
     }
 
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) throws IllegalStateException {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new IllegalStateException("Wrong password");
@@ -47,7 +48,11 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Password are not the same");
         }
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userMapper.updateUser(user);
+        try {
+            userMapper.updateUserPassword(user);
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -87,4 +92,5 @@ public class UserServiceImpl implements UserService {
         userRoleMapper.deleteUserRoleByUsUserId(id);
         userMapper.deleteUserById(id);
     }
+
 }
