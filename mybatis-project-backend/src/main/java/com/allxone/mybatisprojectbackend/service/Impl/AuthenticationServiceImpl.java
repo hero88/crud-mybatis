@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,16 +48,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .isActive(false)
-                .roles(Set.of(new Role(2,"USER")))
+                .roles(Set.of(new Role(2, "USER")))
                 .build();
 
         userMapper.saveUser(user);
-        user.getRoles().forEach(role -> userRoleMapper.addRole(user.getId(),role.getId()));
+        user.getRoles().forEach(role -> userRoleMapper.addRole(user.getId(), role.getId()));
 
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        RegistrationEvent registrationEvent = new RegistrationEvent(user,jwtToken);
+        RegistrationEvent registrationEvent = new RegistrationEvent(user, jwtToken);
         publisher.publishEvent(registrationEvent);
 
         saveUserToken(user, jwtToken);
@@ -68,20 +69,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        try{
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
-            );
-        }catch (Exception e){
-            System.out.println(e);
-        }
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
 
         User user = userMapper.findByEmail(request.getEmail()).orElseThrow();
-        if(!user.isEnabled()){
+        if (!user.isEnabled()) {
             throw new RuntimeException();
         }
         String jwtToken = jwtService.generateToken(user);
@@ -125,7 +122,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
         refreshToken = authHeader.substring(7);
