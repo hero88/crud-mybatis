@@ -49,4 +49,12 @@ public class CoinServiceImpl implements CoinService {
         Coin coin = coinMapper.getCoinById(id);
         return CoinConvert.toDto(coin);
     }
+
+    @Override
+    public List<CoinResponse> getCoinByUserId(Long id) {
+        return coinMapper.getCoinByUserId(id).stream()
+                .map(CoinConvert::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

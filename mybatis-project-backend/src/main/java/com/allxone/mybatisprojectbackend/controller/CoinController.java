@@ -30,15 +30,14 @@ public class CoinController {
             List<CoinResponse> data = coinService.getAllCoins();
             return CommonResponse.success(data);
         } catch (Exception e) {
-            System.out.print(e);
             return CommonResponse.error(null);
         }
     }
 
-    @GetMapping("/getCoinById/{id}")
-    public CommonResponse<CoinResponse> getCoinById(@PathVariable Long id) {
+    @GetMapping("/getCoinByUserId/{id}")
+    public CommonResponse<List<CoinResponse>> getCoinUserById(@PathVariable Long id) {
         try {
-            CoinResponse data = coinService.getCoinById(id);
+            List<CoinResponse> data = coinService.getCoinByUserId(id);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);

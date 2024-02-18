@@ -12,4 +12,5 @@ public interface CoinMapper {
     void deleteCoinById(Long id);
     void saveCoin(Coin coin);
     Coin getCoinById(Long id);
+    List<Coin> getCoinByUserId(Long id);
 }

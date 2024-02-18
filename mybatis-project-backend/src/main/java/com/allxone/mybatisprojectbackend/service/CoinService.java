@@ -12,4 +12,5 @@ public interface CoinService {
     void deleteCoinById(Long id);
     CoinResponse saveCoin(CoinRequest coinRequest);
     CoinResponse getCoinById(Long id);
+    List<CoinResponse> getCoinByUserId(Long id);
 }

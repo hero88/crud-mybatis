@@ -32,6 +32,19 @@
         WHERE c.ID = #{id}
     </select>
 
+    <select id="getCoinByUserId" parameterType="long" resultMap="coinResultMap">
+        SELECT c.ID
+             , c.USER_ID
+             , c.NAME
+             , c.SYMBOL
+             , c.COIN_MARKET_ID
+             , c.QUANTITY
+             , c.CREATED_AT
+             , c.UPDATED_AT
+        FROM coin c
+        WHERE c.USER_ID = #{id}
+    </select>
+
     <select id="getAllCoins" resultMap="coinResultMap">
         SELECT c.ID
              , c.USER_ID
