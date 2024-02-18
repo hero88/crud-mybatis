@@ -21,7 +21,6 @@ import {
   getUserById,
   updateUser,
 } from "@/services/UserAPI";
-import axios from "axios";
 import { Dialog } from "@radix-ui/react-dialog";
 import {
   DialogClose,
@@ -52,7 +51,7 @@ function Profile() {
     email: "",
     phoneNumber: "",
     age: "",
-    gender: "",
+    gender: true,
     address: "",
   });
 
@@ -75,7 +74,7 @@ function Profile() {
       phone: phoneNumber,
       address: address,
       age: age,
-      gender: gender,
+      gender: "",
     },
   });
 
@@ -108,33 +107,32 @@ function Profile() {
     };
 
     console.log(updatedUser);
-    // const { data: response } = await axios.put(
-    //   `http://localhost:5555/api/users/updateUser`,
-    //   updatedUser
-    // );
+    const { data: response } = await updateUser(updatedUser);
 
-    // if (response.data) {
-    //   const { data: newUserResponse } = await getUserById(user.id);
+    console.log(response);
 
-    //   console.log(newUserResponse);
+    if (response.code === 200) {
+      const { data: newUserResponse } = await getUserById(user.id);
 
-    //   localStorage.setItem("profile", JSON.stringify(newUserResponse.data));
+      console.log(newUserResponse);
 
-    //   setUser(newUserResponse.data);
+      localStorage.setItem("profile", JSON.stringify(newUserResponse.data));
 
-    //   toast({
-    //     title: "Update user successfully.",
-    //     description: "Your profile has been updated",
-    //     action: <ToastAction altText="Nice">Nice</ToastAction>,
-    //   });
-    // } else {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Uh oh! Something went wrong.",
-    //     description: "There was a problem with updating.",
-    //     action: <ToastAction altText="Try again">Try again</ToastAction>,
-    //   });
-    // }
+      setUser(newUserResponse.data);
+
+      toast({
+        title: "Update user successfully.",
+        description: "Your profile has been updated",
+        action: <ToastAction altText="Nice">Nice</ToastAction>,
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with updating.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
   };
 
   const handleChangePassword = async () => {
@@ -167,22 +165,22 @@ function Profile() {
 
       console.log(newPasswordUpdated);
 
-      // const { data: response } = await changeUserPassword(newPassword);
+      const { data: response } = await changeUserPassword(newPassword);
 
-      // if (response.data) {
-      //     toast({
-      //       title: "Update user successfully.",
-      //       description: "Your profile has been updated",
-      //       action: <ToastAction altText="Nice">Nice</ToastAction>,
-      //     });
-      // } else {
-      //     toast({
-      //       variant: "destructive",
-      //       title: "Uh oh! Something went wrong.",
-      //       description: "There was a problem with updating.",
-      //       action: <ToastAction altText="Try again">Try again</ToastAction>,
-      //     });
-      // }
+      if (response.data) {
+        toast({
+          title: "Update user successfully.",
+          description: "Your profile has been updated",
+          action: <ToastAction altText="Nice">Nice</ToastAction>,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with updating.",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+      }
     }
   };
 
@@ -345,7 +343,7 @@ function Profile() {
                       className="px-6 h-12 border-gray-400"
                       name="phoneNumber"
                       onChange={(e) => handleUserFieldChange(e)}
-                      value={phoneNumber}
+                      value={phoneNumber || ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -365,7 +363,7 @@ function Profile() {
                       className="px-6 h-12 border-gray-400"
                       name="address"
                       onChange={(e) => handleUserFieldChange(e)}
-                      value={address}
+                      value={address || ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -387,7 +385,7 @@ function Profile() {
                       className="px-6 h-12 border-gray-400"
                       name="age"
                       onChange={(e) => handleUserFieldChange(e)}
-                      value={age}
+                      value={age || 1}
                     />
                   </FormControl>
                   <FormMessage />

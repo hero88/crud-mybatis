@@ -5,6 +5,7 @@ const routes = {
   profile: "/profile/detail/:userId",
   listUser: "/profile/list-user/",
   coin: "/profile/coins/",
+  coinDetail: "/coin-detail",
   signin: "/sign-in",
   signup: "/sign-up",
 };

@@ -8,10 +8,12 @@ import Profile from "@/pages/Profile";
 import AuthLayout from "@/layouts/AuthLayout";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
+import CoinDetail from "@/pages/CoinDetail";
 
 //Public routes
 const publicRoutes = [
   { path: config.routes.home, component: Home },
+  { path: config.routes.coinDetail, component: CoinDetail },
   { path: config.routes.profile, component: Profile, layout: ProfileLayout },
   { path: config.routes.listUser, component: ListUser, layout: ProfileLayout },
   { path: config.routes.coin, component: Coin, layout: ProfileLayout },
