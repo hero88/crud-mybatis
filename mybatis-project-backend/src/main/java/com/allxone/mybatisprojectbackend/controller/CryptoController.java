@@ -21,7 +21,7 @@ public class CryptoController {
     private final CryptoService cryptoService;
 
     @GetMapping("/coinmarketcap")
-    public CryptoCurrencyDataResponse getCoinMarketCapData(@RequestBody CryptoCurrencyRequest request){
+    public CryptoCurrencyDataResponse getCoinMarketCapData(@RequestBody(required = false) CryptoCurrencyRequest request){
         return cryptoService.getCoinMarketCapData(request);
     };
 
