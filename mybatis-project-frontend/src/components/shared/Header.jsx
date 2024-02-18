@@ -31,6 +31,7 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem("profile");
     localStorage.removeItem("token");
+    localStorage.removeItem("auth");
     navigate("/sign-in");
   };
 
@@ -73,7 +74,9 @@ function Header() {
                     onClick={() => navigate(`/profile/detail/${user?.id}`)}
                   >
                     <AvatarImage src="" alt="@shadcn" />
-                    <AvatarFallback>{user?.firstname.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="bg-blue-300 font-semibold">
+                      {user?.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="mr-9 min-w-56 px-3 pt-3 pb-4">
@@ -85,13 +88,13 @@ function Header() {
                       >
                         <AvatarImage src="" alt="@shadcn" />
                         <AvatarFallback>
-                          {user?.firstname.charAt(0)}
+                          {user?.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div>
                       <p className="text-base">
-                        Hi, {user?.firstname + user?.lastname}
+                        Hi, {user?.name}
                       </p>
                       <p className="text-sm text-gray-500 font-semibold">
                         {user?.email}

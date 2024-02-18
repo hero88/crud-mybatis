@@ -20,45 +20,81 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import axios from "axios";
+import { addCoin, getAllCoins } from "@/services/CoinAPI";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const coins = [
-  { label: "Bitcoin", value: 1 },
-  { label: "Ethereum", value: 1027 },
-  { label: "Tether USDt", value: 825 },
-  { label: "BNB", value: 1839 },
-  { label: "Solana", value: 5426 },
-  { label: "USDC", value: 3408 },
-];
-
-function AddCoinDialog({ type }) {
+function AddCoinDialog({ type, user, userCoins, marketCoins, recallCoins }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState();
+  const [selectedValue, setSelectedValue] = useState();
   const [openDialog, setOpenDialog] = useState(false);
+  const [localCoinList, setLocalCoinList] = useState([]);
+  const [addQuantity, setAddQuantity] = useState(1);
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const getAllLocalCoins = async () => {
+      try {
+        const { data: response } = await getAllCoins();
+        setLocalCoinList(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getAllLocalCoins();
+  }, []);
 
   const handleSelectedCoin = (currentValue) => {
-    setValue(currentValue === value ? "" : currentValue);
+    setSelectedValue(currentValue === selectedValue ? "" : currentValue);
     setOpen(false);
   };
 
-  const handleAddNewCoin = async () => {
-    const newCoin = {
-      name: "test",
-      symbol: "test",
-      coinMarketId: 1,
-      quantity: 1,
-      userId: 1,
-    };
+  const handleAddNewCoin = async (selectedCoin) => {
+    if (selectedCoin === null || selectedCoin === undefined) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! You can not let the coin empty",
+        description: "You can adding coin again.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } else if (addQuantity === "0") {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! You can not set the quantity at zero.",
+        description: "You can adding coin again.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } else {
+      const { id, name, symbol } = selectedCoin;
 
-    const { data: response } = axios.post(
-      `http://localhost:5555/api/v1/coins/addCoin`,
-      newCoin
-    );
+      const newCoin = {
+        id: localCoinList.length,
+        name,
+        symbol,
+        coinMarketId: id,
+        quantity: addQuantity,
+        userId: user.id,
+      };
 
-    console.log(response);
+      console.log(newCoin.quantity);
+
+      const { data: response } = await addCoin(newCoin);
+
+      if (response.status === "ok") {
+        recallCoins();
+      } else {
+        console.log("fail");
+      }
+
+      setSelectedValue();
+      setAddQuantity(1);
+    }
 
     setOpenDialog(false);
   };
@@ -90,34 +126,44 @@ function AddCoinDialog({ type }) {
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  className="w-[200px] justify-between"
+                  className="w-[250px] justify-between"
                 >
-                  {value
-                    ? coins.find((coin) => coin.value === value)?.label
+                  {selectedValue
+                    ? marketCoins?.find(
+                        (coin) => coin.name === selectedValue.name
+                      )?.name
                     : "Select coin..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
+              <PopoverContent className="w-[250px] p-0">
                 <Command>
                   <CommandInput placeholder="Search coin..." />
-                  <CommandGroup>
-                    {coins.map((coin) => (
-                      <CommandItem
-                        key={coin.value}
-                        value={coin.value}
-                        onSelect={() => handleSelectedCoin(coin.value)}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            value === coin.value ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {coin.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                  <ScrollArea className="h-72">
+                    <CommandGroup>
+                      {marketCoins
+                        ?.filter((o1) => {
+                          return !userCoins.some((o2) => o1.name === o2.name);
+                        })
+                        .map((coin) => (
+                          <CommandItem
+                            key={coin.id}
+                            value={coin.name}
+                            onSelect={() => handleSelectedCoin(coin)}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedValue === coin
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {coin.name}
+                          </CommandItem>
+                        ))}
+                    </CommandGroup>
+                  </ScrollArea>
                 </Command>
               </PopoverContent>
             </Popover>
@@ -126,11 +172,19 @@ function AddCoinDialog({ type }) {
             <Label htmlFor="username" className="text-right">
               Quantity
             </Label>
-            <Input id="quantity" className="col-span-3" />
+            <Input
+              id="quantity"
+              className="col-span-3"
+              type="number"
+              onChange={(e) => setAddQuantity(e.target.value)}
+              value={addQuantity}
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => handleAddNewCoin()}>Save changes</Button>
+          <Button onClick={() => handleAddNewCoin(selectedValue)}>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
