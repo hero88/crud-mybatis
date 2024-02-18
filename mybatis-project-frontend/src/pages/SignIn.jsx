@@ -106,6 +106,8 @@ const SignIn = () => {
     localStorage.setItem("token", JSON.stringify(response.data.accessToken));
     localStorage.setItem("profile", JSON.stringify(response.data.user));
 
+    console.log(response);
+
     if (response.data.accessToken !== null) {
       navigate("/", { replace: true });
     } else {
