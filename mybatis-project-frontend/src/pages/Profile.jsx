@@ -113,13 +113,7 @@ function Profile() {
 
     if (response.code === 200) {
       const { data: newUserResponse } = await getUserById(user.id);
-
-      console.log(newUserResponse);
-
       localStorage.setItem("profile", JSON.stringify(newUserResponse.data));
-
-      setUser(newUserResponse.data);
-
       toast({
         title: "Update user successfully.",
         description: "Your profile has been updated",
@@ -167,7 +161,7 @@ function Profile() {
 
       const { data: response } = await changeUserPassword(newPassword);
 
-      if (response.data) {
+      if (response.code === 200) {
         toast({
           title: "Update user successfully.",
           description: "Your profile has been updated",

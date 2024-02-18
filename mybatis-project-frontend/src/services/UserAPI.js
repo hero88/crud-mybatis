@@ -57,7 +57,7 @@ export const updateUser = (updateUser) => {
 
 export const deleteUserById = (id) => {
   try {
-    const res = API.delete(`api/users/deleteUser/${id}`);
+    const res = API.delete(`api/users/deleteUserById/${id}`);
     return res;
   } catch (error) {
     console.log(error);

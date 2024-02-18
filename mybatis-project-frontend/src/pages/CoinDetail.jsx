@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Chart from "chart.js/auto"; // Import Chart.js
 import "chartjs-adapter-date-fns"; // Import Chart.js adapter for date-fns
 import format from "date-fns/format"; // Import date-fns format function
