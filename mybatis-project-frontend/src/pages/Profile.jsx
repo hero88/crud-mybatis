@@ -159,15 +159,18 @@ function Profile() {
 
       console.log(newPasswordUpdated);
 
-      const { data: response } = await changeUserPassword(newPassword);
+      try {
+        const { data: response } = await changeUserPassword(newPasswordUpdated);
 
-      if (response.code === 200) {
-        toast({
-          title: "Update user successfully.",
-          description: "Your profile has been updated",
-          action: <ToastAction altText="Nice">Nice</ToastAction>,
-        });
-      } else {
+        if (response.code === 200) {
+          toast({
+            title: "Update user successfully.",
+            description: "Your profile has been updated",
+            action: <ToastAction altText="Nice">Nice</ToastAction>,
+          });
+        }
+      } catch (error) {
+        console.log(error);
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
