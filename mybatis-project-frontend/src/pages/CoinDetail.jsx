@@ -165,23 +165,32 @@ const CoinDetail = () => {
           <div className="text-gray-500 flex justify-between items-center">
             <p>Market Cap:</p> <p>${btcData.marketCap.toLocaleString()}</p>
           </div>
-          <div className="text-gray-500">
+          <div className="text-gray-500 flex justify-between items-center">
             <p>Volume (24h):</p> <p>${btcData.volume.toLocaleString()}</p>
           </div>
-          <div className="text-gray-500">
-            Circulating Supply: {btcData.circulatingSupply.toLocaleString()}{" "}
-            {btcData.symbol}
+          <div className="text-gray-500 flex justify-between items-center">
+            <p>Circulating Supply:</p>
+            <p>
+              {btcData.circulatingSupply.toLocaleString()}
+              {btcData.symbol}
+            </p>
           </div>
-          <div className="text-gray-500">
-            Total Supply: {btcData.totalSupply.toLocaleString()}{" "}
-            {btcData.symbol}
+          <div className="text-gray-500 flex justify-between items-center">
+            <p>Total Supply:</p>
+            <p>
+              {btcData.totalSupply.toLocaleString()}
+              {btcData.symbol}
+            </p>
           </div>
-          <div className="text-gray-500">
-            Max Supply: {btcData.maxSupply.toLocaleString()} {btcData.symbol}
+          <div className="text-gray-500 flex justify-between items-center">
+            <p>Max Supply:</p>{" "}
+            <p>
+              {btcData.maxSupply.toLocaleString()} {btcData.symbol}
+            </p>
           </div>
-          <div className="text-gray-500">
-            Fully Diluted Market Cap: $
-            {btcData.fullyDilutedMarketCap.toLocaleString()}
+          <div className="text-gray-500 flex justify-between items-center">
+            <p>Fully Diluted Market Cap:</p>
+            <p>${btcData.fullyDilutedMarketCap.toLocaleString()}</p>
           </div>
         </div>
       </div>
