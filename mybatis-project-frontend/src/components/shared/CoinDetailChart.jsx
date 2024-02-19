@@ -3,7 +3,6 @@ import "chartjs-adapter-date-fns";
 import { endOfMonth } from "date-fns";
 import format from "date-fns/format";
 import { useEffect } from "react";
-import { FAKECHARTDATA } from "@/assets/FakeChartData";
 
 const formatThousands = (value) =>
   Intl.NumberFormat("en-US", {
@@ -33,34 +32,16 @@ const groupByMonth = (data) => {
   return Object.values(groupedData);
 };
 
-const testData = {
-  1706572800: 310.7080044517561,
-  1706832000: 300.1639106166709,
-  1707177600: 300.8583628383969,
-  1707436800: 318.923358400946,
-  1707782400: 327.9323988798823,
-  1708041600: 354.68757214865866,
-};
-
 const CoinDetailChart = ({ chartCoinData }) => {
   useEffect(() => {
     const ctx = document.getElementById("analytics-card-01");
-    const timestamps = FAKECHARTDATA.map((item) => parseInt(item.timestamp));
-    const values = FAKECHARTDATA.map((item) => item.value);
-
-    // const timestamps = Object.keys(FAKECHARTDATA.timestamp).map(Number);
-    // const values = Object.values(FAKECHARTDATA.value);
+    const timestamps = chartCoinData.map((item) => parseInt(item.timestamp));
+    const values = chartCoinData.map((item) => item.value);
 
     const dates = timestamps.map((timestamp) =>
       format(new Date(timestamp * 1000), "dd-MM-yyyy")
     );
-
-    console.log(dates);
-    console.log(values);
-
-    // const processedData = groupByMonth(FAKECHARTDATA);
-
-    // console.log(processedData);
+    // const processedData = groupByMonth(chartCoinData);
 
     // const timestamps = processedData.map((item) => item.date.getTime() / 1000);
     // const values = processedData.map(
@@ -71,14 +52,9 @@ const CoinDetailChart = ({ chartCoinData }) => {
     //   format(new Date(timestamp * 1000), "dd-MM-yyyy")
     // );
 
-    // console.log(dates);
-    // console.log(values);
-
-    // Chart.js data
     const data = {
       labels: dates,
       datasets: [
-        // Indigo line
         {
           label: "Current",
           data: values,
@@ -91,11 +67,9 @@ const CoinDetailChart = ({ chartCoinData }) => {
           pointHoverRadius: 3,
           pointBackgroundColor: "rgb(99, 102, 241)",
         },
-        // Gray line
       ],
     };
 
-    // Chart.js options
     const options = {
       layout: {
         padding: 20,
@@ -113,8 +87,9 @@ const CoinDetailChart = ({ chartCoinData }) => {
         x: {
           type: "time",
           time: {
-            parser: "MM-dd-yyyy",
+            parser: "dd-MM-yyyy",
             unit: "month",
+            min: new Date("12-01-2023"),
             displayFormats: {
               month: "MMM YYYY",
             },
@@ -148,7 +123,6 @@ const CoinDetailChart = ({ chartCoinData }) => {
       maintainAspectRatio: false,
     };
 
-    // Create Chart.js instance
     const chart = new Chart(ctx, {
       type: "line",
       data: data,
@@ -156,10 +130,9 @@ const CoinDetailChart = ({ chartCoinData }) => {
     });
 
     return () => {
-      // Clean up Chart.js instance
       chart.destroy();
     };
-  }, []); // Run useEffect only once on component mount
+  }, [chartCoinData]);
 
   return (
     <>

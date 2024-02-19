@@ -105,6 +105,8 @@ function Coin() {
   return (
     <>
       <div className="centerSide w-8/12 px-8">
+        <h2 className="pb-4 text-4xl font-bold">Dashboard</h2>
+        <hr className="pb-8" />
         <h2 className="pb-4 text-2xl font-bold">Your Assets</h2>
         <hr className="pb-8" />
         <AddCoinDialog
