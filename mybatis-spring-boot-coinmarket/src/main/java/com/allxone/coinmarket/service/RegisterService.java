@@ -2,6 +2,7 @@ package com.allxone.coinmarket.service;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,10 @@ public class RegisterService {
 	private final HttpServletRequest req;
 	
 	private final PasswordEncoder encoder;
-	
+
+	@Value("${MAIL_USERNAME}")
+	private String MAIL_USERNAME;
+
 	public void register(Users user) {
 		Users userTmp = userMapper.findUserByEmail(user.getEmail());
 		if(userTmp==null) {
@@ -39,7 +43,7 @@ public class RegisterService {
 			userMapper.insertSelective(user);
 			userTmp = userMapper.findUserByEmail(user.getEmail());
 			Email mail = new Email();
-			mail.setFrom("musicstreaming2023@gmail.com");
+			mail.setFrom(MAIL_USERNAME);
 			mail.setTo(user.getEmail());
 			mail.setSubject("COIN MARKET: ACTIVE YOUR ACCOUNT");
 			mail.setBody(sendMailTemplateSer.getContentForConfirm(user.getEmail(), "templateMail", "activated", applicationUrl(req,"/activated-account?id="+userTmp.getId())));
@@ -49,6 +53,6 @@ public class RegisterService {
 	}
 	
 	private String applicationUrl(HttpServletRequest request, String path) {
-		return "http://" + request.getServerName() + ":" + request.getServerPort() + path;
+		return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path;
 	}
 }

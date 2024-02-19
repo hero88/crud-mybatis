@@ -13,6 +13,8 @@ import { instance } from "../config/config.js";
 
 const baseURL = instance.defaults.baseURL;
 
+$("#home-not-account").attr("href",window.location.origin+"/java_gr2/frontend/html/page/home.html");
+
 $(".btn-login").click(function () {
     var mailLogin = $('.mailLogin').val();
     var passLogin = $('.passLogin').val();
@@ -64,9 +66,10 @@ $(".btn-register").click(function () {
 });
 
 $(".btn-send-mail-forgot").click(function(){
+    var mailForgot = $('#mail-forgot').val();
     axios.get(baseURL+'v1/sendmail-forgot-password', {
         params: {
-            email: $('#mail-forgot').val(),
+            email: mailForgot,
         },
     }).then(function (resp) {
         alert("Check your email")

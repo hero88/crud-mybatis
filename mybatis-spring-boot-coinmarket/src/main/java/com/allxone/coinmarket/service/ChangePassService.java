@@ -1,5 +1,6 @@
 package com.allxone.coinmarket.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,17 @@ public class ChangePassService {
 	private final SendMailTemplateService sendMailTemplateSer;
 	
 	private final HttpServletRequest req;
-	
+
+	@Value("${MAIL_USERNAME}")
+	private String MAIL_USERNAME;
+
 	public boolean sendMailForgotPassword(String email) {
 		Email mail = new Email();
 		Users user = userMapper.findUserByEmail(email);
 		if(user == null) {
 			return false;
 		}
-		mail.setFrom("musicstreaming2023@gmail.com");
+		mail.setFrom(MAIL_USERNAME);
 		mail.setTo(email);
 		mail.setSubject("COIN MARKET: RECOVERY YOUR PASSWORD");
 		mail.setBody(sendMailTemplateSer.getContentForConfirm(email, "templateMail", "forgotpassword", applicationUrl(req,"/recovery-password?id="+user.getId())));
@@ -56,6 +60,6 @@ public class ChangePassService {
 	}
 	
 	private String applicationUrl(HttpServletRequest request, String path) {
-		return "http://" + request.getServerName() + ":" + request.getServerPort() + path;
+		return request.getScheme()+"://" + request.getServerName() + ":" + request.getServerPort() + path;
 	}
 }
