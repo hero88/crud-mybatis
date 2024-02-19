@@ -44,5 +44,5 @@ export const deleteCoinById = (id) =>
     },
   });
 
-export const getChartDetailCoin = (coinForm) =>
-  API.get(`api/crypto/detail`, coinForm);
+export const getChartDetailCoin = (id, range) =>
+  API.get(`api/crypto/detail?id=${id}&range=${range}`);

@@ -4,6 +4,8 @@ import "chartjs-adapter-date-fns";
 import format from "date-fns/format";
 import { getChartDetailCoin, getMarketCapCoins } from "@/services/CoinAPI";
 import { useParams } from "react-router-dom";
+import { endOfMonth } from "date-fns";
+import CoinDetailChart from "@/components/shared/CoinDetailChart";
 
 // Helper function to format numbers in K format
 const formatThousands = (value) =>
@@ -11,15 +13,6 @@ const formatThousands = (value) =>
     maximumSignificantDigits: 3,
     notation: "compact",
   }).format(value);
-
-const coinChartData = {
-  points: {
-    1609459200: 37.37457234,
-    1609545600: 37.91710592,
-    1609632000: 38.25372654,
-    1609718400: 1,
-  },
-};
 
 const CoinDetail = () => {
   const param = useParams();
@@ -34,138 +27,31 @@ const CoinDetail = () => {
           (item) => item.id === parseInt(param.coinMarketId)
         )
       );
-      console.log(
-        response.data.cryptoCurrencyList.find(
-          (item) => item.id === parseInt(param.coinMarketId)
-        )
-      );
     } catch (error) {
       console.error(error);
     }
   };
 
   const hanldeLoadChartData = async () => {
-    const chartParam = {
-      // id: parseInt(param.coinMarketId),
-      // range: "1609434000~1640969999",
-      id: 1839,
-      range: "1609434000~1640969999",
-    };
-
-    console.log(chartParam);
-
-    const coinDetailResponse = await getChartDetailCoin(chartParam);
-
-    console.log(coinDetailResponse);
+    const { data: coinDetailResponse } = await getChartDetailCoin(
+      parseInt(param.coinMarketId),
+      "1676792555~1708332976"
+    );
+    setChartCoinData(coinDetailResponse.data);
+    console.log(coinDetailResponse.data);
   };
 
   useEffect(() => {
     findMarketCoin();
     hanldeLoadChartData();
 
-    const callGetAllCoinsApiEvery30s = setInterval(() => {
-      findMarketCoin();
-    }, 30000);
+    // const callGetAllCoinsApiEvery30s = setInterval(() => {
+    //   hanldeLoadChartData();
+    //   findMarketCoin();
+    // }, 1000);
 
-    return () => clearInterval(callGetAllCoinsApiEvery30s);
+    // return () => clearInterval(callGetAllCoinsApiEvery30s);
   }, []);
-
-  useEffect(() => {
-    const ctx = document.getElementById("analytics-card-01");
-
-    const timestamps = Object.keys(coinChartData.points).map(Number);
-    const values = Object.values(coinChartData.points);
-
-    const dates = timestamps.map((timestamp) =>
-      format(new Date(timestamp * 1000), "dd-MM-yyyy")
-    );
-
-    // Chart.js data
-    const data = {
-      labels: dates,
-      datasets: [
-        // Indigo line
-        {
-          label: "Current",
-          data: values,
-          fill: true,
-          backgroundColor: "rgba(59, 130, 246, 0.08)",
-          borderColor: "rgb(99, 102, 241)",
-          borderWidth: 2,
-          tension: 0,
-          pointRadius: 0,
-          pointHoverRadius: 3,
-          pointBackgroundColor: "rgb(99, 102, 241)",
-        },
-        // Gray line
-      ],
-    };
-
-    // Chart.js options
-    const options = {
-      layout: {
-        padding: 20,
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: {
-            drawBorder: false,
-          },
-          ticks: {
-            callback: (value) => formatThousands(value),
-          },
-        },
-        x: {
-          type: "time",
-          time: {
-            parser: "MM-dd-yyyy",
-            unit: "month",
-            displayFormats: {
-              month: "MMM YYYY",
-            },
-          },
-          grid: {
-            display: false,
-            drawBorder: false,
-          },
-          ticks: {
-            autoSkipPadding: 48,
-            maxRotation: 0,
-            callback: (value) => format(new Date(value), "MMM yyyy"),
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          callbacks: {
-            title: () => false, // Disable tooltip title
-            label: (context) => formatThousands(context.parsed.y),
-          },
-        },
-      },
-      interaction: {
-        intersect: false,
-        mode: "nearest",
-      },
-      maintainAspectRatio: false,
-    };
-
-    // Create Chart.js instance
-    const chart = new Chart(ctx, {
-      type: "line",
-      data: data,
-      options: options,
-    });
-
-    return () => {
-      // Clean up Chart.js instance
-      chart.destroy();
-    };
-  }, []); // Run useEffect only once on component mount
 
   return (
     <section className="flex justify-center">
@@ -261,7 +147,7 @@ const CoinDetail = () => {
             </div>
           </div>
           <div className="flex-grow">
-            <canvas id="analytics-card-01" width="800" height="300"></canvas>
+            <CoinDetailChart chartCoinData={chartCoinData} />
           </div>
         </div>
       </div>
