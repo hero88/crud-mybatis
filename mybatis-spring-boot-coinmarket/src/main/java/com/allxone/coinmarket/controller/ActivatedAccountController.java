@@ -15,15 +15,10 @@ import lombok.RequiredArgsConstructor;
 public class ActivatedAccountController {
 	
 	private final UserService userService;
-	
-	@GetMapping("/activated-successful")
-	public String success(HttpServletRequest req) {
-		return "redirect:/"+ req.getServerName() + "/java_gr2/frontend/html/page/SignInSignUp.html";
-	}
-	
+
 	@GetMapping("/activated-account")
 	public String activatedAccount(@RequestParam("id") Long id,HttpServletRequest req){
 		userService.changeStatusUser(id, true, "activated");
-		return "redirect:/"+ req.getServerName() + "/activated-successful";
+		return "redirect:"+req.getScheme() + "://"+ req.getServerName() + "/java_gr2/frontend/html/page/SignInSignUp.html";
 	}
 }
