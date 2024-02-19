@@ -43,3 +43,6 @@ export const deleteCoinById = (id) =>
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   });
+
+export const getChartDetailCoin = (coinForm) =>
+  API.get(`api/crypto/detail`, coinForm);

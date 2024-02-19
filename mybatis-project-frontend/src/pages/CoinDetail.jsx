@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import Chart from "chart.js/auto"; // Import Chart.js
-import "chartjs-adapter-date-fns"; // Import Chart.js adapter for date-fns
-import format from "date-fns/format"; // Import date-fns format function
-import "tailwindcss/tailwind.css"; // Import Tailwind CSS
-import { getMarketCapCoins } from "@/services/CoinAPI";
+import Chart from "chart.js/auto";
+import "chartjs-adapter-date-fns";
+import format from "date-fns/format";
+import { getChartDetailCoin, getMarketCapCoins } from "@/services/CoinAPI";
 import { useParams } from "react-router-dom";
 
 // Helper function to format numbers in K format
@@ -12,19 +11,6 @@ const formatThousands = (value) =>
     maximumSignificantDigits: 3,
     notation: "compact",
   }).format(value);
-
-const btcData = {
-  name: "Bitcoin",
-  symbol: "BTC",
-  price: 51593.61,
-  change: -0.76,
-  marketCap: 1012829835557,
-  volume: 21396355264,
-  circulatingSupply: 18930818,
-  totalSupply: 19930818,
-  maxSupply: 21000000,
-  fullyDilutedMarketCap: 1083485131543,
-};
 
 const coinChartData = {
   points: {
@@ -38,16 +24,17 @@ const coinChartData = {
 const CoinDetail = () => {
   const param = useParams();
   const [currentMarketCoin, setCurrentMarketCoin] = useState();
+  const [chartCoinData, setChartCoinData] = useState([]);
 
   const findMarketCoin = async () => {
     try {
       const { data: response } = await getMarketCapCoins();
-      console.log(
+      setCurrentMarketCoin(
         response.data.cryptoCurrencyList.find(
           (item) => item.id === parseInt(param.coinMarketId)
         )
       );
-      setCurrentMarketCoin(
+      console.log(
         response.data.cryptoCurrencyList.find(
           (item) => item.id === parseInt(param.coinMarketId)
         )
@@ -57,8 +44,30 @@ const CoinDetail = () => {
     }
   };
 
+  const hanldeLoadChartData = async () => {
+    const chartParam = {
+      // id: parseInt(param.coinMarketId),
+      // range: "1609434000~1640969999",
+      id: 1839,
+      range: "1609434000~1640969999",
+    };
+
+    console.log(chartParam);
+
+    const coinDetailResponse = await getChartDetailCoin(chartParam);
+
+    console.log(coinDetailResponse);
+  };
+
   useEffect(() => {
     findMarketCoin();
+    hanldeLoadChartData();
+
+    const callGetAllCoinsApiEvery30s = setInterval(() => {
+      findMarketCoin();
+    }, 30000);
+
+    return () => clearInterval(callGetAllCoinsApiEvery30s);
   }, []);
 
   useEffect(() => {
@@ -70,9 +79,6 @@ const CoinDetail = () => {
     const dates = timestamps.map((timestamp) =>
       format(new Date(timestamp * 1000), "dd-MM-yyyy")
     );
-
-    console.log(values);
-    console.log(dates);
 
     // Chart.js data
     const data = {
@@ -116,7 +122,7 @@ const CoinDetail = () => {
             parser: "MM-dd-yyyy",
             unit: "month",
             displayFormats: {
-              month: "MMM YY",
+              month: "MMM YYYY",
             },
           },
           grid: {
@@ -126,7 +132,7 @@ const CoinDetail = () => {
           ticks: {
             autoSkipPadding: 48,
             maxRotation: 0,
-            callback: (value) => format(new Date(value), "MMM yy"),
+            callback: (value) => format(new Date(value), "MMM yyyy"),
           },
         },
       },
@@ -155,8 +161,6 @@ const CoinDetail = () => {
       options: options,
     });
 
-    console.log(data);
-
     return () => {
       // Clean up Chart.js instance
       chart.destroy();
@@ -165,7 +169,7 @@ const CoinDetail = () => {
 
   return (
     <section className="flex justify-center">
-      <div className="p-4 w-[400px] border-r-[1px]">
+      <div className="p-4 w-[390px] border-r-[1px]">
         <div className=" bg-white  flex flex-col">
           <div className=" text-black flex items-center space-x-1">
             <div className="me-2">
@@ -191,7 +195,9 @@ const CoinDetail = () => {
           <div className="mt-4 space-y-4">
             <div className="text-gray-500 flex justify-between items-center">
               <p className="font-semibold text-sm">Market Cap</p>{" "}
-              <p className="text-black font-medium">${btcData.marketCap}</p>
+              <p className="text-black font-medium">
+                ${currentMarketCoin?.quotes[0]?.marketCap}
+              </p>
             </div>
             <div className="text-gray-500 flex justify-between items-center">
               <p className="font-semibold text-sm">Volume (24h)</p>{" "}
@@ -239,13 +245,13 @@ const CoinDetail = () => {
                 <div className="mr-5">
                   <div className="flex items-center">
                     <div className="text-3xl font-bold text-gray-800 mr-2">
-                      24.7K
+                      ${currentMarketCoin?.quotes[0]?.price.toFixed(3)}
                     </div>
-                    <div className="text-sm font-medium text-green-500">
+                    {/* <div className="text-sm font-medium text-green-500">
                       +49%
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="text-sm text-gray-500">Unique Visitors</div>
+                  <div className="text-sm text-gray-500">Price</div>
                 </div>
                 <div
                   className="hidden md:block w-px h-8 bg-gray-200 mr-5"
