@@ -54,7 +54,7 @@ public class Coins {
      *
      * @mbg.generated Thu Jan 25 09:56:51 ICT 2024
      */
-    private Integer quantity;
+    private Double quantity;
 
     /**
      *
@@ -191,7 +191,7 @@ public class Coins {
      *
      * @mbg.generated Thu Jan 25 09:56:51 ICT 2024
      */
-    public Integer getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
@@ -203,7 +203,7 @@ public class Coins {
      *
      * @mbg.generated Thu Jan 25 09:56:51 ICT 2024
      */
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 

@@ -15,5 +15,5 @@ public class CoinsUserReponse {
     private String symbol;
     private Double amount;
     private Double price;
-    private Integer quantity;
+    private Double quantity;
 }
