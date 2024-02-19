@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import AddCoinDialog from "./dialogs/AddCoinDialog";
 import {
   deleteCoinById,
-  getAllCoins,
+  getCoinsByUserId,
   getMarketCapCoins,
 } from "@/services/CoinAPI";
 import { Button } from "@/components/ui/button";
@@ -30,12 +30,14 @@ import {
 import NumberCounter from "@/components/shared/NumberCounter";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { useNavigate } from "react-router-dom";
 
 function Coin() {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [user, setUser] = useState({});
   const [userCoinList, setUserCoinList] = useState([]);
-  const [marketCoinList, setMarketCoinList] = useState();
+  const [marketCoinList, setMarketCoinList] = useState([]);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("profile")));
@@ -43,7 +45,11 @@ function Coin() {
 
   const getAllUserCoins = async () => {
     try {
-      const { data: response } = await getAllCoins();
+      const initUser = JSON.parse(localStorage.getItem("profile"));
+
+      const { data: response } = await getCoinsByUserId(initUser.id);
+
+      console.log(response);
 
       setUserCoinList(response.data);
     } catch (error) {
@@ -137,16 +143,21 @@ function Coin() {
                     {index + 1}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center">
-                      {/* <div className="me-2">
+                    <div
+                      className="flex items-center cursor-pointer"
+                      onClick={() =>
+                        navigate(`/coin-detail/${coin.coinMarketId}`)
+                      }
+                    >
+                      <div className="me-2">
                         <img
-                          src={`https://s2.coinmarketcap.com/static/img/coins/32x32/${coin.coinId}.png`}
+                          src={`https://s2.coinmarketcap.com/static/img/coins/32x32/${coin.coinMarketId}.png`}
                           alt={coin.name}
                           className="coin-logo"
                           width={32}
                           height={32}
                         />
-                      </div> */}
+                      </div>
                       <div className="items-center">
                         <span className="me-2 font-semibold">{coin.name}</span>
                         <span className="font-semibold text-gray-500">

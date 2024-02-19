@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Chart from "chart.js/auto"; // Import Chart.js
 import "chartjs-adapter-date-fns"; // Import Chart.js adapter for date-fns
 import format from "date-fns/format"; // Import date-fns format function
 import "tailwindcss/tailwind.css"; // Import Tailwind CSS
+import { getMarketCapCoins } from "@/services/CoinAPI";
+import { useParams } from "react-router-dom";
 
 // Helper function to format numbers in K format
 const formatThousands = (value) =>
@@ -24,49 +26,62 @@ const btcData = {
   fullyDilutedMarketCap: 1083485131543,
 };
 
+const coinChartData = {
+  points: {
+    1609459200: 37.37457234,
+    1609545600: 37.91710592,
+    1609632000: 38.25372654,
+    1609718400: 1,
+  },
+};
+
 const CoinDetail = () => {
+  const param = useParams();
+  const [currentMarketCoin, setCurrentMarketCoin] = useState();
+
+  const findMarketCoin = async () => {
+    try {
+      const { data: response } = await getMarketCapCoins();
+      console.log(
+        response.data.cryptoCurrencyList.find(
+          (item) => item.id === parseInt(param.coinMarketId)
+        )
+      );
+      setCurrentMarketCoin(
+        response.data.cryptoCurrencyList.find(
+          (item) => item.id === parseInt(param.coinMarketId)
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    findMarketCoin();
+  }, []);
+
   useEffect(() => {
     const ctx = document.getElementById("analytics-card-01");
 
+    const timestamps = Object.keys(coinChartData.points).map(Number);
+    const values = Object.values(coinChartData.points);
+
+    const dates = timestamps.map((timestamp) =>
+      format(new Date(timestamp * 1000), "dd-MM-yyyy")
+    );
+
+    console.log(values);
+    console.log(dates);
+
     // Chart.js data
     const data = {
-      labels: [
-        "12-01-2020",
-        "01-01-2021",
-        "02-01-2021",
-        "03-01-2021",
-        "04-01-2021",
-        "05-01-2021",
-        "06-01-2021",
-        "07-01-2021",
-        "08-01-2021",
-        "09-01-2021",
-        "10-01-2021",
-        "11-01-2021",
-        "12-01-2021",
-        "01-01-2022",
-        "02-01-2022",
-        "03-01-2022",
-        "04-01-2022",
-        "05-01-2022",
-        "06-01-2022",
-        "07-01-2022",
-        "08-01-2022",
-        "09-01-2022",
-        "10-01-2022",
-        "11-01-2022",
-        "12-01-2022",
-        "01-01-2023",
-      ],
+      labels: dates,
       datasets: [
         // Indigo line
         {
           label: "Current",
-          data: [
-            5000, 8700, 7500, 12000, 11000, 9500, 10500, 10000, 15000, 9000,
-            10000, 7000, 22000, 7200, 9800, 9000, 10000, 8000, 15000, 12000,
-            11000, 13000, 11000, 15000, 17000, 18000,
-          ],
+          data: values,
           fill: true,
           backgroundColor: "rgba(59, 130, 246, 0.08)",
           borderColor: "rgb(99, 102, 241)",
@@ -140,6 +155,8 @@ const CoinDetail = () => {
       options: options,
     });
 
+    console.log(data);
+
     return () => {
       // Clean up Chart.js instance
       chart.destroy();
@@ -147,54 +164,71 @@ const CoinDetail = () => {
   }, []); // Run useEffect only once on component mount
 
   return (
-    <section className="flex justify-center antialiased bg-gray-100 text-gray-600">
-      <div className="p-4">
-        <div className="p-6 bg-white shadow-md flex flex-col space-y-2">
+    <section className="flex justify-center">
+      <div className="p-4 w-[400px] border-r-[1px]">
+        <div className=" bg-white  flex flex-col">
           <div className=" text-black flex items-center space-x-1">
-            <p className="text-xl font-medium">{btcData.name}</p>
+            <div className="me-2">
+              <img
+                src={`https://s2.coinmarketcap.com/static/img/coins/32x32/${param.coinMarketId}.png`}
+                alt={param.coinMarketId}
+                className="coin-logo"
+                width={32}
+                height={32}
+              />
+            </div>
+            <p className="text-xl font-medium">{currentMarketCoin?.name}</p>
             <p className="text-gray-500 font-normal text-sm">
-              {btcData.symbol}
+              {currentMarketCoin?.symbol}
             </p>
           </div>
-          <div className="text-black flex space-x-2 items-center">
+          <div className="text-black flex space-x-2 items-center mt-3">
             <p className="font-bold text-3xl">
-              ${btcData.price.toLocaleString()}
+              ${currentMarketCoin?.quotes[0]?.price.toFixed(3)}
             </p>{" "}
-            <p className="font-semibold">{btcData.change}% (1d)</p>
+            <p className="font-semibold">{currentMarketCoin?.change}% (1d)</p>
           </div>
-          <div className="text-gray-500 flex justify-between items-center">
-            <p>Market Cap:</p> <p>${btcData.marketCap.toLocaleString()}</p>
-          </div>
-          <div className="text-gray-500 flex justify-between items-center">
-            <p>Volume (24h):</p> <p>${btcData.volume.toLocaleString()}</p>
-          </div>
-          <div className="text-gray-500 flex justify-between items-center">
-            <p>Circulating Supply:</p>
-            <p>
-              {btcData.circulatingSupply.toLocaleString()}
-              {btcData.symbol}
-            </p>
-          </div>
-          <div className="text-gray-500 flex justify-between items-center">
-            <p>Total Supply:</p>
-            <p>
-              {btcData.totalSupply.toLocaleString()}
-              {btcData.symbol}
-            </p>
-          </div>
-          <div className="text-gray-500 flex justify-between items-center">
-            <p>Max Supply:</p>{" "}
-            <p>
-              {btcData.maxSupply.toLocaleString()} {btcData.symbol}
-            </p>
-          </div>
-          <div className="text-gray-500 flex justify-between items-center">
-            <p>Fully Diluted Market Cap:</p>
-            <p>${btcData.fullyDilutedMarketCap.toLocaleString()}</p>
+          <div className="mt-4 space-y-4">
+            <div className="text-gray-500 flex justify-between items-center">
+              <p className="font-semibold text-sm">Market Cap</p>{" "}
+              <p className="text-black font-medium">${btcData.marketCap}</p>
+            </div>
+            <div className="text-gray-500 flex justify-between items-center">
+              <p className="font-semibold text-sm">Volume (24h)</p>{" "}
+              <p className="text-black font-medium">
+                ${currentMarketCoin?.quotes[0]?.volume24h}
+              </p>
+            </div>
+            <div className="text-gray-500 flex justify-between items-center">
+              <p className="font-semibold text-sm">Circulating Supply</p>
+              <p className="text-black font-medium">
+                {currentMarketCoin?.circulatingSupply}{" "}
+                {currentMarketCoin?.symbol}
+              </p>
+            </div>
+            <div className="text-gray-500 flex justify-between items-center">
+              <p className="font-semibold text-sm">Total Supply</p>
+              <p className="text-black font-medium">
+                {currentMarketCoin?.totalSupply} {currentMarketCoin?.symbol}
+              </p>
+            </div>
+            <div className="text-gray-500 flex justify-between items-center">
+              <p className="font-semibold text-sm">Max Supply:</p>{" "}
+              <p className="text-black font-medium">
+                {currentMarketCoin?.maxSupply || "Unnkown"}{" "}
+                {currentMarketCoin?.symbol}
+              </p>
+            </div>
+            <div className="text-gray-500 flex justify-between items-center">
+              <p className="font-semibold text-sm">Fully Diluted Market Cap:</p>
+              <p className="text-black font-medium">
+                ${currentMarketCoin?.quotes[0]?.fullyDilluttedMarketCap}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div className="max-w-3xl p-4 px-6">
+      <div className="p-4">
         <div className="flex flex-col col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
           <header className="px-5 py-4 border-b border-gray-100 flex items-center">
             <h2 className="font-semibold text-gray-800">Analytics</h2>
