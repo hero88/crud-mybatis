@@ -6,6 +6,7 @@ const routes = {
   listUser: "/profile/list-user/",
   coin: "/profile/coins/",
   coinDetail: "/coin-detail/:coinMarketId",
+  verify: "/verify",
   signin: "/sign-in",
   signup: "/sign-up",
 };
