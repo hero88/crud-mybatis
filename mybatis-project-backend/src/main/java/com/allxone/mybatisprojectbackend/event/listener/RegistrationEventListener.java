@@ -23,7 +23,7 @@ public class RegistrationEventListener implements ApplicationListener<Registrati
         user = event.getUser();
         String name = user.getName();
         String email = user.getEmail();
-        String url = "http://localhost:5555/api/auth/register/verifyEmail?token="+event.getJwtToken();
+        String url = "http://localhost:5555/api/auth/verifyEmail?token="+event.getJwtToken();
         try {
             emailService.sendVerificationEmail(name,email,url);
         } catch (MessagingException | UnsupportedEncodingException e) {
