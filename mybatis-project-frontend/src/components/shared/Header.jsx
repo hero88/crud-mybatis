@@ -93,9 +93,7 @@ function Header() {
                       </Avatar>
                     </div>
                     <div>
-                      <p className="text-base">
-                        Hi, {user?.name}
-                      </p>
+                      <p className="text-base">Hi, {user?.name}</p>
                       <p className="text-sm text-gray-500 font-semibold">
                         {user?.email}
                       </p>
@@ -107,9 +105,11 @@ function Header() {
                       Profile
                     </DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem className="py-2 font-medium text-sm">
-                    Dashboard
-                  </DropdownMenuItem>
+                  <Link to={`/profile/coins`}>
+                    <DropdownMenuItem className="py-2 font-medium text-sm">
+                      Dashboard
+                    </DropdownMenuItem>
+                  </Link>
 
                   <DropdownMenuItem
                     className="py-2 font-medium text-sm"

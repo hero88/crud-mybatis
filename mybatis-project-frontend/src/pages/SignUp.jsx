@@ -64,7 +64,7 @@ const SignUp = () => {
           JSON.stringify(response.data.accessToken)
         );
         setIsLoading(false);
-        navigate("/", { replace: true });
+        navigate("/verify", { replace: true });
       }
     }
 

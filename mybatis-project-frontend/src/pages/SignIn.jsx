@@ -31,6 +31,8 @@ import { app } from "@/config/firebase.config";
 import PasswordInput from "@/components/shared/PasswordInput";
 import { SignInValidation } from "@/lib/validation";
 import { login } from "@/services/UserAPI";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 const imagesInit = [
   "/src/assets/side-img-1.jpg",
@@ -39,6 +41,7 @@ const imagesInit = [
 ];
 
 const SignIn = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -66,15 +69,35 @@ const SignIn = () => {
   const handleLoginWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, googleProvider).then((userCred) => {
       if (userCred) {
-        localStorage.setItem("auth", "true");
-
         firebaseAuth.onAuthStateChanged((userCred) => {
           if (userCred) {
             userCred.getIdToken().then((token) => {
-              localStorage.setItem("token", token);
+              const userProfile = {
+                address: "address",
+                age: 23,
+                createdAt: 1707961060,
+                email: userCred.email,
+                gender: true,
+                id: 1,
+                isActive: true,
+                name: userCred.displayName,
+                password: null,
+                phoneNumber: userCred.phoneNumber,
+                updatedAt: 1707961060,
+              };
+
+              localStorage.setItem("token", JSON.stringify(token));
+              localStorage.setItem("profile", JSON.stringify(userProfile));
             });
+
             navigate("/", { replace: true });
           } else {
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: "You have apply a wrong email or password.",
+              action: <ToastAction altText="Try again">Try again</ToastAction>,
+            });
             navigate("/login");
           }
         });
@@ -85,15 +108,34 @@ const SignIn = () => {
   const handleLoginWithFacebook = async () => {
     await signInWithPopup(firebaseAuth, facebookProvider).then((userCred) => {
       if (userCred) {
-        localStorage.setItem("auth", "true");
-
         firebaseAuth.onAuthStateChanged((userCred) => {
           if (userCred) {
             userCred.getIdToken().then((token) => {
-              localStorage.setItem("token", token);
+              const userProfile = {
+                address: "address",
+                age: 23,
+                createdAt: 1707961060,
+                email: userCred.email,
+                gender: true,
+                id: 1,
+                isActive: true,
+                name: userCred.displayName,
+                password: null,
+                phoneNumber: userCred.phoneNumber,
+                updatedAt: 1707961060,
+              };
+
+              localStorage.setItem("token", JSON.stringify(token));
+              localStorage.setItem("profile", JSON.stringify(userProfile));
             });
             navigate("/", { replace: true });
           } else {
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: "You have apply a wrong email or password.",
+              action: <ToastAction altText="Try again">Try again</ToastAction>,
+            });
             navigate("/login");
           }
         });
@@ -103,12 +145,21 @@ const SignIn = () => {
 
   const handleLoginNormally = async (userForm) => {
     const { data: response } = await login(userForm);
-    localStorage.setItem("token", JSON.stringify(response.data.accessToken));
-    localStorage.setItem("profile", JSON.stringify(response.data.user));
 
-    if (response.data.accessToken !== null) {
+    console.log(response);
+
+    if (response.data) {
+      localStorage.setItem("token", JSON.stringify(response.data.accessToken));
+      localStorage.setItem("profile", JSON.stringify(response.data.user));
       navigate("/", { replace: true });
     } else {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "You have apply a wrong email or password.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      navigate("/sign-in");
       setError("Your username or password is incorrect!");
     }
   };
@@ -142,11 +193,11 @@ const SignIn = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        {error && (
+                        {/* {error && (
                           <FormLabel className="font-semibold text-red-500">
                             {error}
                           </FormLabel>
-                        )}
+                        )} */}
                         <FormControl>
                           <Input
                             placeholder="Email"

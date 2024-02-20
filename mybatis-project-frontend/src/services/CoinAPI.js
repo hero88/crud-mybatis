@@ -29,7 +29,8 @@ export const getMarketCapCoins = () => {
   }
 };
 
-export const getCoinsByUserId = (id) => API.get(`api/coin/getCoinById/${id}`);
+export const getCoinsByUserId = (id) =>
+  API.get(`api/coin/getCoinByUserId/${id}`);
 
 export const addCoin = (newCoin) => API.post("api/coin/saveCoin", newCoin);
 
@@ -42,3 +43,6 @@ export const deleteCoinById = (id) =>
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   });
+
+export const getChartDetailCoin = (id, range) =>
+  API.get(`api/crypto/detail?id=${id}&range=${range}`);

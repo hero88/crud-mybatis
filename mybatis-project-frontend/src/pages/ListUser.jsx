@@ -19,11 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { deleteUserById, getAllUsers } from "@/services/UserAPI";
 import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function ListUser() {
+  const { toast } = useToast();
   const [userList, setUserList] = useState([]);
 
   const handleGetAllUsers = async () => {
@@ -42,9 +45,21 @@ function ListUser() {
   const handleDeleteUser = async (userId) => {
     const { data: response } = await deleteUserById(userId);
 
-    handleGetAllUsers();
-
-    console.log(response);
+    if (response.code === 200) {
+      toast({
+        title: "Delete user successfully.",
+        description: "User list has been changed.",
+        action: <ToastAction altText="Nice">Nice</ToastAction>,
+      });
+      handleGetAllUsers();
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with deleting.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
   };
 
   const convertToAge = (dob) => {
