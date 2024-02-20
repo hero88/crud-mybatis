@@ -25,6 +25,8 @@ import { deleteUserById, getAllUsers } from "@/services/UserAPI";
 import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const currentUser = JSON.parse(localStorage.getItem("profile"));
+
 function ListUser() {
   const { toast } = useToast();
   const [userList, setUserList] = useState([]);
@@ -136,9 +138,11 @@ function ListUser() {
                 <TableCell className="flex items-center space-x-1">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button className="w-12 h-12">
-                        <Trash width={20} height={20} />
-                      </Button>
+                      {user.id !== currentUser.id && (
+                        <Button className="w-12 h-12">
+                          <Trash width={20} height={20} />
+                        </Button>
+                      )}
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>

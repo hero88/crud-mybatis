@@ -57,18 +57,15 @@ const SignUp = () => {
 
       const response = await register(registedUser);
       if (response.status === 200) {
-        console.log(response);
-        localStorage.setItem("profile", JSON.stringify(response.data.user));
-        localStorage.setItem(
-          "token",
-          JSON.stringify(response.data.accessToken)
-        );
+        // localStorage.setItem("profile", JSON.stringify(response.data.user));
+        // localStorage.setItem(
+        //   "token",
+        //   JSON.stringify(response.data.accessToken)
+        // );
         setIsLoading(false);
         navigate("/verify", { replace: true });
       }
     }
-
-    console.log(values);
   };
 
   return (
