@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.UserMapper">
+    <resultMap id="userResultMap" type="com.allxone.mybatisprojectbackend.model.User">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="isActive" column="is_active"/>
+        <result property="gender" column="gender"/>
+        <result property="address" column="address"/>
+        <result property="age" column="age"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
+        <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
+
+        <collection property="roles" ofType="Role">
+            <id property="id" column="role_id" />
+            <result property="name" column="role_name" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="UserPasswordResultMap" type="com.allxone.mybatisprojectbackend.model.User">
+        <id property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="isActive" column="is_active"/>
+
+        <collection property="roles" ofType="Role">
+            <id property="id" column="role_id" />
+            <result property="name" column="role_name" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="userResultMapWithTokens" type="com.allxone.mybatisprojectbackend.model.User">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (NAME, EMAIL, PASSWORD, IS_ACTIVE, GENDER, ADDRESS, AGE, PHONE_NUMBER,
+        CREATED_AT,
+        UPDATED_AT)
+        VALUES (#{name}, #{email}, #{password}, #{isActive}, #{gender}, #{address}, #{age},
+        #{phoneNumber}, NOW(),
+        NOW())
+    </insert>
+
+    <select id="getUserById" resultMap="userResultMap">
+        SELECT u.ID
+             , u.NAME
+             , u.EMAIL
+             , u.IS_ACTIVE
+             , u.GENDER
+             , u.ADDRESS
+             , u.AGE
+             , u.PHONE_NUMBER
+             , u.CREATED_AT
+             , u.UPDATED_AT
+             , r.id   AS role_id
+             , r.name AS role_name
+        FROM user u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+                 LEFT JOIN role r ON ur.role_id = r.id
+        WHERE u.ID = #{id}
+    </select>
+
+    <select id="getAllUsers" resultMap="userResultMap">
+        SELECT u.ID
+        , u.NAME
+        , u.EMAIL
+        , u.IS_ACTIVE
+        , u.GENDER
+        , u.ADDRESS
+        , u.AGE
+        , u.PHONE_NUMBER
+        , u.CREATED_AT
+        , u.UPDATED_AT
+        FROM user u
+    </select>
+
+    <select id="findByEmail" resultMap="userResultMap">
+        SELECT u.ID
+             , u.NAME
+             , u.EMAIL
+             , u.IS_ACTIVE
+             , u.GENDER
+             , u.ADDRESS
+             , u.AGE
+             , u.PHONE_NUMBER
+             , u.CREATED_AT
+             , u.UPDATED_AT
+             , r.id   AS role_id
+             , r.name AS role_name
+        FROM user u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+                 LEFT JOIN role r ON ur.role_id = r.id
+        WHERE u.EMAIL = #{email}
+    </select>
+
+    <select id="loadUserByUsername" resultMap="UserPasswordResultMap">
+        SELECT u.ID
+             , u.EMAIL
+             , u.PASSWORD
+             , u.IS_ACTIVE
+             , r.id   AS role_id
+             , r.name AS role_name
+        FROM user u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+                 LEFT JOIN role r ON ur.role_id = r.id
+        WHERE u.EMAIL = #{email}
+    </select>
+
+    <update id="updateUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        UPDATE user
+        SET NAME = #{name},
+        EMAIL = #{email},
+        IS_ACTIVE = #{isActive},
+        GENDER = #{gender},
+        ADDRESS = #{address},
+        AGE = #{age},
+        PHONE_NUMBER = #{phoneNumber} ,
+        UPDATED_AT = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updateUserPassword" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        UPDATE user
+        SET PASSWORD = #{password}
+        WHERE EMAIL = #{email}
+    </update>
+
+    <delete id="deleteUserById" parameterType="long">
+        DELETE
+        FROM user
+        WHERE ID = #{id}
+    </delete>
+</mapper>
