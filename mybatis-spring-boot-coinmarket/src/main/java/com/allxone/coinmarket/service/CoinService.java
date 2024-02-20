@@ -24,4 +24,6 @@ public interface CoinService {
     List<Coins> findByLoggedUser() throws ParamInvalidException;
 
     Map<String, Object> getHistoryPriceCoin(Integer coinId);
+
+    Map<String, Object> getAllCoin(int start, int limit, String sortBy, String sortType, String convert);
 }

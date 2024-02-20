@@ -19,11 +19,13 @@ import com.allxone.coinmarket.service.UserService;
 import com.allxone.coinmarket.utilities.TimeUtils;
 import com.allxone.coinmarket.utilities.ValidatorUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -114,7 +116,7 @@ public class CoinsServiceImpl implements CoinService {
 
         List<Coins> coinsList = coinMapper.selectByExample(coinsExample);
 
-        if(coinsList != null && !coinsList.isEmpty()) {
+        if (coinsList != null && !coinsList.isEmpty()) {
 //            Coins dbCoin = coinsList.get(0);
             throw new DuplicateDataException("This coin already exists in the account");
         }
@@ -201,26 +203,26 @@ public class CoinsServiceImpl implements CoinService {
 
     @Override
     public Map<String, Object> getHistoryPriceCoin(Integer coinId) {
-    	RestTemplate restTemplate = new RestTemplate();
-		String range=timeUntil.getListTimeStampEnd12MonthsAgo().get(0)+"~"+timeUntil.getListTimeStampEnd12MonthsAgo().get(timeUntil.getListTimeStampEnd12MonthsAgo().size()-1);
-		ResponseEntity<String> response = restTemplate
-				.getForEntity(URI_HISTORY_PRICECOIN+"?id=" + coinId + "&range="+range, String.class);
-		try {
-			if (response.getStatusCode().is2xxSuccessful()) {
-				String responseData = response.getBody();
-				ObjectMapper objectMapper = new ObjectMapper();
-				Map<String, Object> dataMap;
-				dataMap = objectMapper.readValue(responseData, Map.class);
-				dataMap.put("timestamps", timeUntil.getListTimeStampEnd12MonthsAgo());
-				dataMap.put("months", timeUntil.getEnglishMonthNamesLast12Months());
-				return dataMap;
-			} else {
-				return null;
-			}
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return null;
-		}
+        RestTemplate restTemplate = new RestTemplate();
+        String range = timeUntil.getListTimeStampEnd12MonthsAgo().get(0) + "~" + timeUntil.getListTimeStampEnd12MonthsAgo().get(timeUntil.getListTimeStampEnd12MonthsAgo().size() - 1);
+        ResponseEntity<String> response = restTemplate
+                .getForEntity(URI_HISTORY_PRICECOIN + "?id=" + coinId + "&range=" + range, String.class);
+        try {
+            if (response.getStatusCode().is2xxSuccessful()) {
+                String responseData = response.getBody();
+                ObjectMapper objectMapper = new ObjectMapper();
+                Map<String, Object> dataMap;
+                dataMap = objectMapper.readValue(responseData, Map.class);
+                dataMap.put("timestamps", timeUntil.getListTimeStampEnd12MonthsAgo());
+                dataMap.put("months", timeUntil.getEnglishMonthNamesLast12Months());
+                return dataMap;
+            } else {
+                return null;
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -289,4 +291,50 @@ public class CoinsServiceImpl implements CoinService {
         return null;
     }
 
+    @Override
+    public Map<String, Object> getAllCoin(int start, int limit, String sortBy, String sortType, String convert) {
+        String apiUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=" + start + "&limit=" + limit + "&sortBy=" + sortBy + "&sortType=" + sortType + "&convert=" + convert + "&cryptoType=all&tagType=all&audited=false&aux=ath%2Catl%2Chigh24h%2Clow24h%2Cnum_market_pairs%2Ccmc_rank%2Cdate_added%2Cmax_supply%2Ccirculating_supply%2Ctotal_supply%2Cvolume_7d%2Cvolume_30d%2Cself_reported_circulating_supply%2Cself_reported_market_cap";
+        String apiCoinDetail = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+
+        // Create HttpHeaders and set header X-CMC_PRO_API_KEY
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("X-CMC_PRO_API_KEY", "502fa2ee-6cd7-4ef6-8b67-2a7a6ace811e");
+
+        // Create HttpEntity with headers
+        HttpEntity<String> entityHeader = new HttpEntity<>(headers);
+        try {
+            if (response.getStatusCode().is2xxSuccessful()) {
+                //read data from api top
+                String responseData = response.getBody();
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                //parse data to json
+                JsonNode rootNode = objectMapper.readTree(responseData);
+                JsonNode cryptoCurrencyListNode = rootNode.path("data").path("cryptoCurrencyList");
+
+                for (JsonNode currency : cryptoCurrencyListNode) {
+                    // sent request with information header
+                    ResponseEntity<String> resp = restTemplate.exchange(apiCoinDetail+currency.path("id"), HttpMethod.GET, entityHeader, String.class);
+                    if (resp.getStatusCode().is2xxSuccessful()) {
+                        JsonNode rootNodeDetail = objectMapper.readTree(String.valueOf(resp.getBody()));
+                        JsonNode detail = rootNodeDetail.path("data").path(currency.path("id").asText());
+                        ((ObjectNode) currency).set("detail", detail);
+                        System.out.println(currency.path("detail"));
+                    }
+                }
+
+                Map<String, Object> dataMap;
+                dataMap = objectMapper.readValue(rootNode.toString(), Map.class);
+                return dataMap;
+            } else {
+                return null;
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -28,7 +28,7 @@ public class CoinsRestApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateCoin(@PathVariable Long id,@RequestBody Coins coins)
+    public ResponseEntity<?> updateCoin(@PathVariable Long id, @RequestBody Coins coins)
             throws ParamInvalidException {
         coins.setId(id);
         coinService.updateCoin(coins);
@@ -64,12 +64,26 @@ public class CoinsRestApi {
     }
 
     @GetMapping("history-coin")
-	public ResponseEntity<?> getHistory(@RequestParam("id") Integer id) {
-		Map<String, Object> history = coinService.getHistoryPriceCoin(id);
-		if(history!=null) {
-			return ResponseEntity.ok(history);
-		}else {
-			return ResponseEntity.badRequest().body(ApiResponse.builder().message("Get data failure").success(false).data(null));
-		}
-	}
+    public ResponseEntity<?> getHistory(@RequestParam("id") Integer id) {
+        Map<String, Object> history = coinService.getHistoryPriceCoin(id);
+        if (history != null) {
+            return ResponseEntity.ok(history);
+        } else {
+            return ResponseEntity.badRequest().body(ApiResponse.builder().message("Get data failure").success(false).data(null));
+        }
+    }
+
+    @GetMapping("top-coin")
+    public ResponseEntity<?> getTopCoin(@RequestParam(value = "start", defaultValue = "1") Integer start,
+                                        @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                        @RequestParam(value = "sortBy", defaultValue = "market_cap") String sortBy,
+                                        @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
+                                        @RequestParam(value = "convert", defaultValue = "USD") String convert) {
+        Map<String, Object> history = coinService.getAllCoin(start,limit,sortBy,sortType,convert);
+        if (history != null) {
+            return ResponseEntity.ok(history);
+        } else {
+            return ResponseEntity.badRequest().body(ApiResponse.builder().message("Get data failure").success(false).data(null));
+        }
+    }
 }
