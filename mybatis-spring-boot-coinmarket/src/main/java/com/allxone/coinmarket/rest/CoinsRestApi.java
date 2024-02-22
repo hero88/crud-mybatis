@@ -75,7 +75,7 @@ public class CoinsRestApi {
 
     @GetMapping("top-coin")
     public ResponseEntity<?> getTopCoin(@RequestParam(value = "start", defaultValue = "1") Integer start,
-                                        @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                        @RequestParam(value = "limit", defaultValue = "10") Integer limit,
                                         @RequestParam(value = "sortBy", defaultValue = "market_cap") String sortBy,
                                         @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
                                         @RequestParam(value = "convert", defaultValue = "USD") String convert) {
