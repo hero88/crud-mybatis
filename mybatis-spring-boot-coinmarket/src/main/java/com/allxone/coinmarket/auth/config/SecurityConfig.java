@@ -66,8 +66,8 @@ public class SecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll())
-				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//				.oauth2Login(oauth2 -> oauth2.successHandler(customSuccessHandler));
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.oauth2Login(oauth2 -> oauth2.successHandler(customSuccessHandler));
 
 		UserFactory jwtUserFactory = UserFactory.getInstance();
 		jwtUserFactory.setRoleMapper(rolesMapper);

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:/*.env.example")
+@PropertySource("classpath:/*.env")
 public class urlConfig {
 	
 	@Value("${BASE_URL}")
