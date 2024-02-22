@@ -1,16 +1,14 @@
 package com.allxone.mybatisprojectbackend.service;
 
-import com.allxone.mybatisprojectbackend.dto.request.CoinRequest;
-import com.allxone.mybatisprojectbackend.dto.response.CoinResponse;
-import com.allxone.mybatisprojectbackend.model.Coin;
+import com.allxone.mybatisprojectbackend.dto.request.EmployeeRequest;
+import com.allxone.mybatisprojectbackend.dto.response.EmployeeResponse;
 
 import java.util.List;
 
-public interface CoinService {
-    List<CoinResponse> getAllCoins();
-    CoinResponse updateCoin(CoinRequest coinRequest);
-    void deleteCoinById(Long id);
-    CoinResponse saveCoin(CoinRequest coinRequest);
-    CoinResponse getCoinById(Long id);
-    List<CoinResponse> getCoinByUserId(Long id);
+public interface EmployeeService {
+    List<EmployeeResponse> getAllEmployees();
+    EmployeeResponse updateEmployee(EmployeeRequest employeeRequest);
+    void deleteEmployeeById(Long id);
+    EmployeeResponse saveEmployee(EmployeeRequest employeeRequest);
+    EmployeeResponse getEmployeeById(Long id);
 }

@@ -1,46 +1,37 @@
 package com.allxone.mybatisprojectbackend.convert;
 
-import com.allxone.mybatisprojectbackend.dto.request.EmployeeRequest;
-import com.allxone.mybatisprojectbackend.dto.response.EmployeeResponse;
-import com.allxone.mybatisprojectbackend.model.Employee;
+import com.allxone.mybatisprojectbackend.dto.request.TimeTrackingRequest;
+import com.allxone.mybatisprojectbackend.dto.response.TimeTrackingResponse;
+import com.allxone.mybatisprojectbackend.model.TimeTracking;
 import org.springframework.stereotype.Component;
 
-@Component
-public class EmployeeConvert {
+import java.time.Instant;
+import java.time.LocalTime;
 
-    public static EmployeeResponse toDto(Employee employee) {
-        return EmployeeResponse.builder()
-                .id(employee.getId())
-                .userId(employee.getUserId())
-                .firstname(employee.getFirstname())
-                .lastname(employee.getLastname())
-                .birthday(employee.getBirthday())
-                .gender(employee.getGender())
-                .contactNumber(employee.getContactNumber())
-                .email(employee.getEmail())
-                .departmentId(employee.getDepartmentId())
-                .position(employee.getPosition())
-                .hireDate(employee.getHireDate())
-                .terminationDate(employee.getTerminationDate())
-                .createdAt(employee.getCreatedAt())
-                .updatedAt(employee.getUpdatedAt())
+@Component
+public class TimeTrackingConvert {
+
+    public static TimeTrackingResponse toDto(TimeTracking timeTracking) {
+        return TimeTrackingResponse.builder()
+                .id(timeTracking.getId())
+                .employeeId(timeTracking.getEmployeeId())
+                .dateTrack(timeTracking.getDateTrack())
+                .clockIn(timeTracking.getClockIn())
+                .clockOut(timeTracking.getClockOut())
+                .totalHours(timeTracking.getTotalHours())
+                .createdAt(timeTracking.getCreatedAt())
+                .updatedAt(timeTracking.getUpdatedAt())
                 .build();
     }
 
-    public static Employee toEmployee(EmployeeRequest employeeRequest) {
-        return Employee.builder()
-                .id(employeeRequest.getId())
-                .userId(employeeRequest.getUserId())
-                .firstname(employeeRequest.getFirstname())
-                .lastname(employeeRequest.getLastname())
-                .birthday(employeeRequest.getBirthday())
-                .gender(employeeRequest.getGender())
-                .contactNumber(employeeRequest.getContactNumber())
-                .email(employeeRequest.getEmail())
-                .departmentId(employeeRequest.getDepartmentId())
-                .position(employeeRequest.getPosition())
-                .hireDate(employeeRequest.getHireDate())
-                .terminationDate(employeeRequest.getTerminationDate())
+    public static TimeTracking toTimeTracking(TimeTrackingRequest timeTrackingRequest) {
+        return TimeTracking.builder()
+                .id(timeTrackingRequest.getId())
+                .employeeId(timeTrackingRequest.getEmployeeId())
+                .dateTrack(timeTrackingRequest.getDateTrack())
+                .clockIn(timeTrackingRequest.getClockIn())
+                .clockOut(timeTrackingRequest.getClockOut())
+                .totalHours(timeTrackingRequest.getTotalHours())
                 .build();
     }
 }

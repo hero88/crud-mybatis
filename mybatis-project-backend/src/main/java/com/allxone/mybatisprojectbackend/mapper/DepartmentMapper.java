@@ -1,16 +1,15 @@
 package com.allxone.mybatisprojectbackend.mapper;
 
-import com.allxone.mybatisprojectbackend.model.Coin;
+import com.allxone.mybatisprojectbackend.model.Department;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
-public interface CoinMapper {
-    List<Coin> getAllCoins();
-    void updateCoin(Coin coin);
-    void deleteCoinById(Long id);
-    void saveCoin(Coin coin);
-    Coin getCoinById(Long id);
-    List<Coin> getCoinByUserId(Long id);
+public interface DepartmentMapper {
+    List<Department> getAllDepartments();
+    void updateDepartment(Department department);
+    void deleteDepartmentById(int id);
+    void saveDepartment(Department department);
+    Department getDepartmentById(int id);
 }

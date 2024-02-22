@@ -1,11 +1,11 @@
 package com.allxone.mybatisprojectbackend.service.Impl;
 
-import com.allxone.mybatisprojectbackend.convert.CoinConvert;
-import com.allxone.mybatisprojectbackend.dto.request.CoinRequest;
-import com.allxone.mybatisprojectbackend.dto.response.CoinResponse;
-import com.allxone.mybatisprojectbackend.mapper.CoinMapper;
-import com.allxone.mybatisprojectbackend.model.Coin;
-import com.allxone.mybatisprojectbackend.service.CoinService;
+import com.allxone.mybatisprojectbackend.convert.EmployeeConvert;
+import com.allxone.mybatisprojectbackend.dto.request.EmployeeRequest;
+import com.allxone.mybatisprojectbackend.dto.response.EmployeeResponse;
+import com.allxone.mybatisprojectbackend.mapper.EmployeeMapper;
+import com.allxone.mybatisprojectbackend.model.Employee;
+import com.allxone.mybatisprojectbackend.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,47 +14,40 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CoinServiceImpl implements CoinService {
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private final CoinMapper coinMapper;
+    private final EmployeeMapper employeeMapper;
     @Override
-    public List<CoinResponse> getAllCoins() {
-        return coinMapper.getAllCoins()
+    public List<EmployeeResponse> getAllEmployees() {
+        return employeeMapper.getAllEmployees()
         .stream()
-        .map(CoinConvert::toDto)
+        .map(EmployeeConvert::toDto)
         .collect(Collectors.toList());
     }
 
     @Override
-    public CoinResponse updateCoin(CoinRequest coinRequest) {
-        Coin coin = CoinConvert.toCoin(coinRequest);
-        coinMapper.updateCoin(coin);
-        return getCoinById(coin.getId());
+    public EmployeeResponse updateEmployee(EmployeeRequest employeeRequest) {
+        Employee Employee = EmployeeConvert.toEmployee(employeeRequest);
+        employeeMapper.updateEmployee(Employee);
+        return getEmployeeById(Employee.getId());
     }
 
     @Override
-    public void deleteCoinById(Long id) {
-        coinMapper.deleteCoinById(id);
+    public void deleteEmployeeById(Long id) {
+        employeeMapper.deleteEmployeeById(id);
     }
 
     @Override
-    public CoinResponse saveCoin(CoinRequest coinRequest) {
-        Coin coin = CoinConvert.toCoin(coinRequest);
-        coinMapper.saveCoin(coin);
-        return getCoinById(coin.getId());
+    public EmployeeResponse saveEmployee(EmployeeRequest employeeRequest) {
+        Employee Employee = EmployeeConvert.toEmployee(employeeRequest);
+        employeeMapper.saveEmployee(Employee);
+        return getEmployeeById(Employee.getId());
     }
 
     @Override
-    public CoinResponse getCoinById(Long id) {
-        Coin coin = coinMapper.getCoinById(id);
-        return CoinConvert.toDto(coin);
-    }
-
-    @Override
-    public List<CoinResponse> getCoinByUserId(Long id) {
-        return coinMapper.getCoinByUserId(id).stream()
-                .map(CoinConvert::toDto)
-                .collect(Collectors.toList());
+    public EmployeeResponse getEmployeeById(Long id) {
+        Employee Employee = employeeMapper.getEmployeeById(id);
+        return EmployeeConvert.toDto(Employee);
     }
 
 }

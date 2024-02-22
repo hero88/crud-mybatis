@@ -1,9 +1,9 @@
 package com.allxone.mybatisprojectbackend.controller;
 
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
-import com.allxone.mybatisprojectbackend.dto.request.TimeTrackingRequest;
-import com.allxone.mybatisprojectbackend.dto.response.TimeTrackingResponse;
-import com.allxone.mybatisprojectbackend.service.TimeTrackingService;
+import com.allxone.mybatisprojectbackend.dto.request.TaxInformationRequest;
+import com.allxone.mybatisprojectbackend.dto.response.TaxInformationResponse;
+import com.allxone.mybatisprojectbackend.service.TaxInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,53 +17,53 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/timeTracking")
+@RequestMapping("/api/taxInformation")
 @RequiredArgsConstructor
 //@PreAuthorize("hasAnyRole('ADMIN','USER')")
-public class TimeTrackingController {
+public class TaxInformationController {
 
-    private final TimeTrackingService timeTrackingService;
+    private final TaxInformationService taxInformationService;
 
-    @GetMapping("/getAllTimeTracking")
-    public CommonResponse<List<TimeTrackingResponse>> getAllTimeTracking() {
+    @GetMapping("/getAllTaxInformation")
+    public CommonResponse<List<TaxInformationResponse>> getAllTaxInformation() {
         try {
-            List<TimeTrackingResponse> data = timeTrackingService.getAllTimeTracking();
+            List<TaxInformationResponse> data = taxInformationService.getAllTaxInformation();
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PostMapping("/saveTimeTracking")
+    @PostMapping("/saveTaxInformation")
 //    @PreAuthorize("hasAuthority('admin:create')")
-    public CommonResponse<TimeTrackingResponse> saveTimeTracking(@RequestBody TimeTrackingRequest timeTrackingRequest) {
+    public CommonResponse<TaxInformationResponse> saveTaxInformation(@RequestBody TaxInformationRequest taxInformationRequest) {
 
         try {
-            TimeTrackingResponse data = timeTrackingService.saveTimeTracking(timeTrackingRequest);
+            TaxInformationResponse data = taxInformationService.saveTaxInformation(taxInformationRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @DeleteMapping("/deleteTimeTrackingById/{id}")
+    @DeleteMapping("/deleteTaxInformationById/{id}")
 //    @PreAuthorize("hasAuthority('admin:delete')")
-    public CommonResponse<Long> deleteTimeTrackingById(@PathVariable Long id) {
+    public CommonResponse<Integer> deleteTaxInformationById(@PathVariable Integer id) {
 
         try {
-            timeTrackingService.deleteTimeTrackingById(id);
+            taxInformationService.deleteTaxInformationById(id);
             return CommonResponse.success(id);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PutMapping("/updateTimeTracking")
+    @PutMapping("/updateTaxInformation")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
-    public CommonResponse<TimeTrackingResponse> updateTimeTracking(@RequestBody TimeTrackingRequest timeTrackingRequest) {
+    public CommonResponse<TaxInformationResponse> updateTaxInformation(@RequestBody TaxInformationRequest taxInformationRequest) {
 
         try {
-            TimeTrackingResponse data = timeTrackingService.updateTimeTracking(timeTrackingRequest);
+            TaxInformationResponse data = taxInformationService.updateTaxInformation(taxInformationRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             System.out.println(e);

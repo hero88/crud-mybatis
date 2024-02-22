@@ -1,37 +1,32 @@
 package com.allxone.mybatisprojectbackend.convert;
 
-import com.allxone.mybatisprojectbackend.dto.request.TimeTrackingRequest;
-import com.allxone.mybatisprojectbackend.dto.response.TimeTrackingResponse;
-import com.allxone.mybatisprojectbackend.model.TimeTracking;
+import com.allxone.mybatisprojectbackend.dto.request.TaxInformationRequest;
+import com.allxone.mybatisprojectbackend.dto.response.TaxInformationResponse;
+import com.allxone.mybatisprojectbackend.model.TaxInformation;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalTime;
 
 @Component
-public class TimeTrackingConvert {
+public class TaxInformationConvert {
 
-    public static TimeTrackingResponse toDto(TimeTracking timeTracking) {
-        return TimeTrackingResponse.builder()
-                .id(timeTracking.getId())
-                .employeeId(timeTracking.getEmployeeId())
-                .dateTrack(timeTracking.getDateTrack())
-                .clockIn(timeTracking.getClockIn())
-                .clockOut(timeTracking.getClockOut())
-                .totalHours(timeTracking.getTotalHours())
-                .createdAt(timeTracking.getCreatedAt())
-                .updatedAt(timeTracking.getUpdatedAt())
+    public static TaxInformationResponse toDto(TaxInformation taxInformation) {
+        return TaxInformationResponse.builder()
+                .id(taxInformation.getId())
+                .employeeId(taxInformation.getEmployeeId())
+                .taxRate(taxInformation.getTaxRate())
+                .taxExemption(taxInformation.getTaxExemption())
+                .createdAt(taxInformation.getCreatedAt())
+                .updatedAt(taxInformation.getUpdatedAt())
                 .build();
     }
 
-    public static TimeTracking toTimeTracking(TimeTrackingRequest timeTrackingRequest) {
-        return TimeTracking.builder()
-                .id(timeTrackingRequest.getId())
-                .employeeId(timeTrackingRequest.getEmployeeId())
-                .dateTrack(timeTrackingRequest.getDateTrack())
-                .clockIn(timeTrackingRequest.getClockIn())
-                .clockOut(timeTrackingRequest.getClockOut())
-                .totalHours(timeTrackingRequest.getTotalHours())
+    public static TaxInformation toTaxInformation(TaxInformationRequest taxInformationRequest) {
+        return TaxInformation.builder()
+                .id(taxInformationRequest.getId())
+                .employeeId(taxInformationRequest.getEmployeeId())
+                .taxRate(taxInformationRequest.getTaxRate())
+                .taxExemption(taxInformationRequest.getTaxExemption())
                 .build();
     }
 }

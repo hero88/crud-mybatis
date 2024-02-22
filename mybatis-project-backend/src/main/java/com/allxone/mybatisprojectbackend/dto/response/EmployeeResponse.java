@@ -1,11 +1,13 @@
-package com.allxone.mybatisprojectbackend.dto.request;
+package com.allxone.mybatisprojectbackend.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Data
-public class EmployeeRequest {
+@Builder
+public class EmployeeResponse {
     private Long id;
     private Long userId;
     private String firstname;
@@ -14,8 +16,10 @@ public class EmployeeRequest {
     private String gender;
     private String contactNumber;
     private String email;
-    private int departmentId;
+    private Integer departmentId;
     private String position;
     private Instant hireDate;
     private Instant terminationDate;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

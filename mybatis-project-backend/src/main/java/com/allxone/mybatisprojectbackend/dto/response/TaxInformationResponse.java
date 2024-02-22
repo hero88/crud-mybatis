@@ -1,11 +1,13 @@
-package com.allxone.mybatisprojectbackend.dto.request;
+package com.allxone.mybatisprojectbackend.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Data
-public class TaxInformationRequest {
+@Builder
+public class TaxInformationResponse {
     private Integer id;
     private Long employeeId;
     private Double taxRate;

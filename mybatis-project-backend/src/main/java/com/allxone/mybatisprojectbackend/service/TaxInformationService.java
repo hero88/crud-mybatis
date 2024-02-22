@@ -1,14 +1,14 @@
 package com.allxone.mybatisprojectbackend.service;
 
-import com.allxone.mybatisprojectbackend.dto.request.TimeTrackingRequest;
-import com.allxone.mybatisprojectbackend.dto.response.TimeTrackingResponse;
+import com.allxone.mybatisprojectbackend.dto.request.TaxInformationRequest;
+import com.allxone.mybatisprojectbackend.dto.response.TaxInformationResponse;
 
 import java.util.List;
 
-public interface TimeTrackingService {
-    List<TimeTrackingResponse> getAllTimeTracking();
-    TimeTrackingResponse updateTimeTracking(TimeTrackingRequest TimeTrackingRequest);
-    void deleteTimeTrackingById(Long id);
-    TimeTrackingResponse saveTimeTracking(TimeTrackingRequest TimeTrackingRequest);
-    TimeTrackingResponse getTimeTrackingById(Long id);
+public interface TaxInformationService {
+    List<TaxInformationResponse> getAllTaxInformation();
+    TaxInformationResponse updateTaxInformation(TaxInformationRequest taxInformationRequest);
+    void deleteTaxInformationById(Integer id);
+    TaxInformationResponse saveTaxInformation(TaxInformationRequest taxInformationRequest);
+    TaxInformationResponse getTaxInformationById(Integer id);
 }

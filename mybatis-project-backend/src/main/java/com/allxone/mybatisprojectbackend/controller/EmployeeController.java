@@ -1,9 +1,9 @@
 package com.allxone.mybatisprojectbackend.controller;
 
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
-import com.allxone.mybatisprojectbackend.dto.request.CoinRequest;
-import com.allxone.mybatisprojectbackend.dto.response.CoinResponse;
-import com.allxone.mybatisprojectbackend.service.CoinService;
+import com.allxone.mybatisprojectbackend.dto.request.EmployeeRequest;
+import com.allxone.mybatisprojectbackend.dto.response.EmployeeResponse;
+import com.allxone.mybatisprojectbackend.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,65 +17,56 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/coin")
+@RequestMapping("/api/employee")
 @RequiredArgsConstructor
 //@PreAuthorize("hasAnyRole('ADMIN','USER')")
-public class CoinController {
+public class EmployeeController {
 
-    private final CoinService coinService;
+    private final EmployeeService employeeService;
 
-    @GetMapping("/getAllCoins")
-    public CommonResponse<List<CoinResponse>> getAllCoins() {
+    @GetMapping("/getAllEmployees")
+    public CommonResponse<List<EmployeeResponse>> getAllEmployees() {
         try {
-            List<CoinResponse> data = coinService.getAllCoins();
+            List<EmployeeResponse> data = employeeService.getAllEmployees();
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @GetMapping("/getCoinByUserId/{id}")
-    public CommonResponse<List<CoinResponse>> getCoinUserById(@PathVariable Long id) {
-        try {
-            List<CoinResponse> data = coinService.getCoinByUserId(id);
-            return CommonResponse.success(data);
-        } catch (Exception e) {
-            return CommonResponse.error(null);
-        }
-    }
-
-    @PostMapping("/saveCoin")
+    @PostMapping("/saveEmployee")
 //    @PreAuthorize("hasAuthority('admin:create')")
-    public CommonResponse<CoinResponse> saveCoin(@RequestBody CoinRequest coinRequest) {
+    public CommonResponse<EmployeeResponse> saveEmployee(@RequestBody EmployeeRequest employeeRequest) {
 
         try {
-            CoinResponse data = coinService.saveCoin(coinRequest);
+            EmployeeResponse data = employeeService.saveEmployee(employeeRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @DeleteMapping("/deleteCoinById/{id}")
+    @DeleteMapping("/deleteEmployeeById/{id}")
 //    @PreAuthorize("hasAuthority('admin:delete')")
-    public CommonResponse<Long> deleteCoinById(@PathVariable Long id) {
+    public CommonResponse<Long> deleteEmployeeById(@PathVariable Long id) {
 
         try {
-            coinService.deleteCoinById(id);
+            employeeService.deleteEmployeeById(id);
             return CommonResponse.success(id);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PutMapping("/updateCoin")
+    @PutMapping("/updateEmployee")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
-    public CommonResponse<CoinResponse> updateCoin(@RequestBody CoinRequest coinRequest) {
+    public CommonResponse<EmployeeResponse> updateEmployee(@RequestBody EmployeeRequest employeeRequest) {
 
         try {
-            CoinResponse data = coinService.updateCoin(coinRequest);
+            EmployeeResponse data = employeeService.updateEmployee(employeeRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
+            System.out.println(e);
             return CommonResponse.error(null);
         }
 
