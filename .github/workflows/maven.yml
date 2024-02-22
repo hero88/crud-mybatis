@@ -23,6 +23,13 @@ jobs:
         # ref: ${{ github.event.before }}  # Use the commit before the push
         ref: "develop-java-gr3"
 
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: node_modules-${{hashFiles('package-lock.json')}}
+        restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+
     - name: build_FE
       run: |
         cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-3/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
