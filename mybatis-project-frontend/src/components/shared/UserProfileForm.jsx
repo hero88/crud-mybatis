@@ -62,10 +62,7 @@ const UserProfileForm = ({ user, setUser }) => {
       gender: gender === "male" ? true : false,
     };
 
-    console.log(updatedUser);
     const { data: response } = await updateUser(updatedUser);
-
-    console.log(response);
 
     if (response.code === 200) {
       const { data: newUserResponse } = await getUserById(user.id);

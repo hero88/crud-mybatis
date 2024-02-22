@@ -146,8 +146,6 @@ const SignIn = () => {
   const handleLoginNormally = async (userForm) => {
     const { data: response } = await login(userForm);
 
-    console.log(response);
-
     if (response.data) {
       localStorage.setItem("token", JSON.stringify(response.data.accessToken));
       localStorage.setItem("profile", JSON.stringify(response.data.user));

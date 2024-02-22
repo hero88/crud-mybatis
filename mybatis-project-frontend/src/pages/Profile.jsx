@@ -76,8 +76,6 @@ function Profile() {
         confirmationPassword,
       };
 
-      console.log(newPasswordUpdated);
-
       const response = await changeUserPassword(newPasswordUpdated);
 
       if (response.status === 200) {

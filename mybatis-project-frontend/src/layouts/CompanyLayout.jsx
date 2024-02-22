@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { DefaultLayout } from ".";
-import { useLocation, useNavigate } from "react-router-dom";
+import CompanyHeader from "@/sections/CompanyPage/CompanyHeader";
 import { useEffect, useState } from "react";
-import { CiUser, CiBitcoin } from "react-icons/ci";
+import { CiBitcoin, CiUser } from "react-icons/ci";
 import { HiOutlineUsers } from "react-icons/hi";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function ProfileLayout({ children }) {
+function CompanyLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("detail");
@@ -21,11 +21,11 @@ function ProfileLayout({ children }) {
   }, [location.pathname]);
 
   return (
-    <DefaultLayout>
-      <div id="profile" className="flex justify-between min-h-svh py-4">
-        {/* Sidebar */}
-        <div className="leftSide xl:w-2/12 md:w-5/12 px-12 text-lg">
-          <aside className="flex flex-col gap-1 ">
+    <div className="w-screen h-screen">
+      <CompanyHeader />
+      {/* <div className="flex px-2">
+        <div className="w-2/12 text-lg">
+          <aside className="flex flex-col gap-1 border-r-2">
             <Button
               onClick={() => navigate("../profile/detail/1")}
               className={`w-48 hover:bg-gray-200 h-12 text-md font-normal flex justify-start text-base rounded-lg ${
@@ -46,6 +46,7 @@ function ProfileLayout({ children }) {
               <HiOutlineUsers className="text-2xl" strokeWidth={1.8} />
               <p className="ml-2">List user</p>
             </Button>
+
             <Button
               onClick={() => navigate("../profile/coins")}
               className={`w-48 hover:bg-gray-200 h-12 text-md font-normal flex justify-start text-base rounded-lg ${
@@ -58,11 +59,10 @@ function ProfileLayout({ children }) {
             </Button>
           </aside>
         </div>
-        {children}
-        {/* <div className="rightSide md:w-0 xl:w-3/12"></div> */}
-      </div>
-    </DefaultLayout>
+      </div> */}
+      {children}
+    </div>
   );
 }
 
-export default ProfileLayout;
+export default CompanyLayout;

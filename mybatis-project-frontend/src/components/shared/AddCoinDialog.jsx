@@ -82,8 +82,6 @@ function AddCoinDialog({ type, user, userCoins, marketCoins, recallCoins }) {
         userId: user.id,
       };
 
-      console.log(newCoin.quantity);
-
       const { data: response } = await addCoin(newCoin);
 
       if (response.status === "ok") {
