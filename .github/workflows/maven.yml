@@ -25,7 +25,7 @@ jobs:
 
     - name: build_FE
       run: |
-        cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-2/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
+        cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-3/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
         cd mybatis-project-frontend
         npm install
         npm run build
