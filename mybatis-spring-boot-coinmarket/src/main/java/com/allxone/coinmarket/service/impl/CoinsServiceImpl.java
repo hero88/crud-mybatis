@@ -322,12 +322,34 @@ public class CoinsServiceImpl implements CoinService {
                         JsonNode rootNodeDetail = objectMapper.readTree(String.valueOf(resp.getBody()));
                         JsonNode detail = rootNodeDetail.path("data").path(currency.path("id").asText());
                         ((ObjectNode) currency).set("detail", detail);
-                        System.out.println(currency.path("detail"));
                     }
                 }
 
                 Map<String, Object> dataMap;
                 dataMap = objectMapper.readValue(rootNode.toString(), Map.class);
+                return dataMap;
+            } else {
+                return null;
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public Map<String, Object> getAllCoins(int start, int limit, String sortBy, String sortType, String convert) {
+        String apiUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=" + start + "&limit=" + limit + "&sortBy=" + sortBy + "&sortType=" + sortType + "&convert=" + convert + "&cryptoType=all&tagType=all&audited=false&aux=ath%2Catl%2Chigh24h%2Clow24h%2Cnum_market_pairs%2Ccmc_rank%2Cdate_added%2Cmax_supply%2Ccirculating_supply%2Ctotal_supply%2Cvolume_7d%2Cvolume_30d%2Cself_reported_circulating_supply%2Cself_reported_market_cap";
+        String apiCoinDetail = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+        try {
+            if (response.getStatusCode().is2xxSuccessful()) {
+                //read data from api top
+                String responseData = response.getBody();
+                ObjectMapper objectMapper = new ObjectMapper();
+                Map<String, Object> dataMap;
+                dataMap = objectMapper.readValue(responseData, Map.class);
                 return dataMap;
             } else {
                 return null;
