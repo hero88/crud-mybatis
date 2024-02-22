@@ -10,21 +10,34 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "develop-java-gr3" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 jobs:
   test-java:
-    runs-on: java-gr1
+    runs-on: java-gr3
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         # ref: ${{ github.event.before }}  # Use the commit before the push
-        ref: "hero88-patch-1"
+        ref: "develop-java-gr3"
+
+    - name: build_FE
+      run: |
+        cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-2/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
+        cd mybatis-project-frontend
+        npm install
+        npm run build
+        sudo rsync -a dist/. /usr/share/nginx/html/java_gr3
 
     - name: copy_file
       run: |
-        sudo rsync -a . /home/azureuser/crud_training/java_gr2/ --exclude .git
-        cd /home/azureuser/crud_training/java_gr2/crud-mybatis/
+        sudo rsync -a . /home/azureuser/crud_training/java_gr3/ --exclude .git
+        cp /home/azureuser/crud_training/java_gr3/firebase_config /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/resources/firebase_config.json
+        cp /home/azureuser/crud_training/java_gr2/.env /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/resources/app.env
+        
+    - name: run_app
+      run: |
+        cd /home/azureuser/crud_training/java_gr3/mybatis-project-backend/
         mvn spring-boot:run
