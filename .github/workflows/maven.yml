@@ -42,7 +42,7 @@ jobs:
       run: |
         sudo rsync -a . /home/azureuser/crud_training/java_gr3/ --exclude .git
         cp /home/azureuser/crud_training/java_gr3/firebase_config /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/main/resources/firebase_config.json
-        cp /home/azureuser/crud_training/java_gr2/.env /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/resources/app.env
+        cp /home/azureuser/crud_training/java_gr2/.env /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/main/resources/app.env
         
     - name: run_app
       run: |
