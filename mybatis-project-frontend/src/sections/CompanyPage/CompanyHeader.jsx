@@ -26,19 +26,28 @@ function CompanyHeader() {
           </Link>
           {/* Employees */}
           <div>
-            <Link to="/company/employees" className="font-semibold hover:text-blue-500">
+            <Link
+              to="/company/employees"
+              className="font-semibold hover:text-blue-500"
+            >
               Employees
             </Link>
           </div>
           {/* Payroll */}
           <div>
-            <Link to="/" className="font-semibold hover:text-blue-500">
+            <Link
+              to="/company/payroll"
+              className="font-semibold hover:text-blue-500"
+            >
               Payroll
             </Link>
           </div>
           {/* TimeTracking */}
           <div>
-            <Link to="/" className="font-semibold hover:text-blue-500">
+            <Link
+              to="/company/time-tracking"
+              className="font-semibold hover:text-blue-500"
+            >
               TimeTracking
             </Link>
           </div>

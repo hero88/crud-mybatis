@@ -26,7 +26,7 @@ function DelEmployeeDialog() {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete this
-              account and remove this person data from servers.
+              employee account and remove this employee data from servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
