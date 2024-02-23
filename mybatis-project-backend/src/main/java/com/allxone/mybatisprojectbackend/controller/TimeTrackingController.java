@@ -46,18 +46,6 @@ public class TimeTrackingController {
         }
     }
 
-    @DeleteMapping("/deleteTimeTrackingById/{id}")
-//    @PreAuthorize("hasAuthority('admin:delete')")
-    public CommonResponse<Long> deleteTimeTrackingById(@PathVariable Long id) {
-
-        try {
-            timeTrackingService.deleteTimeTrackingById(id);
-            return CommonResponse.success(id);
-        } catch (Exception e) {
-            return CommonResponse.error(null);
-        }
-    }
-
     @PutMapping("/updateTimeTracking")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
     public CommonResponse<TimeTrackingResponse> updateTimeTracking(@RequestBody TimeTrackingRequest timeTrackingRequest) {

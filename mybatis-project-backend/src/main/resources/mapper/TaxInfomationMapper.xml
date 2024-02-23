@@ -26,17 +26,21 @@
         SELECT * FROM tax_information
     </select>
 
+    <select id="getTaxInformationByEmployeeId" parameterType="Long" resultMap="taxInformationResultMap">
+        SELECT * FROM tax_information WHERE employee_id = #{id}
+    </select>
+
     <update id="updatePayroll" parameterType="Payroll">
         UPDATE payroll
         <set>
             <if test="employeeId != null">
-                employee_id = #{employeeId}
+                employee_id = #{employeeId},
             </if>
             <if test="taxRate != null">
-                tax_rate = #{taxRate}
+                tax_rate = #{taxRate},
             </if>
             <if test="bonus != null">
-                tax_exemption = #{taxExemption}
+                tax_exemption = #{taxExemption},
             </if>
             updated_at = NOW()
         </set>
