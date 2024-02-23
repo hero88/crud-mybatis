@@ -9,9 +9,9 @@
         <result property="salary" column="salary"/>
         <result property="bonus" column="bonus"/>
         <result property="deductions" column="deductions"/>
-        <result property="netSalary" column="net_salary"/>
-        <result property="periodStart" column="period_start" javaType="java.time.Instant"/>
-        <result property="periodEnd" column="period_end" javaType="java.time.Instant"/>
+        <result property="netSalary" column="net_salary" />
+        <result property="periodStart" column="period_start" javaType="java.time.LocalDate"/>
+        <result property="periodEnd" column="period_end" javaType="java.time.LocalDate"/>
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
         <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
     </resultMap>
@@ -27,6 +27,10 @@
         SELECT * FROM payroll WHERE id = #{id}
     </select>
 
+    <select id="getPayrollByEmployeeId" parameterType="Long" resultMap="payrollResultMap">
+        SELECT * FROM payroll WHERE employee_id = #{id}
+    </select>
+
     <select id="getAllPayrolls" resultMap="payrollResultMap">
         SELECT * FROM payroll
     </select>
@@ -34,33 +38,26 @@
     <update id="updatePayroll" parameterType="Payroll">
         UPDATE payroll
         <set>
-            <if test="employeeId != null">
-                employee_id = #{employeeId}
-            </if>
             <if test="salary != null">
-                salary = #{salary}
+                salary = #{salary},
             </if>
             <if test="bonus != null">
-                bonus = #{bonus}
+                bonus = #{bonus},
             </if>
             <if test="bonus != null">
-                deductions = #{deductions}
+                deductions = #{deductions},
             </if>
             <if test="netSalary != null">
-                net_salary = #{netSalary}
+                net_salary = #{netSalary},
             </if>
             <if test="periodStart != null">
-                period_start = #{periodStart}
+                period_start = #{periodStart},
             </if>
             <if test="periodEnd != null">
-                period_end = #{periodEnd}
+                period_end = #{periodEnd},
             </if>
                 updated_at = NOW()
         </set>
         WHERE id = #{id}
     </update>
-
-    <delete id="deletePayrollById" parameterType="Long">
-        DELETE FROM payroll WHERE id = #{id}
-    </delete>
 </mapper>

@@ -9,7 +9,7 @@ import java.util.List;
 public interface PayrollMapper {
     List<Payroll> getAllPayrolls();
     void updatePayroll(Payroll payroll);
-    void deletePayrollById(Long id);
     void savePayroll(Payroll payroll);
     Payroll getPayrollById(Long id);
+    Payroll getPayrollByEmployeeId(Long id);
 }

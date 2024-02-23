@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,8 +21,8 @@ public class Payroll {
     private Double bonus;
     private Double deductions;
     private Double netSalary;
-    private Instant periodStart;
-    private Instant periodEnd;
+    private LocalDate periodStart;
+    private LocalDate periodEnd;
     private Instant createdAt;
     private Instant updatedAt;
 }

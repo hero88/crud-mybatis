@@ -6,7 +6,7 @@
     <resultMap id="timeTrackingResultMap" type="com.allxone.mybatisprojectbackend.model.TimeTracking">
         <id property="id" column="id"/>
         <result property="employeeId" column="employee_id"/>
-        <result property="dateTrack" column="date_track" javaType="java.time.Instant"/>
+        <result property="dateTrack" column="date_track" javaType="java.time.LocalDate"/>
         <result property="clockIn" column="clock_in" javaType="java.time.LocalTime"/>
         <result property="clockOut" column="clock_out" javaType="java.time.LocalTime"/>
         <result property="totalHours" column="total_hours"/>
@@ -32,19 +32,19 @@
         UPDATE time_tracking
         <set>
             <if test="employeeId != null">
-                employee_id = #{employeeId}
+                employee_id = #{employeeId},
             </if>
             <if test="dateTrack != null">
-                date_track = #{dateTrack}
+                date_track = #{dateTrack},
             </if>
             <if test="clockIn != null">
-                clock_in = #{clockIn}
+                clock_in = #{clockIn},
             </if>
             <if test="clockOut != null">
-                clock_out = #{clockOut}
+                clock_out = #{clockOut},
             </if>
             <if test="totalHours != null">
-                total_hours = #{totalHours}
+                total_hours = #{totalHours},
             </if>
             updated_at = NOW()
         </set>
