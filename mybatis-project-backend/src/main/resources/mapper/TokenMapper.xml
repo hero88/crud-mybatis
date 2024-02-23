@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.TokenMapper">
+    <resultMap id="tokenResultMap" type="com.allxone.mybatisprojectbackend.model.Token">
+        <result property="id" column="id"/>
+        <result property="token" column="token"/>
+        <result property="tokenType" column="token_type"/>
+        <result property="revoked" column="revoked"/>
+        <result property="expired" column="expired"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <insert id="saveToken" parameterType="Token" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO token (TOKEN, TOKEN_TYPE, REVOKED, EXPIRED, USER_ID)
+        VALUES (#{token}, #{tokenType}, #{revoked}, #{expired}, #{userId})
+    </insert>
+
+    <update id="updateToken" parameterType="Token" useGeneratedKeys="true" keyProperty="id">
+        UPDATE token
+        SET REVOKED = #{revoked},
+            EXPIRED = #{expired},
+            WHERE ID = #{id}
+    </update>
+
+    <select id="getTokenById" parameterType="long" resultMap="tokenResultMap">
+        SELECT c.ID,
+               c.TOKEN,
+               c.TOKEN_TYPE,
+               c.REVOKED,
+               c.EXPIRED,
+               c.USER_ID
+        FROM token c
+        WHERE c.ID = #{id}
+    </select>
+
+    <select id="findByToken" parameterType="String" resultMap="tokenResultMap">
+        SELECT c.ID,
+               c.TOKEN,
+               c.TOKEN_TYPE,
+               c.REVOKED,
+               c.EXPIRED,
+               c.USER_ID
+        FROM token c
+        WHERE c.TOKEN = #{token}
+    </select>
+
+    <select id="findAllValidTokenByUser" parameterType="Long" resultMap="tokenResultMap">
+        SELECT c.ID,
+               c.TOKEN,
+               c.TOKEN_TYPE,
+               c.REVOKED,
+               c.EXPIRED,
+               c.USER_ID
+        FROM token c
+        WHERE c.USER_ID = #{userId}
+          AND expired = false
+    </select>
+
+</mapper>
