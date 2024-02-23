@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.TimeTrackingMapper">
+    <resultMap id="timeTrackingResultMap" type="com.allxone.mybatisprojectbackend.model.TimeTracking">
+        <id property="id" column="id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="dateTrack" column="date_track" javaType="java.time.LocalDate"/>
+        <result property="clockIn" column="clock_in" javaType="java.time.LocalTime"/>
+        <result property="clockOut" column="clock_out" javaType="java.time.LocalTime"/>
+        <result property="totalHours" column="total_hours"/>
+        <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
+        <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
+    </resultMap>
+
+    <insert id="saveTimeTracking" parameterType="TimeTracking" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO time_tracking (id, employee_id, date_track, clock_in, clock_out, total_hours, created_at, updated_at)
+        VALUES (#{id}, #{employeeId}, #{dateTrack}, #{clockIn}, #{clockOut}, #{totalHours}, NOW(), NOW())
+    </insert>
+
+    <select id="getTimeTrackingById" parameterType="Long" resultMap="timeTrackingResultMap">
+        SELECT * FROM time_tracking WHERE id = #{id}
+    </select>
+
+    <select id="getAllTimeTracking" resultMap="timeTrackingResultMap">
+        SELECT * FROM time_tracking
+    </select>
+
+    <update id="updateTimeTracking" parameterType="TimeTracking">
+        UPDATE time_tracking
+        <set>
+            <if test="employeeId != null">
+                employee_id = #{employeeId},
+            </if>
+            <if test="dateTrack != null">
+                date_track = #{dateTrack},
+            </if>
+            <if test="clockIn != null">
+                clock_in = #{clockIn},
+            </if>
+            <if test="clockOut != null">
+                clock_out = #{clockOut},
+            </if>
+            <if test="totalHours != null">
+                total_hours = #{totalHours},
+            </if>
+            updated_at = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteTimeTrackingById" parameterType="Long">
+        DELETE FROM time_tracking WHERE id = #{id}
+    </delete>
+</mapper>
