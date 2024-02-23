@@ -5,9 +5,9 @@
 <generatorConfiguration>
   <context id="DB2Tables" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-        connectionURL="jdbc:mysql://localhost:3306/crud_crypto"
-        userId="java-gr2"
-        password="123">
+        connectionURL="jdbc:mysql://localhost:3306/coinmaster"
+        userId="root"
+        password="123456">
     </jdbcConnection>
 
     <javaTypeResolver >
@@ -24,16 +24,19 @@
     <javaClientGenerator type="XMLMAPPER" targetPackage="com.allxone.coinmarket.mapper"  targetProject="mybatis-spring-boot-coinmarket"/>
      
 
-    <table tableName="users" domainObjectName="Users">
+    <table tableName="department" domainObjectName="Departments">
+      
+    </table>	
+    <table tableName="employees" domainObjectName="Employees">
       
     </table>
-    <table tableName="roles" domainObjectName="Roles">
-      
-    </table>
-    <table tableName="user_role" domainObjectName="UserRole">
+    <table tableName="payroll" domainObjectName="Payroll">
       
     </table>   
-    <table tableName="coins" domainObjectName="Coins" >
+    <table tableName="tax_information" domainObjectName="TaxInformation" >
+      
+    </table>
+      <table tableName="time_tracking" domainObjectName="TimeTracking" >
       
     </table>
 
