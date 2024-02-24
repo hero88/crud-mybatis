@@ -1,13 +1,12 @@
 package com.allxone.coinmarket.mapper;
 
+import com.allxone.coinmarket.dto.response.EmployeeDTO;
 import com.allxone.coinmarket.model.Employees;
 import com.allxone.coinmarket.model.EmployeesExample;
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
-
 @Mapper
 public interface EmployeesMapper {
     /**
@@ -98,6 +97,5 @@ public interface EmployeesMapper {
      * @mbg.generated Thu Feb 22 09:13:49 ICT 2024
      */
     int updateByPrimaryKey(Employees row);
-    
     List<Employees> getEmployees(@Param("offset")int page,@Param("limit")int size);
 }
