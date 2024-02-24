@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.allxone.coinmarket.dto.response.EmployeeDTO;
 import org.apache.catalina.mbeans.MBeanUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,6 +178,9 @@ public class EmployeesServiceImpl implements EmployeesService {
 			DepartmentsExample departmentsExample = new DepartmentsExample();
 			return departmentsMapper.selectByExample(departmentsExample);
 		}
-	 
-	
+
+	@Override
+	public List<EmployeeDTO> findAllEmployeeNotTermination() {
+		return employeesMapper.findAllEmployeeNotTermination();
+	}
 }

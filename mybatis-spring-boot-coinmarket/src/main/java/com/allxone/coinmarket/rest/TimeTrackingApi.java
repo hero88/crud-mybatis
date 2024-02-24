@@ -4,10 +4,8 @@ import com.allxone.coinmarket.dto.response.ApiResponse;
 import com.allxone.coinmarket.dto.response.EmployeeDTO;
 import com.allxone.coinmarket.dto.response.TimeTrackingDTO;
 import com.allxone.coinmarket.dto.response.WorkingTimeDTO;
-import com.allxone.coinmarket.mapper.EmployeesMapper;
-import com.allxone.coinmarket.model.Employees;
-import com.allxone.coinmarket.model.EmployeesExample;
 import com.allxone.coinmarket.model.TimeTracking;
+import com.allxone.coinmarket.service.EmployeesService;
 import com.allxone.coinmarket.service.TimeTrackingService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,7 +26,7 @@ public class TimeTrackingApi {
 
     private final ModelMapper mapDTO;
 
-    private final EmployeesMapper employeesMapper;
+    private final EmployeesService employeesService;
 
     @PostMapping("")
     public ResponseEntity<?> createTimeTracking(@RequestBody TimeTracking tracking) {
@@ -119,7 +117,7 @@ public class TimeTrackingApi {
 
     @GetMapping("/list-employee")
     public ResponseEntity<?> getListEmployee() {
-        List<EmployeeDTO> list = employeesMapper.findAllEmployeeNotTermination();
+        List<EmployeeDTO> list = employeesService.findAllEmployeeNotTermination();
         if (list != null) {
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
                     .message("successful")
