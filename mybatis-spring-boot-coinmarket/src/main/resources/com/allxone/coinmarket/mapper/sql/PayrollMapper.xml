@@ -365,7 +365,7 @@
   </update>
 
   <select id="sumSalaryByMonth" parameterType="com.allxone.coinmarket.model.PayrollExample" resultType="java.math.BigDecimal">
-    select  sum(bonus + net_salary) from payroll
+    select sum(coalesce(bonus, 0) + coalesce(net_salary, 0)) from payroll
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
