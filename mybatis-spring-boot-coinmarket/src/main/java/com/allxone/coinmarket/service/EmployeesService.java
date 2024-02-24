@@ -3,6 +3,7 @@ package com.allxone.coinmarket.service;
 import java.util.List;
 
 import com.allxone.coinmarket.dto.EmployeesDto;
+import com.allxone.coinmarket.dto.response.EmployeeDTO;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
 import com.allxone.coinmarket.model.Departments;
 
@@ -19,4 +20,6 @@ public interface EmployeesService {
 	void addToEmployee(EmployeesDto employeesDto) throws ParamInvalidException;
 
 	List<Departments> getAllDepartments();
+
+	List<EmployeeDTO> findAllEmployeeNotTermination();
 }

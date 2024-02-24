@@ -98,4 +98,6 @@ public interface EmployeesMapper {
      */
     int updateByPrimaryKey(Employees row);
     List<Employees> getEmployees(@Param("offset")int page,@Param("limit")int size);
+
+    List<EmployeeDTO> findAllEmployeeNotTermination();
 }
