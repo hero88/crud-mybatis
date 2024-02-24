@@ -7,10 +7,25 @@
     <title>Company</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <style>
+        .col-md-3 .btn-dark {
+            opacity: 0;
+            /* Ẩn nút ban đầu */
+            transition: opacity 0.8s ease;
+            /* Thêm hiệu ứng transition */
+        }
+
+        /* Hiển thị nút khi rê chuột vào phần tử .col-md-3 */
+        .col-md-3:hover .btn-dark {
+            opacity: 1;
+            /* Hiển thị nút khi hover */
+        }
+    </style>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-xxl">
+<body style="background-color: #EFF2F5;">
+    <nav class="navbar navbar-expand-xxl" style="background-color: #FFFF;">
         <div class="container-fluid">
             <svg width="168" height="29" fill="var(--text-color)" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 168 29" class="cmc-logo-img" style="margin-top:-3px">
@@ -100,105 +115,81 @@
         </button>
     </div>
     <div class="container-fluid">
-        <div class="container">
-            <div class="row row-cols-3 p-3">
-                <div class="col p-2">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src="../../img/employee.png" alt="employee" class="img-fluid border-dark rounded">
-                        </div>
-                        <div class="col-md-8">
-                            <div>
-                                <p>
-                                    Welcome to XYZ Company! With a team of <span>100</span> employees, we are ready to
-                                    serve and accompany you on every financial journey.
-                                </p>
-                            </div>
-                            <div class="footer">
-                                <a href="#">View detail</a>
-                            </div>
-                        </div>
+        <div class="row justify-content-center p-2">
+            <div class="col-md-3 border-dark rounded p-2 m-2" style="background-color: #CC99FF;">
+                <!-- <img src="../../img/slide2.png" alt="" class="img-fluid border border-dark rounded"> -->
+                <div class="row">
+                    <div class="row p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                            class="bi bi-people" viewBox="0 0 16 16">
+                            <path
+                                d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+                        </svg>
                     </div>
-                </div>
-                <div class="col p-2">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src="../../img/capital.png" alt="capital" class="img-fluid border-dark rounded">
-                        </div>
-                        <div class="col-md-8">
-                            <div>
-                                <p>
-                                    We are currently holding a significant amount of USD, totaling approximately
-                                    <span>1.000.000</span> USD. This creates a solid financial resource to support and
-                                    develop our
-                                    business activities.
-                                </p>
-                            </div>
-                            <div class="footer">
-                                <a href="#">View detail</a>
-                            </div>
-                        </div>
+                    <div class="row justify-content-center text-center">
+                        <span class="fw-bold">Total number of employees</span>
                     </div>
-                </div>
-                <div class="col p-2">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src="../../img/salary.png" alt="employee" class="img-fluid border-dark rounded">
-                        </div>
-                        <div class="col-md-8">
-                            <div>
-                                <p>
-                                    At XYZ Company, we ensure fair treatment and recognition for all employees through
-                                    our competitive monthly salary policy. Our current monthly salary total is
-                                    <span>100.000</span> USD.
-                                </p>
-                            </div>
-                            <div class="footer">
-                                <a href="#">View detail</a>
-                            </div>
+                    <div class="row justify-content-center text-center">
+                        <span class="fw-bold" id="employees">1.000</span>
+                    </div>
+                    <div class="row justify-content-center p-3">
+                        <div class="col-md-auto text-center">
+                            <a type="button" class="btn btn-dark">Detail</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="row d-flex justify-content-center p-2">
-                <p class="fw-bold align-items-center text-center">Về chúng tôi</p>
+            <div class="col-md-3 border-dark rounded p-2 m-2" style="background-color: #00CC99;">
+                <div class="row">
+                    <div class="row p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                            class="bi bi-cash-coin" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0" />
+                            <path
+                                d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195z" />
+                            <path
+                                d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z" />
+                            <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567" />
+                        </svg>
+                    </div>
+                    <div class="row justify-content-center text-center">
+                        <span class="fw-bold">Total USD Holding</span>
+                    </div>
+                    <div class="row justify-content-center text-center">
+                        <span class="fw-bold" id="holding">1.000.000 USD</span>
+                    </div>
+                    <div class="row justify-content-center p-3">
+                        <div class="col-md-auto text-center">
+                            <a type="button" class="btn btn-dark">Detail</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row p-2">
-                <div class="col-md-4 p-3">
-                    <img src="../../img/slide2.png" alt="" class="img-fluid border border-dark rounded">
-                </div>
-                <div class="col-md-8 p-3">
-                    <p class="fw-bold">
-                        Chào mừng bạn đến với công ty tiền điện tử XYZ! Chúng tôi là một tổ chức tiên phong trong lĩnh
-                        vực công nghệ tài chính, tập trung vào việc phát triển và cung cấp các giải pháp tiền điện tử
-                        hiệu quả và tiên tiến nhất. Với cam kết về sự đổi mới và sự tiện ích, chúng tôi đặt mục tiêu là
-                        giúp người dùng trên khắp thế giới tiếp cận dễ dàng hơn với thế giới tài chính kỹ thuật số. Hiện
-                        tại, chúng tôi có tổng cộng <span> 100</span> nhân viên, đồng lòng làm việc để đem đến những
-                        giải
-                        pháp tốt nhất cho khách hàng của chúng tôi.
-                    </p>
-                </div>
-            </div>
-            <div class="row p-2">
-                <div class="col-md-8">
-
-                </div>
-                <div class="col-md-4">
-                    <img src="../../img/slide2.png" alt="" class="img-fluid border border-dark rounded"
-                        style="font-family: 'Roboto', sans-serif;">
+            <div class="col-md-3 border-dark rounded p-2 m-2" style="background-color: #FFFF;">
+                <div class="row">
+                    <div class="row p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                            class="bi bi-currency-exchange" viewBox="0 0 16 16">
+                            <path
+                                d="M0 5a5 5 0 0 0 4.027 4.905 6.5 6.5 0 0 1 .544-2.073C3.695 7.536 3.132 6.864 3 5.91h-.5v-.426h.466V5.05q-.001-.07.004-.135H2.5v-.427h.511C3.236 3.24 4.213 2.5 5.681 2.5c.316 0 .59.031.819.085v.733a3.5 3.5 0 0 0-.815-.082c-.919 0-1.538.466-1.734 1.252h1.917v.427h-1.98q-.004.07-.003.147v.422h1.983v.427H3.93c.118.602.468 1.03 1.005 1.229a6.5 6.5 0 0 1 4.97-3.113A5.002 5.002 0 0 0 0 5m16 5.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0m-7.75 1.322c.069.835.746 1.485 1.964 1.562V14h.54v-.62c1.259-.086 1.996-.74 1.996-1.69 0-.865-.563-1.31-1.57-1.54l-.426-.1V8.374c.54.06.884.347.966.745h.948c-.07-.804-.779-1.433-1.914-1.502V7h-.54v.629c-1.076.103-1.808.732-1.808 1.622 0 .787.544 1.288 1.45 1.493l.358.085v1.78c-.554-.08-.92-.376-1.003-.787zm1.96-1.895c-.532-.12-.82-.364-.82-.732 0-.41.311-.719.824-.809v1.54h-.005zm.622 1.044c.645.145.943.38.943.796 0 .474-.37.8-1.02.86v-1.674z" />
+                        </svg>
+                    </div>
+                    <div class="row justify-content-center text-center">
+                        <span class="fw-bold">Total payroll this month</span>
+                    </div>
+                    <div class="row justify-content-center text-center">
+                        <span class="fw-bold" id="payroll">1.000.000 USD</span>
+                    </div>
+                    <div class="row justify-content-center p-3">
+                        <div class="col-md-auto text-center">
+                            <a type="button" class="btn btn-dark">Detail</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row p-2">
-                <div class="col-md-4">
-                    <img src="../../img/slide2.png" alt="" class="img-fluid border border-dark rounded">
-                </div>
-                <div class="col-md-8">
-                    <p class="fw-bold">
-                        dgfn
-                    </p>
-                </div>
-            </div> -->
         </div>
+    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -208,6 +199,7 @@
         import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
         const apiProfile = baseURL + 'v1/user/own';
+        const apiData = baseURL + 'v1/company';
 
         // hiển thị menu và nut login
         document.addEventListener("DOMContentLoaded", function () {
@@ -277,6 +269,43 @@
         if (getCookie('token') != null) {
             profile(apiProfile);
         }
+
+        // call data hiển thị lên trang company
+
+        function getDataCompany(api) {
+            var employees = document.getElementById('employees');
+            var holding = document.getElementById('holding');
+            var payroll = document.getElementById('payroll');
+            var authToken = getCookie('token');
+            const requestConfig = {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                }
+            };
+            axios.get(api, requestConfig)
+                .then(response => {
+                    if (response.status !== 200) {
+                        throw new Error(`Error: ${response.status}`);
+                    }
+                    return response.data;
+                })
+                .then(data => {
+                    console.log(data);
+                    const totalHoldings = formatNumber(data.data.totalHoldings);
+                    const totalPayroll = formatNumber(data.data.totalPayroll);
+                    employees.textContent = data.data.totalEmployees;
+                    holding.textContent = totalHoldings + ' USD';
+                    payroll.textContent = totalPayroll + ' USD';
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+        // Hàm định dạng số
+        function formatNumber(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        getDataCompany(apiData);
     </script>
 </body>
 

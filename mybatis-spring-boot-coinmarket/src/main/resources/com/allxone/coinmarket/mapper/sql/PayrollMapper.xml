@@ -363,4 +363,11 @@
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="sumSalaryByMonth" parameterType="com.allxone.coinmarket.model.PayrollExample" resultType="java.math.BigDecimal">
+    select  sum(bonus + net_salary) from payroll
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>
