@@ -40,7 +40,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeResponse saveEmployee(EmployeeRequest employeeRequest) {
         Employee Employee = EmployeeConvert.toEmployee(employeeRequest);
-        employeeMapper.saveEmployee(Employee);
+        try {
+
+            employeeMapper.saveEmployee(Employee);
+        }catch (Exception e){
+            System.out.println(e);
+        }
         return getEmployeeById(Employee.getId());
     }
 
