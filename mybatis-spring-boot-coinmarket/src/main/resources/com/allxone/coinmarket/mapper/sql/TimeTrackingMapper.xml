@@ -226,6 +226,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - @mbg.generated
@@ -341,5 +342,11 @@
              where employee_id = #{employee_id,jdbcType=BIGINT}
                   and  month(date_track) = #{month,jdbcType=INTEGER}
                   and year(date_track) = year(current_date())
+   </select>
+  <select id="findAllWorkingTimeEmployee" resultType="com.allxone.coinmarket.dto.response.WorkingTimeDTO">
+    select * from time_tracking ttr
+    join employees e on ttr.employee_id = e.id
+    where ttr.date_track= #{date}
+    order by ttr.clock_out desc limit #{limit}
   </select>
 </mapper>

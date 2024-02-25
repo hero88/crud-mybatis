@@ -1,14 +1,15 @@
 package com.allxone.coinmarket.mapper;
 
-import com.allxone.coinmarket.model.TimeTracking;
-import com.allxone.coinmarket.model.TimeTrackingExample;
-
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.allxone.coinmarket.dto.response.WorkingTimeDTO;
+import com.allxone.coinmarket.model.TimeTracking;
+import com.allxone.coinmarket.model.TimeTrackingExample;
 @Mapper
 public interface TimeTrackingMapper {
     /**
@@ -102,4 +103,5 @@ public interface TimeTrackingMapper {
     BigDecimal sumTotalHours(@Param("employee_id") Long employee_id);
 
     List<TimeTracking> getEmployeeIdWorkingTime(@Param("employee_id") Long id, @Param("month") int month);
+    List<WorkingTimeDTO> findAllWorkingTimeEmployee(@Param("date") Date date,@Param("limit") Integer limit);
 }

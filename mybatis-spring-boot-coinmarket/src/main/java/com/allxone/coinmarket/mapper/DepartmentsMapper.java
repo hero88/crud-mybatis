@@ -1,10 +1,14 @@
 package com.allxone.coinmarket.mapper;
 
-import com.allxone.coinmarket.model.Departments;
-import com.allxone.coinmarket.model.DepartmentsExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.allxone.coinmarket.model.Departments;
+import com.allxone.coinmarket.model.DepartmentsExample;
+
+@Mapper
 public interface DepartmentsMapper {
 
 	/**
