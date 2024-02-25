@@ -1,3 +1,4 @@
+import format from "date-fns/format";
 import {
   Table,
   TableBody,
@@ -8,15 +9,38 @@ import {
 } from "@/components/ui/table";
 import DelEmployeeDialog from "@/sections/EmployeesPage/DelEmployeeDialog";
 import UpdateEmployeeDialog from "@/sections/EmployeesPage/UpdateEmployeeDialog";
-
-const marketCoinList = [];
+import { doGetAllEmployees } from "@/services/EmployeeAPI";
+import { useEffect, useState } from "react";
+import AddNewEmployeeDialog from "@/sections/EmployeesPage/AddEmployeeDialog";
 
 function Employees() {
+  const [employees, setEmployees] = useState([]);
+  const [departments, setDepartments] = useState([]);
+
+  const handleGetEmployeesData = async () => {
+    const { data: response } = await doGetAllEmployees();
+    console.log(response.data);
+    setEmployees(response.data);
+  };
+
+  // const handleGetDepartmentData  = async () => {
+  //   const {data: response};
+
+  // }
+
+  useEffect(() => {
+    handleGetEmployeesData();
+  }, []);
+
   return (
-    <div className="px-28 py-4">
+    <div className="px-28 py-4 flex flex-col">
       <h2 className="text-3xl font-semibold text-gray-900 mt-8">Employees</h2>
 
-      <div className="mt-8 border rounded-md">
+      <div className="flex justify-end mt-8">
+        <AddNewEmployeeDialog loadEmployeesData={handleGetEmployeesData} />
+      </div>
+
+      <div className="mt-3 border rounded-md">
         <Table>
           <TableHeader>
             <TableRow>
@@ -43,6 +67,9 @@ function Employees() {
                 Position
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
+                Department
+              </TableHead>
+              <TableHead className="text-black text-[12px] font-bold">
                 Hire date
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
@@ -52,67 +79,60 @@ function Employees() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* {marketCoinList?.map((item, index) => (
+            {employees?.map((employee, index) => (
               <TableRow key={index}>
                 <TableCell className="font-semibold"></TableCell>
                 <TableCell className="text-gray-500 font-semibold">
-                  {index + 1}
+                  {employee.id}
                 </TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="font-semibold text-end"></TableCell>
-                <TableCell className="flex items-center space-x-1">
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button className="w-12 h-12">
-                        <Trash width={20} height={20} />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete this account and remove this person data from
-                          servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDeleteUser(user.id)}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </TableCell>{" "}
+                <TableCell className="font-semibold">
+                  {employee.firstname}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.lastname}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.birthday
+                    ? format(new Date(employee.birthday * 1000), "dd-MM-yyyy")
+                    : "Not set yet"}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.gender || "Male"}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.contactNumber || ""}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.position || ""}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.departmentId || ""}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.hireDate
+                    ? format(new Date(employee.hireDate * 1000), "dd-MM-yyyy")
+                    : "Not set yet"}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {employee.terminationDate
+                    ? format(
+                        new Date(employee.terminationDate * 1000),
+                        "dd-MM-yyyy"
+                      )
+                    : "Not set yet"}
+                </TableCell>
+                <TableCell className="flex items-center space-x-4 justify-center">
+                  <UpdateEmployeeDialog
+                    employee={employee}
+                    loadEmployeesData={handleGetEmployeesData}
+                  />
+                  <DelEmployeeDialog
+                    employee={employee}
+                    loadEmployeesData={handleGetEmployeesData}
+                  />
+                </TableCell>
               </TableRow>
-            ))} */}
-            <TableRow>
-              <TableCell className="font-semibold"></TableCell>
-              <TableCell className="text-gray-500 font-semibold">1</TableCell>
-              <TableCell className="font-semibold">Kenny</TableCell>
-              <TableCell className="font-semibold">Will</TableCell>
-              <TableCell className="font-semibold">22-1-2002</TableCell>
-              <TableCell className="font-semibold">Male</TableCell>
-              <TableCell className="font-semibold">0339991443</TableCell>
-              <TableCell className="font-semibold">Designer</TableCell>
-              <TableCell className="font-semibold">06-04-2017</TableCell>
-              <TableCell className="font-semibold">06-04-2024</TableCell>
-              <TableCell className="flex items-center space-x-4 justify-center">
-                <UpdateEmployeeDialog />
-                <DelEmployeeDialog />
-              </TableCell>
-            </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

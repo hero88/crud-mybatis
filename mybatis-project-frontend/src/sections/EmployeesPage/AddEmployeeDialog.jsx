@@ -18,15 +18,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Pencil } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 import { Description } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { doUpdateEmployee } from "@/services/EmployeeAPI";
+import { doAddNewEmployee } from "@/services/EmployeeAPI";
 
-function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
+function AddNewEmployeeDialog({ loadEmployeesData }) {
   const { toast } = useToast();
 
   const [currentEmployee, setCurrentEmployee] = useState({
@@ -35,7 +35,8 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
     gender: "",
     contactNumber: "",
     position: "",
-    // departmentId: 1,
+    departmentId: 1,
+    userId: "",
   });
 
   const [validateError, setValidateError] = useState(["basic"]);
@@ -47,18 +48,12 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
   const {
     firstname,
     lastname,
-    birthday,
     gender,
     contactNumber,
     position,
-    hireDate,
-    terminationDate,
-    // departmentId,
+    departmentId,
+    userId,
   } = currentEmployee;
-
-  useEffect(() => {
-    setCurrentEmployee(employee);
-  }, []);
 
   const handleChangeField = (e) => {
     setCurrentEmployee({ ...currentEmployee, [e.target.name]: e.target.value });
@@ -68,14 +63,20 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
     setCurrentEmployee({ ...currentEmployee, gender: e });
   };
 
-  const handleSubmitUpdate = async () => {
+  const handleSubmitCreate = async () => {
     if (firstname === "" || lastname === "") {
-      if (firstname === "" && lastname === "") {
+      if (firstname === "" && lastname === "" && userId === "") {
+        setValidateError([...validateError, "firstname", "lastname", "userid"]);
+      } else if (firstname === "" && lastname == "") {
         setValidateError([...validateError, "firstname", "lastname"]);
+      } else if (lastname === "" && userId === "") {
+        setValidateError([...validateError, "lastname", "userid"]);
       } else if (firstname === "") {
         setValidateError([...validateError, "firstname"]);
-      } else {
+      } else if (lastname === "") {
         setValidateError([...validateError, "lastname"]);
+      } else {
+        setValidateError([...validateError, "userid"]);
       }
     } else {
       setValidateError(["basic"]);
@@ -96,8 +97,9 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
         terminationDate: formattedTerminationDate,
       };
 
-      const { data: response } = await doUpdateEmployee(newEmployee);
+      const { data: response } = await doAddNewEmployee(newEmployee);
 
+      console.log(newEmployee);
       console.log(response);
 
       if (response.code === 200) {
@@ -105,15 +107,15 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
         loadEmployeesData();
 
         toast({
-          title: "Update employee successfully!",
-          description: "Employee info has been changed.",
+          title: "Add employee successfully!",
+          description: "Employee list has been changed.",
           action: <ToastAction altText="Nice">Nice</ToastAction>,
         });
       } else {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: "There was a problem with updating.",
+          description: "There was a problem with creating info.",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
       }
@@ -124,24 +126,16 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="w-5 h-5 p-0 bg-transparent hover:bg-transparent">
-            <Pencil
-              width={17}
-              height={17}
-              className="text-blue-500"
-              onClick={() => setValidateError(["basic"])}
-            />
-          </Button>
+          <Button className="">Add new employee</Button>
         </DialogTrigger>
         {validateError.length > 0 && (
-          <DialogContent className="sm:max-w-[560px]">
+          <DialogContent className="sm:max-w-[580px]">
             <AlertDialogHeader>
-              <DialogTitle className="text-blue-500">
-                Update employee infomation
+              <DialogTitle className="text-green-500">
+                Add new employee
               </DialogTitle>
               <DialogDescription>
-                Make changes to your employee info here. Click save when
-                you&apos;re done.
+                Add new employee info here. Click save when you&apos;re done.
               </DialogDescription>
             </AlertDialogHeader>
             <div className="grid gap-4 py-4">
@@ -183,6 +177,25 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
                   )}
                 </div>
               </div>
+              {/* User Id */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="userId" className="text-right">
+                  User Id
+                </Label>
+                <div className="col-span-3">
+                  <Input
+                    name="userId"
+                    id="userId"
+                    value={userId}
+                    onChange={(e) => handleChangeField(e)}
+                  />
+                  {validateError.includes("userid") && (
+                    <Description className="text-red-500 font-semibold text-[12px]">
+                      Do not let user id empty
+                    </Description>
+                  )}
+                </div>
+              </div>
               {/* Birthday */}
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="birthday" className="text-right">
@@ -199,11 +212,7 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
                             "text-muted-foreground text-black"
                         )}
                       >
-                        {selectedBirthday && !birthday ? (
-                          format(selectedBirthday, "PPP")
-                        ) : !selectedBirthday && birthday ? (
-                          format(birthday * 1000, "PPP")
-                        ) : selectedBirthday && birthday ? (
+                        {selectedBirthday ? (
                           format(selectedBirthday, "PPP")
                         ) : (
                           <span>Pick a date</span>
@@ -276,6 +285,20 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
                   />
                 </div>
               </div>
+              {/* Department */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="position" className="text-right">
+                  Department Id
+                </Label>
+                <div className="col-span-3">
+                  <Input
+                    name="departmentId"
+                    id="position"
+                    value={departmentId || ""}
+                    onChange={(e) => handleChangeField(e)}
+                  />
+                </div>
+              </div>
               {/* Hire date */}
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="hire-date" className="text-right">
@@ -292,11 +315,7 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
                             "text-muted-foreground text-black"
                         )}
                       >
-                        {selectedHireDate && !hireDate ? (
-                          format(selectedHireDate, "PPP")
-                        ) : !selectedHireDate && hireDate ? (
-                          format(hireDate * 1000, "PPP")
-                        ) : selectedHireDate && hireDate ? (
+                        {selectedHireDate ? (
                           format(selectedHireDate, "PPP")
                         ) : (
                           <span>Pick a date</span>
@@ -334,11 +353,7 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
                             "text-muted-foreground text-black"
                         )}
                       >
-                        {selectedTerminationDate && !terminationDate ? (
-                          format(selectedTerminationDate, "PPP")
-                        ) : !selectedTerminationDate && terminationDate ? (
-                          format(terminationDate * 1000, "PPP")
-                        ) : selectedTerminationDate && terminationDate ? (
+                        {selectedTerminationDate ? (
                           format(selectedTerminationDate, "PPP")
                         ) : (
                           <span>Pick a date</span>
@@ -362,8 +377,8 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={handleSubmitUpdate}>
-                Save changes
+              <Button type="submit" onClick={handleSubmitCreate}>
+                Create
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -373,4 +388,4 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
   );
 }
 
-export default UpdateEmployeeDialog;
+export default AddNewEmployeeDialog;

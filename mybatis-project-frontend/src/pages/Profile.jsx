@@ -36,8 +36,6 @@ function Profile() {
     confirmationPassword: "",
   });
 
-  // const { name, email, phoneNumber, age, gender, address } = user;
-
   const { currentPassword, newPassword, confirmationPassword } = passwordForm;
 
   useEffect(() => {
