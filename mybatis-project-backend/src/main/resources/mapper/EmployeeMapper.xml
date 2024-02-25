@@ -21,9 +21,9 @@
 
     <insert id="saveEmployee" parameterType="Employee" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO employee (id, user_id, firstname, lastname, birthday, gender, contact_number, email, department_id,
+        INSERT INTO employee (user_id, first_name, last_name, birthday, gender, contact_number, email, department_id,
                               position, hire_date, termination_date, created_at, updated_at)
-        VALUES (#{id}, #{userId}, #{firstname}, #{lastname}, #{birthday}, #{gender}, #{contactNumber}, #{email},
+        VALUES (#{userId}, #{firstname}, #{lastname}, #{birthday}, #{gender}, #{contactNumber}, #{email},
                 #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, NOW(), NOW())
     </insert>
 
