@@ -1,12 +1,11 @@
 package com.allxone.mybatisprojectbackend.controller;
 
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
-import com.allxone.mybatisprojectbackend.dto.request.TimeTrackingRequest;
+import com.allxone.mybatisprojectbackend.dto.request.DepartmentRequest;
+import com.allxone.mybatisprojectbackend.dto.response.CoinResponse;
 import com.allxone.mybatisprojectbackend.dto.response.DepartmentResponse;
-import com.allxone.mybatisprojectbackend.dto.response.TimeTrackingResponse;
-import com.allxone.mybatisprojectbackend.service.TimeTrackingService;
+import com.allxone.mybatisprojectbackend.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,51 +17,51 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/timeTracking")
+@RequestMapping("/api/Department")
 @RequiredArgsConstructor
 //@PreAuthorize("hasAnyRole('ADMIN','USER')")
-public class TimeTrackingController {
+public class DepartmentController {
 
-    private final TimeTrackingService timeTrackingService;
+    private final DepartmentService departmentService;
 
-    @GetMapping("/getAllTimeTracking")
-    public CommonResponse<List<TimeTrackingResponse>> getAllTimeTracking() {
+    @GetMapping("/getAllDepartment")
+    public CommonResponse<List<DepartmentResponse>> getAllDepartment() {
         try {
-            List<TimeTrackingResponse> data = timeTrackingService.getAllTimeTracking();
+            List<DepartmentResponse> data = departmentService.getAllDepartment();
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PostMapping("/saveTimeTracking")
+    @PostMapping("/saveDepartment")
 //    @PreAuthorize("hasAuthority('admin:create')")
-    public CommonResponse<TimeTrackingResponse> saveTimeTracking(@RequestBody TimeTrackingRequest timeTrackingRequest) {
+    public CommonResponse<DepartmentResponse> saveDepartment(@RequestBody DepartmentRequest departmentRequest) {
 
         try {
-            TimeTrackingResponse data = timeTrackingService.saveTimeTracking(timeTrackingRequest);
+            DepartmentResponse data = departmentService.saveDepartment(departmentRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @GetMapping("/getTimeTrackingById/{id}")
-    public CommonResponse<TimeTrackingResponse> getTimeTrackingById(@PathVariable Long id) {
+    @GetMapping("/getDepartmentById/{id}")
+    public CommonResponse<DepartmentResponse> getDepartmentById(@PathVariable Integer id) {
         try {
-            TimeTrackingResponse data = timeTrackingService.getTimeTrackingById(id);
+            DepartmentResponse data = departmentService.getDepartmentById(id);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PutMapping("/updateTimeTracking")
+    @PutMapping("/updateDepartment")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
-    public CommonResponse<TimeTrackingResponse> updateTimeTracking(@RequestBody TimeTrackingRequest timeTrackingRequest) {
+    public CommonResponse<DepartmentResponse> updateDepartment(@RequestBody DepartmentRequest departmentRequest) {
 
         try {
-            TimeTrackingResponse data = timeTrackingService.updateTimeTracking(timeTrackingRequest);
+            DepartmentResponse data = departmentService.updateDepartment(departmentRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             System.out.println(e);
