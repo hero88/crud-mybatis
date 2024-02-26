@@ -25,6 +25,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { doAddNewEmployee } from "@/services/EmployeeAPI";
+import { doAddNewPayroll } from "@/services/PayrollAPI";
 
 function AddNewEmployeeDialog({ loadEmployeesData }) {
   const { toast } = useToast();
@@ -103,6 +104,23 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
       console.log(response);
 
       if (response.code === 200) {
+        const employeeData = response.data;
+
+        let newPayroll = {
+          employeeId: employeeData.id,
+          salary: 0,
+          bonus: 0,
+          deduction: 0,
+          netSalary: 0,
+          periodStart: null,
+          periodEnd: null,
+        };
+
+        const { data: payrollResponse } = await doAddNewPayroll(newPayroll);
+
+        console.log(newPayroll);
+        console.log(payrollResponse);
+
         setValidateError([]);
         loadEmployeesData();
 

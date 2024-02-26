@@ -44,7 +44,7 @@ function Payroll() {
                 Bonus
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
-                Destruction
+                Deduction
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
                 Net Salary
@@ -88,10 +88,7 @@ function Payroll() {
                     ? format(new Date(payroll.periodEnd), "dd-MM-yyyy")
                     : "Not set yet"}
                 </TableCell>
-                <TableCell className="flex items-center space-x-4 justify-center">
-                  <UpdatePayrollDialog />
-                  <DeletePayrollDialog />
-                </TableCell>
+                <TableCell className="flex items-center space-x-4 justify-center"></TableCell>
               </TableRow>
             ))}
           </TableBody>
