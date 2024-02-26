@@ -60,10 +60,10 @@ public class EmployeesRestApi {
 	}
 	
 	@GetMapping()
-	public ResponseEntity<?> findAll(@RequestParam(name = "page",defaultValue = "0") int page
-			,@RequestParam(name = "size",defaultValue = "10") int size){
-		
-		return ResponseEntity.ok(employeesService.findAll(page, size));
+	public ResponseEntity<?> findAll(@RequestParam(name = "page",defaultValue = "1")int page
+			,@RequestParam(name = "size",defaultValue = "5") int size){
+		   int offset = (page - 1) * size;
+		return ResponseEntity.ok(employeesService.findAll(offset, size));
 	}
 	
 	@GetMapping("get-departments")

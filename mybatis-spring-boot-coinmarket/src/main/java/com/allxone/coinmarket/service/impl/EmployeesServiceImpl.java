@@ -1,10 +1,13 @@
 package com.allxone.coinmarket.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import com.allxone.coinmarket.dto.response.EmployeeDTO;
+import com.allxone.coinmarket.dto.response.PageResult;
+
 import org.apache.catalina.mbeans.MBeanUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,12 +144,20 @@ public class EmployeesServiceImpl implements EmployeesService {
 	}
 	 
 	 @Override
-	public List<EmployeesDto> findAll(int page,int size) {
+	public PageResult<EmployeesDto> findAll(int page,int size) {
 		 
-		 return employeesMapper.getEmployees(page, size)
+		 List<EmployeesDto> employeesDtoList = employeesMapper.getEmployees(page, size)
 				    .stream()
 				    .map(item -> convertToEmployeesDto(item))
 				    .toList();
+		 
+		 EmployeesExample employeesExample = new EmployeesExample();
+		 
+		 int totalEmployees = employeesMapper.selectByExample(employeesExample).size();
+		  int totalPages = (int) Math.ceil((double) totalEmployees / size);
+		  
+		  return new PageResult(employeesDtoList, totalPages);
+
 	 }
 
 	 

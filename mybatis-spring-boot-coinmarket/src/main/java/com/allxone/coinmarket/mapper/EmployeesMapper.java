@@ -97,7 +97,7 @@ public interface EmployeesMapper {
      * @mbg.generated Thu Feb 22 09:13:49 ICT 2024
      */
     int updateByPrimaryKey(Employees row);
-    List<Employees> getEmployees(@Param("offset")int page,@Param("limit")int size);
+    List<Employees> getEmployees(@Param("offset")int page,@Param("size")int size);
 
     List<EmployeeDTO> findAllEmployeeNotTermination();
 }
