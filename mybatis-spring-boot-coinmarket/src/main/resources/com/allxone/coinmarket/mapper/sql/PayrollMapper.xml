@@ -364,6 +364,26 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="getAllPayrolls" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT * FROM coinmaster.payroll where  month(period_start) = #{month,jdbcType=INTEGER}
+  </select>
+
+  <select id="getAllSalary" parameterType="java.lang.Integer" resultType="com.allxone.coinmarket.dto.response.PayrollDTO">
+    SELECT e.last_name, e.first_name, e.email, e.hire_date, p.salary, p.net_salary
+    FROM employees e JOIN payroll p ON e.id = p.employee_id
+    where month(period_start) = #{month,jdbcType=INTEGER}
+      and  year(period_start) = year(current_date())
+  </select>
+
+  <select id="getAllSalaryByFirstName" parameterType="java.util.Map" resultType="com.allxone.coinmarket.dto.response.PayrollDTO">
+    SELECT e.last_name, e.first_name, e.email, e.hire_date, p.salary, p.net_salary
+    FROM employees e JOIN payroll p ON e.id = p.employee_id
+    WHERE MONTH(p.period_start) = #{month, jdbcType=INTEGER}
+      AND YEAR(p.period_start) = YEAR(CURRENT_DATE())
+      AND e.first_name LIKE #{firstname, jdbcType=NVARCHAR}
+  </select>
+
+
   <select id="sumSalaryByMonth" parameterType="com.allxone.coinmarket.model.PayrollExample" resultType="java.math.BigDecimal">
     select sum(coalesce(bonus, 0) + coalesce(net_salary, 0)) from payroll
     <if test="_parameter != null">
