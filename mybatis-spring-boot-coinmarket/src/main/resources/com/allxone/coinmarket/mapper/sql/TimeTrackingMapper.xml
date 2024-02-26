@@ -332,6 +332,17 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+
+  <select id="sumTotalHours" parameterType="java.lang.Long" resultType="BigDecimal">
+    SELECT sum(total_hours) FROM coinmaster.time_tracking WHERE coinmaster.employee_id = #{employee_id,jdbcType=BIGINT};
+  </select>
+
+  <select id="getEmployeeIdWorkingTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM coinmaster.time_tracking
+             where employee_id = #{employee_id,jdbcType=BIGINT}
+                  and  month(date_track) = #{month,jdbcType=INTEGER}
+                  and year(date_track) = year(current_date())
+   </select>
   <select id="findAllWorkingTimeEmployee" resultType="com.allxone.coinmarket.dto.response.WorkingTimeDTO">
     select * from time_tracking ttr
     join employees e on ttr.employee_id = e.id

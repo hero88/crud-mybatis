@@ -2,8 +2,6 @@ package com.allxone.coinmarket.model;
 
 import java.util.Date;
 
-import javax.validation.constraints.NegativeOrZero;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

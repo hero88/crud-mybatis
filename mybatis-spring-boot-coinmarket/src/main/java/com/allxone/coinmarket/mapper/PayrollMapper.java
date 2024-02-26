@@ -1,14 +1,14 @@
 package com.allxone.coinmarket.mapper;
 
-import com.allxone.coinmarket.model.Payroll;
-import com.allxone.coinmarket.model.PayrollExample;
-
 import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.allxone.coinmarket.dto.response.PayrollDTO;
+import com.allxone.coinmarket.model.Payroll;
+import com.allxone.coinmarket.model.PayrollExample;
 @Mapper
 public interface PayrollMapper {
     /**
@@ -98,6 +98,13 @@ public interface PayrollMapper {
      * @mbg.generated Thu Feb 22 09:13:49 ICT 2024
      */
     int updateByPrimaryKey(Payroll row);
+
+    List<Payroll> getAllPayrolls( Integer month);
+
+    List<PayrollDTO> getAllSalary(@Param("month") Integer month);
+
+    List<PayrollDTO> getAllSalaryByFirstName(@Param("month") Integer month, @Param("firstname") String firstname);
+
 
     BigDecimal sumSalaryByMonth(PayrollExample payrollExample);
 }

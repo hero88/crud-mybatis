@@ -1,10 +1,11 @@
 package com.allxone.coinmarket.service;
 
-import com.allxone.coinmarket.dto.response.WorkingTimeDTO;
-import com.allxone.coinmarket.model.TimeTracking;
-
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.allxone.coinmarket.dto.response.WorkingTimeDTO;
+import com.allxone.coinmarket.model.TimeTracking;
 
 public interface TimeTrackingService {
     public TimeTracking save(TimeTracking tracking);
@@ -16,4 +17,6 @@ public interface TimeTrackingService {
     public List<TimeTracking> getListByDate(Date date);
 
     public List<WorkingTimeDTO> getAllWorkingTimeEmployee(Date date,Integer limit);
+    
+    BigDecimal sumTotalHoursWorking(Long id,int month);
 }

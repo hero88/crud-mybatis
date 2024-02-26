@@ -1,25 +1,80 @@
 package com.allxone.coinmarket.service.impl;
 
-import com.allxone.coinmarket.dto.response.TimeTrackingDTO;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.allxone.coinmarket.dto.response.WorkingTimeDTO;
 import com.allxone.coinmarket.mapper.TimeTrackingMapper;
 import com.allxone.coinmarket.model.TimeTracking;
 import com.allxone.coinmarket.model.TimeTrackingExample;
 import com.allxone.coinmarket.service.TimeTrackingService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 @Service
 public class TimeTrackingServiceImpl implements TimeTrackingService {
 
     @Autowired
     TimeTrackingMapper mapper;
+
+    @Override
+    public BigDecimal sumTotalHoursWorking(Long id, int month) {
+        BigDecimal workingTime = BigDecimal.ZERO;
+        List<TimeTracking> timeTrackings = mapper.getEmployeeIdWorkingTime(id, month);
+        for (TimeTracking timeTracking : timeTrackings) {
+            int dayOfWeek = dayOfWeek(timeTracking.getDateTrack());
+
+            switch (dayOfWeek) {
+                case 1:
+                    workingTime = workingTime.add(timeTracking.getTotalHours().multiply(new BigDecimal(2)));
+                    break;
+                case 7:
+                    workingTime = workingTime.add(timeTracking.getTotalHours().multiply(new BigDecimal(1.5)));
+                    break;
+                default:
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+                    String clockInString = timeTracking.getClockIn();
+                    String clockOutString = timeTracking.getClockOut();
+
+                    LocalTime clockInTime = LocalTime.parse(clockInString, timeFormatter);
+                    LocalTime clockOutTime = LocalTime.parse(clockOutString, timeFormatter);
+
+                    LocalTime startTime = LocalTime.parse("20:00:00", timeFormatter);
+                    LocalTime endTime = LocalTime.parse("06:00:00", timeFormatter);
+
+                    if ((clockInTime.isAfter(startTime) || clockInTime.equals(startTime))
+                            && (clockOutTime.isBefore(endTime) || clockOutTime.equals(endTime))) {
+                        workingTime = workingTime.add(timeTracking.getTotalHours().multiply(new BigDecimal(1.5)));
+                    } else {
+                        workingTime = workingTime.add(timeTracking.getTotalHours());
+                    }
+                    break;
+            }
+        }
+        return workingTime;
+    }
+
+    public static int dayOfWeek(Date day) {
+        LocalDateTime dateTime = day.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDate date = dateTime.toLocalDate();
+        int dayOfWeek = date.getDayOfWeek().getValue();
+        int adjustedDayOfWeek = (dayOfWeek == 7) ? 1 : dayOfWeek + 1;
+        return adjustedDayOfWeek;
+    }
+    
 
     @Override
     public TimeTracking save(TimeTracking tracking) {
