@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.allxone.coinmarket.dto.EmployeesDto;
 import com.allxone.coinmarket.dto.response.EmployeeDTO;
+import com.allxone.coinmarket.dto.response.PageResult;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
 import com.allxone.coinmarket.model.Departments;
 
 public interface EmployeesService {
 
-	List<EmployeesDto> findAll(int page, int size);
+	PageResult<EmployeesDto> findAll(int page, int size);
 
 	EmployeesDto findById(Long id) throws ParamInvalidException;
 

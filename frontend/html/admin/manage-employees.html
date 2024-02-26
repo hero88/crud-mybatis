@@ -11,6 +11,42 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* CSS cho container của phân trang */
+        #pagination-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* CSS cho các nút phân trang */
+        .page-link {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            /* Màu xanh lá cây */
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            /* Màu chữ trắng */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            /* Hiệu ứng chuyển màu */
+        }
+
+        /* CSS cho nút phân trang hiện tại */
+        .page-link.active {
+            background-color: #45a049;
+            /* Màu xanh lá cây đậm */
+        }
+
+        /* CSS cho hover của nút phân trang */
+        .page-link:hover {
+            background-color: #45a049;
+            /* Màu xanh lá cây đậm khi hover */
+        }
+
+
         .hsdhf h1 {
             margin: 0;
         }
@@ -159,7 +195,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="text" name="" id="employeesId" hidden>
-
+                        <input type="text" name="" id="taxInformationId" hidden>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="">FirstName</label>
@@ -270,15 +306,22 @@
             <tbody>
             </tbody>
         </table>
+
+        <div id="pagination-container">
+            <!-- Các nút hoặc liên kết phân trang sẽ được thêm vào đây -->
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
     <script type="module">
         import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
         const apiUrl = baseURL + 'v1/employees';
+        var page = 1;
         const headers = {
             'Authorization': 'Bearer ' + getCookie('token'),
         };
@@ -316,21 +359,119 @@
                 taxRate: taxRate
             };
 
+            if (validateData(firstName, lastName, email, phone, position, department, birthday, gender, taxRate)) {
+                if (id) {
 
-            if (id) {
+                    updateEmployees(apiUrl + "/" + id, data);
+                } else {
 
-                updateEmployees(apiUrl + "/" + id, data);
-            } else {
-
-                addToEmployees(apiUrl, data);
+                    addToEmployees(apiUrl, data);
+                }
             }
         }
+
+
+        function showAlert(title, message, icon) {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: icon
+            });
+        }
+
+
+
+        function validateData(firstName, lastName, email, phone, position, department, birthday, gender, taxRate) {
+            // Kiểm tra dữ liệu bắt buộc
+            if (!firstName || !lastName || !email || !phone || !position || !department || !birthday || !gender || !taxRate) {
+
+                showAlert("Thông báo!", "Please fill in all information!", "error")
+                return false;
+            }
+
+            // Kiểm tra định dạng email
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+
+                showAlert("Thông báo!", "Please enter a valid email address!", "error")
+                return false;
+            }
+
+            // Kiểm tra định dạng số điện thoại
+            var phonePattern = /^\d{10}$/;
+            if (!phonePattern.test(phone)) {
+
+                showAlert("Thông báo!", "Please enter valid phone number!", "error")
+                return false;
+            }
+
+            // Kiểm tra định dạng ngày tháng
+            var birthdayPattern = /^\d{4}-\d{2}-\d{2}$/;
+            if (!birthdayPattern.test(birthday)) {
+
+                showAlert("Thông báo!", "Please enter a valid date of birth (YYYY-MM-DD)!", "error")
+                return false;
+            }
+
+            // Kiểm tra giới tính
+            if (gender !== 'Male' && gender !== 'FeMale') {
+                showAlert("Thông báo!", "Please select gender!", "error")
+
+                return false;
+            }
+
+            // Kiểm tra thuế suất
+            if (isNaN(taxRate) || taxRate < 0 || taxRate > 100) {
+                showAlert("Thông báo!", "Please enter a valid tax rate!", "error")
+                return false;
+            }
+
+            // Dữ liệu hợp lệ
+            return true;
+        }
+
+        // Hàm saveOrUpdate
+        window.saveOrUpdate = function () {
+            var id = $('#employeesId').val();
+            var firstName = $('#firstName').val();
+            var lastName = $('#lastName').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var position = $('#position').val();
+            var department = $('#departmentSelect').val();
+            var birthday = $('#birthday').val();
+            var gender = $('#gender').val();
+            var taxRate = $('#taxRate').val();
+            var taxInformationId = $("#taxInformationId").val();
+
+            if (validateData(firstName, lastName, email, phone, position, department, birthday, gender, taxRate)) {
+                var data = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    contactNumber: phone,
+                    position: position,
+                    departmentId: department,
+                    birthday: birthday,
+                    gender: gender,
+                    taxRate: taxRate,
+                    taxInformationId:taxInformationId
+                };
+
+                if (id) {
+                    updateEmployees(apiUrl + "/" + id, data);
+                } else {
+                    addToEmployees(apiUrl, data);
+                }
+            }
+        };
+
 
 
         window.addToEmployees = function (url, coinData) {
             axios.post(url, coinData, { headers })
                 .then(res => {
-                    fetchDataAndPopulateTable(apiUrl)
+                    fetchDataAndPopulateTable(apiUrl, page)
 
                     clearFormFields()
 
@@ -343,17 +484,10 @@
                 }).catch(err => {
                     console.log(err)
                     if (err.response) {
-                        Swal.fire({
-                            title: "Thông báo!",
-                            text: err.response.data.message,
-                            icon: "error",
-                        });
+                        showAlert("Thông báo!", err.response.data.message, "error")
+
                     } else {
-                        Swal.fire({
-                            title: "Thông báo!",
-                            text: err,
-                            icon: "error",
-                        });
+                        showAlert("Thông báo!", err, "error")
                     }
                 })
         }
@@ -361,31 +495,18 @@
         window.updateEmployees = function (url, coinData) {
             axios.put(url, coinData, { headers })
                 .then(res => {
-                    fetchDataAndPopulateTable(apiUrl)
-
+                    fetchDataAndPopulateTable(apiUrl, page);
 
                     clearFormFields()
+                    showAlert("Thông báo!", res.data, "success")
 
-                    Swal.fire({
-                        title: "Thông báo!",
-                        text: res.data,
-                        icon: "success",
-                    });
 
                 }).catch(err => {
                     console.log(err)
                     if (err.response) {
-                        Swal.fire({
-                            title: "Thông báo!",
-                            text: err.response.data.message,
-                            icon: "error",
-                        });
+                        showAlert("Thông báo!", err.response.data.message, "error")
                     } else {
-                        Swal.fire({
-                            title: "Thông báo!",
-                            text: err,
-                            icon: "error",
-                        });
+                        showAlert("Thông báo!", err, "error")
                     }
                 })
         }
@@ -404,25 +525,29 @@
                     $('#phone').val(item.contactNumber);
                     $('#position').val(item.position);
                     $('#departmentSelect').val(item.departmentId);
-                    $('#birthday').val(item.birthday);
+                    $('#taxInformationId').val(item.taxInformationId);
+
                     $('#gender').val(item.gender);
                     $('#taxRate').val(item.taxRate);
+                  
+                 
+                    const date = new Date(item.birthday);
+                    const day = date.getDate().toString().padStart(2, '0');
+                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    const year = date.getFullYear();
+                    const formattedDate = `${year}-${month}-${day}`;
+           
+
+                    $('#birthday').val(formattedDate);
+
 
                     $('#exampleModal').modal('show')
                 })
                 .catch(err => {
                     if (err.response) {
-                        Swal.fire({
-                            title: "Thông báo!",
-                            text: err.response.data.message,
-                            icon: "error",
-                        });
+                        showAlert("Thông báo!", err.response.data.message, "error")
                     } else {
-                        Swal.fire({
-                            title: "Thông báo!",
-                            text: err,
-                            icon: "error",
-                        });
+                        showAlert("Thông báo!", err, "error")
                     }
                 })
         }
@@ -438,6 +563,7 @@
             $('#birthday').val('');
             $('#gender').val('');
             $('#taxRate').val('0.0');
+            $('#taxInformationId').val('');
         }
 
 
@@ -457,13 +583,8 @@
 
                     axios.delete(apiUrl + '/' + id, { headers })
                         .then(res => {
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: res.data,
-                                icon: "success"
-                            });
-
-                            fetchDataAndPopulateTable(apiUrl)
+                            showAlert("Thông báo!", res.data, "success")
+                            fetchDataAndPopulateTable(apiUrl, 1)
                         })
 
 
@@ -485,8 +606,8 @@
         }
 
         // Hàm fetch dữ liệu và điền vào bảng
-        function fetchDataAndPopulateTable(apiUrl) {
-            axios.get(apiUrl)
+        function fetchDataAndPopulateTable(apiUrl, currentPage) {
+            axios.get(apiUrl + '?page=' + currentPage)
                 .then(response => {
                     if (response.status !== 200) {
                         throw new Error(`Error: ${response.status}`);
@@ -494,16 +615,83 @@
                     return response.data;
                 })
                 .then(res => {
-                    populateTable(res);
+                    page = currentPage;
+                    populateTable(res.data);
+                    const totalPages = res.totalPages;
+
+                    if (totalPages > 1) {
+                        createPagination(totalPages);
+                    } else {
+                        const paginationContainer = $('#pagination-container');
+                        paginationContainer.empty();
+                    }
+
+
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
                 });
         }
 
+
+        function createPagination(totalPages) {
+            const paginationContainer = $('#pagination-container');
+            paginationContainer.empty();
+
+            const maxButtons = 5; // Số lượng nút phân trang tối đa cần hiển thị
+            const halfButtons = Math.floor(maxButtons / 2); // Số lượng nút phân trang hiển thị trước và sau trang hiện tại
+
+            // Xác định trang đầu tiên và trang cuối cùng cần hiển thị
+            let startPage = Math.max(1, page - halfButtons);
+            let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+            // Đảm bảo luôn hiển thị đủ số lượng nút phân trang
+            if (endPage - startPage + 1 < maxButtons) {
+                startPage = Math.max(1, endPage - maxButtons + 1);
+            }
+
+    
+            const prevButton = $('<a href="#" class="page-link">&laquo;</a>');
+            prevButton.click(function () {
+                if (page > 1) {
+                    fetchDataAndPopulateTable(apiUrl, page - 1);
+                } else {
+                    fetchDataAndPopulateTable(apiUrl, totalPages);
+                }
+            });
+            paginationContainer.append(prevButton);
+            for (let i = startPage; i <= endPage; i++) {
+                const pageLink = $('<a href="#" class="page-link"></a>');
+                pageLink.text(i);
+
+                if (i === page) {
+                    pageLink.addClass('active');
+                }
+
+                pageLink.click(function () {
+            
+                    fetchDataAndPopulateTable(apiUrl, i);
+                });
+
+                paginationContainer.append(pageLink);
+            }
+
+            const nextButton = $('<a href="#" class="page-link">&raquo;</a>');
+            nextButton.click(function () {
+                if (page < totalPages) {
+                    fetchDataAndPopulateTable(apiUrl, page + 1);
+                } else {
+                    fetchDataAndPopulateTable(apiUrl, 1);
+                }
+            });
+            paginationContainer.append(nextButton);
+        }
+
+
+
         function populateTable(data) {
             const tableBody = document.getElementById('employeesTable').getElementsByTagName('tbody')[0];
-            // Xóa dữ liệu hiện tại trên bảng
+      ng
             tableBody.innerHTML = '';
 
             const mapping = {
@@ -519,12 +707,32 @@
                 'Phone': item => item.contactNumber ? item.contactNumber : "",
                 'Email': item => item.email ? item.email : "",
                 'Position': item => item.position ? item.position : "",
-                'CreatedDay': item => item.createdAt ? item.createdAt : "",
-                'HireDay': item => item.hireDate ? item.hireDate : "",
+                'CreatedDay': item => {
+                    if (item.createdAt) {
+                        const date = new Date(item.createdAt);
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const year = date.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    } else {
+                        return "";
+                    }
+                },
+                'HireDay': item => {
+                    if (item.hireDate) {
+                        const date = new Date(item.hireDate);
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const year = date.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    } else {
+                        return "";
+                    }
+                },
                 'TaxRate': item => item.taxRate ? item.taxRate : "0.0",
                 'action': item => `
                 <button onclick="editEmployees(${item.id})" class="btn btn-warning"><i class='bx bxs-pencil'></i></button>
-                 <button onclick="deleteEmployees(${item.id})" class="btn btn-danger mt-2"><i class='bx bxs-trash' ></i></button>`
+                 <button onclick="deleteEmployees(${item.id})" class="btn btn-danger "><i class='bx bxs-trash' ></i></button>`
 
             };
 
@@ -540,6 +748,10 @@
                     cell.innerHTML = `${value}`;
                 });
             });
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<td colspan="10" class="text-center"><b>The employee list is currently empty.</b></td>';
+            }
 
         }
 
@@ -581,8 +793,12 @@
             logout();
         });
 
-        fetchDataAndPopulateTable(apiUrl);
+        fetchDataAndPopulateTable(apiUrl, page);
         populateSelect()
+
+
+
+
 
     </script>
 </body>

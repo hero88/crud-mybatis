@@ -100,7 +100,7 @@ public interface EmployeesMapper {
      */
     int updateByPrimaryKey(Employees row);
     List<Employees> getAllEmployees();
-    List<Employees> getEmployees(@Param("offset")int page,@Param("limit")int size);
+    List<Employees> getEmployees(@Param("offset")int page,@Param("size")int size);
 
     List<EmployeeDTO> findAllEmployeeNotTermination();
 }

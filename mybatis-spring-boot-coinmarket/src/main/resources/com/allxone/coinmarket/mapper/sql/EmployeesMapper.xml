@@ -437,6 +437,7 @@
 
   <select id="getEmployees" parameterType="map" resultMap="BaseResultMap">
     SELECT * FROM employees
-    LIMIT #{offset}, #{limit}
+    ORDER BY created_at DESC
+    LIMIT #{size} OFFSET #{offset}
   </select>
 </mapper>
