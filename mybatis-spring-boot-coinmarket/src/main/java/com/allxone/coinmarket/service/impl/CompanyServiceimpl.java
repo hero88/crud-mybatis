@@ -44,6 +44,9 @@ public class CompanyServiceimpl implements CompanyService {
         PayrollExample payrollExample = new PayrollExample();
         payrollExample.createCriteria().andPeriodEndBetween(firstDayOfCurrentMonth,lastDayOfCurrentMonth);
         BigDecimal totalPayroll = payrollMapper.sumSalaryByMonth(payrollExample);
+        if(totalPayroll == null){
+            totalPayroll = BigDecimal.valueOf(0);
+        }
         companyDTO.setTotalPayroll(totalPayroll);
         try{
             List<CoinsUserReponse> list = coinService.getAllCoinsUser();

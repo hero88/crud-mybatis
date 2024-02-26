@@ -25,7 +25,7 @@
 </head>
 
 <body style="background-color: #EFF2F5;">
-    <nav class="navbar navbar-expand-xxl" style="background-color: #FFFF;">
+    <nav class="navbar navbar-expand-xxl pb-5">
         <div class="container-fluid">
             <svg width="168" height="29" fill="var(--text-color)" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 168 29" class="cmc-logo-img" style="margin-top:-3px">
@@ -49,8 +49,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="../../html/page/coin_management.html">User coin</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../html/page/company.html">Company</a>
+                    </li>
                 </ul>
-                <div class="dropdown">
+                <div class="dropdown p-2">
                     <div class="row p-2" style="display: none;" id="buttonLogin">
                         <a class="btn btn-primary" href="../../html/page/SignInSignUp.html">Login</a>
                     </div>
@@ -198,6 +201,7 @@
     <script type="module">
         import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
+        console.log(baseURL);
         const apiProfile = baseURL + 'v1/user/own';
         const apiData = baseURL + 'v1/company';
 
