@@ -3,6 +3,7 @@ package com.allxone.mybatisprojectbackend.controller;
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
 import com.allxone.mybatisprojectbackend.dto.request.TaxInformationRequest;
 import com.allxone.mybatisprojectbackend.dto.response.TaxInformationResponse;
+import com.allxone.mybatisprojectbackend.dto.response.TaxInformationResponse;
 import com.allxone.mybatisprojectbackend.service.TaxInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,6 +54,16 @@ public class TaxInformationController {
         try {
             taxInformationService.deleteTaxInformationById(id);
             return CommonResponse.success(id);
+        } catch (Exception e) {
+            return CommonResponse.error(null);
+        }
+    }
+
+    @GetMapping("/getTaxInformationById/{id}")
+    public CommonResponse<TaxInformationResponse> getTaxInformationById(@PathVariable Integer id) {
+        try {
+            TaxInformationResponse data = taxInformationService.getTaxInformationById(id);
+            return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }

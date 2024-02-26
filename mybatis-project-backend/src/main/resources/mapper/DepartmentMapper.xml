@@ -14,11 +14,11 @@
         VALUES (#{id}, #{name})
     </insert>
 
-    <select id="getDepartmentById" parameterType="int" resultMap="departmentResultMap">
+    <select id="getDepartmentById" parameterType="Integer" resultMap="departmentResultMap">
         SELECT * FROM department WHERE id = #{id}
     </select>
 
-    <select id="getAllDepartment" resultMap="departmentResultMap">
+    <select id="getAllDepartments" resultMap="departmentResultMap">
         SELECT * FROM department
     </select>
 
@@ -32,7 +32,7 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="deleteDepartmentById" parameterType="int">
+    <delete id="deleteDepartmentById" parameterType="Integer">
         DELETE FROM department WHERE id = #{id}
     </delete>
 </mapper>
