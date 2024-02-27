@@ -18,15 +18,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Pencil } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Description } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { doUpdateEmployee } from "@/services/EmployeeAPI";
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
+function UpdateEmployeeDialog({ employee, loadEmployeesData, departments }) {
   const { toast } = useToast();
 
   const [currentEmployee, setCurrentEmployee] = useState({
@@ -35,14 +42,16 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
     gender: "",
     contactNumber: "",
     position: "",
-    // departmentId: 1,
+    departmentId: "",
   });
 
-  const [validateError, setValidateError] = useState(["basic"]);
-
+  const [validateError, setValidateError] = useState([]);
   const [selectedHireDate, setSelectedHireDate] = useState();
   const [selectedTerminationDate, setSelectedTerminationDate] = useState();
   const [selectedBirthday, setSelectedBirthday] = useState();
+  const [selectedDepartment, setSelectedDepartment] = useState();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const {
     firstname,
@@ -53,11 +62,14 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
     position,
     hireDate,
     terminationDate,
-    // departmentId,
+    departmentId,
   } = currentEmployee;
 
   useEffect(() => {
     setCurrentEmployee(employee);
+    setSelectedDepartment(
+      departments.find((department) => department.id === departmentId)
+    );
   }, []);
 
   const handleChangeField = (e) => {
@@ -66,6 +78,13 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
 
   const handleChangeGender = (e) => {
     setCurrentEmployee({ ...currentEmployee, gender: e });
+  };
+
+  const handleSelectedDepartment = (currentValue) => {
+    setSelectedDepartment(
+      currentValue === selectedDepartment ? "" : currentValue
+    );
+    setOpen(false);
   };
 
   const handleSubmitUpdate = async () => {
@@ -78,7 +97,7 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
         setValidateError([...validateError, "lastname"]);
       }
     } else {
-      setValidateError(["basic"]);
+      setValidateError([]);
       const formattedBirthday = selectedBirthday
         ? Math.floor(selectedBirthday.getTime() / 1000)
         : null;
@@ -94,6 +113,7 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
         birthday: formattedBirthday,
         hireDate: formattedHireDate,
         terminationDate: formattedTerminationDate,
+        departmentId: selectedDepartment ? selectedDepartment.id : 1,
       };
 
       const { data: response } = await doUpdateEmployee(newEmployee);
@@ -103,7 +123,8 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
       if (response.code === 200) {
         loadEmployeesData();
 
-        setValidateError([]);
+        setOpenDialog(false);
+
         toast({
           title: "Update employee successfully!",
           description: "Employee info has been changed.",
@@ -122,15 +143,10 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
 
   return (
     <>
-      <Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
           <Button className="w-5 h-5 p-0 bg-transparent hover:bg-transparent">
-            <Pencil
-              width={17}
-              height={17}
-              className="text-blue-500"
-              onClick={() => setValidateError(["basic"])}
-            />
+            <Pencil width={17} height={17} className="text-blue-500" />
           </Button>
         </DialogTrigger>
         {validateError.length > 0 && (
@@ -275,6 +291,58 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
                     onChange={(e) => handleChangeField(e)}
                   />
                 </div>
+              </div>
+              {/* Department */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Department
+                </Label>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-[300px] justify-between"
+                    >
+                      {selectedDepartment
+                        ? departments?.find(
+                            (department) =>
+                              department.name === selectedDepartment.name
+                          )?.name
+                        : "Select department..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[300px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search department..." />
+                      <ScrollArea className="h-72">
+                        <CommandGroup>
+                          {departments?.map((department) => (
+                            <CommandItem
+                              key={department.id}
+                              value={department.name}
+                              onSelect={() =>
+                                handleSelectedDepartment(department)
+                              }
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedDepartment === department
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {department.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
               {/* Hire date */}
               <div className="grid grid-cols-4 items-center gap-4">

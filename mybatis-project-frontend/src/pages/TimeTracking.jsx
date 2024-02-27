@@ -84,7 +84,7 @@ function TimeTracking() {
 
                 <TableCell className="flex items-center space-x-4 justify-center">
                   <UpdateTrackingTimeDialog
-                    trackingTime={timeTrackingData}
+                    trackingTime={tracking}
                     loadTimeTrackingData={handleGetTimeTrackingData}
                   />
                   {/* <DelTrackingTimeDialog
