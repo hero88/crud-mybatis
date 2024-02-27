@@ -137,7 +137,8 @@
                     </div>
                     <div class="row justify-content-center p-3">
                         <div class="col-md-auto text-center">
-                            <a type="button" class="btn btn-dark">Detail</a>
+                            <a type="button" href="../../html/admin/manage-employees.html"
+                                class="btn btn-dark">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -164,7 +165,7 @@
                     </div>
                     <div class="row justify-content-center p-3">
                         <div class="col-md-auto text-center">
-                            <a type="button" class="btn btn-dark">Detail</a>
+                            <a type="button" href="../../html/admin/time-tracking.html" class="btn btn-dark">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -186,7 +187,8 @@
                     </div>
                     <div class="row justify-content-center p-3">
                         <div class="col-md-auto text-center">
-                            <a type="button" class="btn btn-dark">Detail</a>
+                            <a type="button" href="../../html/admin/payroll-employee.html"
+                                class="btn btn-dark">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -201,7 +203,6 @@
     <script type="module">
         import { instance } from "../../axios/config/config.js";
         const baseURL = instance.defaults.baseURL;
-        console.log(baseURL);
         const apiProfile = baseURL + 'v1/user/own';
         const apiData = baseURL + 'v1/company';
 
@@ -257,15 +258,15 @@
         }
 
         function logout() {
-            var cookies = document.cookie.split(";");
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i];
-                var eqPos = cookie.indexOf("=");
-                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-            }
-            window.location.href = window.location.origin + "/java_gr2/frontend/html/page/SignInSignUp.html"; // Thay đổi đường dẫn nếu cần
-        }
+			var cookies = document.cookie.split(";");
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i];
+				var eqPos = cookie.indexOf("=");
+				var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+				document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+			}
+			window.location.href = window.location.origin + "/html/page/SignInSignUp.html"; // Thay đổi đường dẫn nếu cần
+		}
 
         document.getElementById("logoutButton").addEventListener("click", function () {
             logout();
