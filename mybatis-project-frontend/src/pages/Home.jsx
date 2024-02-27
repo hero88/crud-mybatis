@@ -23,7 +23,6 @@ function Home() {
     const callGetAllCoinsApi = async () => {
       try {
         const { data: response } = await getMarketCapCoins();
-        console.log(response);
         setMarketCoinList(response.data.cryptoCurrencyList);
       } catch (error) {
         console.error(error);

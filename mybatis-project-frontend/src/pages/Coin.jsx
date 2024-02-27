@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import AddCoinDialog from "./dialogs/AddCoinDialog";
 import {
   deleteCoinById,
   getCoinsByUserId,
@@ -31,6 +30,7 @@ import NumberCounter from "@/components/shared/NumberCounter";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useNavigate } from "react-router-dom";
+import AddCoinDialog from "@/components/shared/AddCoinDialog";
 
 function Coin() {
   const navigate = useNavigate();
@@ -48,8 +48,6 @@ function Coin() {
       const initUser = JSON.parse(localStorage.getItem("profile"));
 
       const { data: response } = await getCoinsByUserId(initUser.id);
-
-      console.log(response);
 
       setUserCoinList(response.data);
     } catch (error) {
@@ -98,8 +96,6 @@ function Coin() {
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     }
-
-    console.log(response);
   };
 
   return (

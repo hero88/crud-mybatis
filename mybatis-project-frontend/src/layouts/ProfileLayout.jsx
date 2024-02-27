@@ -6,8 +6,6 @@ import { CiUser, CiBitcoin } from "react-icons/ci";
 import { HiOutlineUsers } from "react-icons/hi";
 
 function ProfileLayout({ children }) {
-  // let isAdmin = window.localStorage.getItem("isAdmin");
-  let isAdmin = true;
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("detail");
@@ -38,18 +36,16 @@ function ProfileLayout({ children }) {
               <CiUser className="text-2xl" strokeWidth={0.7} />
               <p className="ml-2">Profile</p>
             </Button>
-            {isAdmin && (
-              <Button
-                onClick={() => navigate("../profile/list-user")}
-                className={`w-48 hover:bg-gray-200 h-12 text-md font-normal flex justify-start text-base rounded-lg ${
-                  selectedTab === "list-user" && "bg-gray-200 font-semibold"
-                }`}
-                variant="ghost"
-              >
-                <HiOutlineUsers className="text-2xl" strokeWidth={1.8} />
-                <p className="ml-2">List user</p>
-              </Button>
-            )}
+            <Button
+              onClick={() => navigate("../profile/list-user")}
+              className={`w-48 hover:bg-gray-200 h-12 text-md font-normal flex justify-start text-base rounded-lg ${
+                selectedTab === "list-user" && "bg-gray-200 font-semibold"
+              }`}
+              variant="ghost"
+            >
+              <HiOutlineUsers className="text-2xl" strokeWidth={1.8} />
+              <p className="ml-2">List user</p>
+            </Button>
             <Button
               onClick={() => navigate("../profile/coins")}
               className={`w-48 hover:bg-gray-200 h-12 text-md font-normal flex justify-start text-base rounded-lg ${

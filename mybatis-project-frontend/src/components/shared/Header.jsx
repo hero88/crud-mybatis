@@ -9,15 +9,8 @@ import {
   HoverCardTrigger,
 } from "../ui/hover-card";
 import CustomSearchBar from "./CustomSearchBar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { useEffect, useState } from "react";
+import AvatarTray from "./AvatarTray";
 
 function Header() {
   const navigate = useNavigate();
@@ -64,80 +57,7 @@ function Header() {
             Fear & Greed: <Link className="text-blue-600 ml-1">57/100</Link>
           </span>
         </div>
-        <div className="flex space-x-2">
-          {user?.id ? (
-            <>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar
-                    className="h-9 w-9 cursor-pointer"
-                    onClick={() => navigate(`/profile/detail/${user?.id}`)}
-                  >
-                    <AvatarImage src="" alt="@shadcn" />
-                    <AvatarFallback className="bg-blue-300 font-semibold">
-                      {user?.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="mr-9 min-w-56 px-3 pt-3 pb-4">
-                  <DropdownMenuLabel className="flex items-center space-x-3">
-                    <div>
-                      <Avatar
-                        className="h-12 w-12 cursor-pointer"
-                        onClick={() => navigate(`/profile/detail/${user?.id}`)}
-                      >
-                        <AvatarImage src="" alt="@shadcn" />
-                        <AvatarFallback>
-                          {user?.name.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <div>
-                      <p className="text-base">Hi, {user?.name}</p>
-                      <p className="text-sm text-gray-500 font-semibold">
-                        {user?.email}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <Link to={`/profile/detail/${user?.id}`}>
-                    <DropdownMenuItem className="py-2 font-medium text-sm">
-                      Profile
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link to={`/profile/coins`}>
-                    <DropdownMenuItem className="py-2 font-medium text-sm">
-                      Dashboard
-                    </DropdownMenuItem>
-                  </Link>
-
-                  <DropdownMenuItem
-                    className="py-2 font-medium text-sm"
-                    onClick={() => handleLogout()}
-                  >
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                className="b-1 border-blue-500 text-blue-500 rounded-lg px-4"
-                size="sm"
-              >
-                <Link to={`/sign-in`}>Log In</Link>
-              </Button>
-              <Button
-                className="b-1 bg-blue-500 text-white rounded-lg px-4"
-                size="sm"
-              >
-                <Link to={`/sign-up`}>Sign up</Link>
-              </Button>
-            </>
-          )}
-        </div>
+        <AvatarTray user={user} handleLogout={handleLogout} />
       </div>
       <hr />
       <div className="px-6 py-4 flex justify-between">

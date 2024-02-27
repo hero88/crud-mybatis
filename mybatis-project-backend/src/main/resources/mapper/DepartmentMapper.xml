@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.DepartmentMapper">
+    <resultMap id="departmentResultMap" type="com.allxone.mybatisprojectbackend.model.Department">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <insert id="saveDepartment" parameterType="Department" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO department (id, name)
+        VALUES (#{id}, #{name})
+    </insert>
+
+    <select id="getDepartmentById" parameterType="Integer" resultMap="departmentResultMap">
+        SELECT * FROM department WHERE id = #{id}
+    </select>
+
+    <select id="getAllDepartments" resultMap="departmentResultMap">
+        SELECT * FROM department
+    </select>
+
+    <update id="updateDepartment" parameterType="Department">
+        UPDATE department
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteDepartmentById" parameterType="Integer">
+        DELETE FROM department WHERE id = #{id}
+    </delete>
+</mapper>
