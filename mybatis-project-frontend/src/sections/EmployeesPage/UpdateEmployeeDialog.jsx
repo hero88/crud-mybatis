@@ -101,9 +101,9 @@ function UpdateEmployeeDialog({ employee, loadEmployeesData }) {
       console.log(response);
 
       if (response.code === 200) {
-        setValidateError([]);
         loadEmployeesData();
 
+        setValidateError([]);
         toast({
           title: "Update employee successfully!",
           description: "Employee info has been changed.",

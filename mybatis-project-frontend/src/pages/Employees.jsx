@@ -33,7 +33,7 @@ function Employees() {
   }, []);
 
   return (
-    <div className="px-28 py-4 flex flex-col">
+    <div className="px-24 pt-4 pb-28 flex flex-col">
       <h2 className="text-3xl font-semibold text-gray-900 mt-8">Employees</h2>
 
       <div className="flex justify-end mt-8">

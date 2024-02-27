@@ -6,8 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DeletePayrollDialog from "@/sections/PayrollPage/DeletePayrollDialog";
-import UpdatePayrollDialog from "@/sections/PayrollPage/UpdatePayrollDialog";
 import { doGetAllPayroll } from "@/services/PayrollAPI";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
@@ -26,7 +24,7 @@ function Payroll() {
   }, []);
 
   return (
-    <div className="px-28 py-4">
+    <div className="px-24 pb-28">
       <h2 className="text-3xl font-semibold text-gray-900 mt-8">Payroll</h2>
 
       <div className="mt-8 border rounded-md">
@@ -44,7 +42,7 @@ function Payroll() {
                 Bonus
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
-                Deduction
+                Deductions
               </TableHead>
               <TableHead className="text-black text-[12px] font-bold">
                 Net Salary
@@ -73,7 +71,7 @@ function Payroll() {
                   {payroll.bonus && <>{payroll.bonus}%</>}
                 </TableCell>
                 <TableCell className="font-semibold">
-                  {payroll.deduction && <>{payroll.deduction}$</>}
+                  {payroll.deductions && <>{payroll.deductions}$</>}
                 </TableCell>
                 <TableCell className="font-semibold">
                   {payroll.netSalary && <>{payroll.netSalary}$</>}

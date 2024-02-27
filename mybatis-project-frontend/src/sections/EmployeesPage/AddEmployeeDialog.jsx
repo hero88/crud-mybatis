@@ -18,14 +18,48 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Description } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { doAddNewEmployee } from "@/services/EmployeeAPI";
 import { doAddNewPayroll } from "@/services/PayrollAPI";
+import { getAllUsers } from "@/services/UserAPI";
+import { doGetAllDepartments } from "@/services/Department";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+const frameworks = [
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
+];
 
 function AddNewEmployeeDialog({ loadEmployeesData }) {
   const { toast } = useToast();
@@ -40,11 +74,15 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
     userId: "",
   });
 
-  const [validateError, setValidateError] = useState(["basic"]);
+  const [open, setOpen] = useState(false);
 
+  const [users, setUsers] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [validateError, setValidateError] = useState(["basic"]);
   const [selectedHireDate, setSelectedHireDate] = useState();
   const [selectedTerminationDate, setSelectedTerminationDate] = useState();
   const [selectedBirthday, setSelectedBirthday] = useState();
+  const [selectedDepartment, setSelectedDepartment] = useState();
 
   const {
     firstname,
@@ -56,6 +94,22 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
     userId,
   } = currentEmployee;
 
+  const handleGetUsersData = async () => {
+    const { data: response } = await getAllUsers();
+    setUsers(response.data);
+  };
+
+  const handleGetDepartmentsData = async () => {
+    const { data: response } = await doGetAllDepartments();
+    console.log(response.data);
+    setDepartments(response.data);
+  };
+
+  useEffect(() => {
+    handleGetDepartmentsData();
+    handleGetUsersData();
+  }, []);
+
   const handleChangeField = (e) => {
     setCurrentEmployee({ ...currentEmployee, [e.target.name]: e.target.value });
   };
@@ -64,78 +118,98 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
     setCurrentEmployee({ ...currentEmployee, gender: e });
   };
 
+  const handleSelectedCoin = (currentValue) => {
+    setSelectedDepartment(
+      currentValue === selectedDepartment ? "" : currentValue
+    );
+    setOpen(false);
+  };
+
   const handleSubmitCreate = async () => {
-    if (firstname === "" || lastname === "") {
+    if (firstname === "" || lastname === "" || userId === "") {
       if (firstname === "" && lastname === "" && userId === "") {
-        setValidateError([...validateError, "firstname", "lastname", "userid"]);
+        setValidateError(["firstname", "lastname", "userid"]);
       } else if (firstname === "" && lastname == "") {
-        setValidateError([...validateError, "firstname", "lastname"]);
+        setValidateError(["firstname", "lastname"]);
       } else if (lastname === "" && userId === "") {
-        setValidateError([...validateError, "lastname", "userid"]);
+        setValidateError(["lastname", "userid"]);
       } else if (firstname === "") {
-        setValidateError([...validateError, "firstname"]);
+        setValidateError(["firstname"]);
       } else if (lastname === "") {
-        setValidateError([...validateError, "lastname"]);
-      } else {
-        setValidateError([...validateError, "userid"]);
+        setValidateError(["lastname"]);
+      } else if (userId === "") {
+        setValidateError(["userid"]);
       }
     } else {
-      setValidateError(["basic"]);
-      const formattedBirthday = selectedBirthday
-        ? Math.floor(selectedBirthday.getTime() / 1000)
-        : null;
-      const formattedHireDate = selectedHireDate
-        ? Math.floor(selectedHireDate.getTime() / 1000)
-        : null;
-      const formattedTerminationDate = selectedTerminationDate
-        ? Math.floor(selectedTerminationDate.getTime() / 1000)
-        : null;
+      const userExist = users.some((user) => user.id === userId);
 
-      let newEmployee = {
-        ...currentEmployee,
-        birthday: formattedBirthday,
-        hireDate: formattedHireDate,
-        terminationDate: formattedTerminationDate,
-      };
+      if (userExist === false) {
+        setValidateError(["userexist"]);
+      } else {
+        const formattedBirthday = selectedBirthday
+          ? Math.floor(selectedBirthday.getTime() / 1000)
+          : null;
+        const formattedHireDate = selectedHireDate
+          ? Math.floor(selectedHireDate.getTime() / 1000)
+          : null;
+        const formattedTerminationDate = selectedTerminationDate
+          ? Math.floor(selectedTerminationDate.getTime() / 1000)
+          : null;
 
-      const { data: response } = await doAddNewEmployee(newEmployee);
-
-      console.log(newEmployee);
-      console.log(response);
-
-      if (response.code === 200) {
-        const employeeData = response.data;
-
-        let newPayroll = {
-          employeeId: employeeData.id,
-          salary: 0,
-          bonus: 0,
-          deduction: 0,
-          netSalary: 0,
-          periodStart: null,
-          periodEnd: null,
+        let newEmployee = {
+          ...currentEmployee,
+          birthday: formattedBirthday,
+          hireDate: formattedHireDate,
+          terminationDate: formattedTerminationDate,
         };
 
-        const { data: payrollResponse } = await doAddNewPayroll(newPayroll);
+        const { data: response } = await doAddNewEmployee(newEmployee);
 
-        console.log(newPayroll);
-        console.log(payrollResponse);
-
+        console.log(newEmployee);
+        console.log(response);
         setValidateError([]);
-        loadEmployeesData();
+        if (response.code === 200) {
+          const employeeData = response.data;
 
-        toast({
-          title: "Add employee successfully!",
-          description: "Employee list has been changed.",
-          action: <ToastAction altText="Nice">Nice</ToastAction>,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "There was a problem with creating info.",
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
+          let newPayroll = {
+            employeeId: employeeData.id,
+            salary: 0,
+            bonus: 0,
+            deductions: 0,
+            netSalary: 0,
+            periodStart: null,
+            periodEnd: null,
+          };
+
+          const { data: payrollResponse } = await doAddNewPayroll(newPayroll);
+
+          console.log(payrollResponse);
+
+          setCurrentEmployee({
+            firstname: "",
+            lastname: "",
+            gender: "",
+            contactNumber: "",
+            position: "",
+            departmentId: 1,
+            userId: "",
+          });
+
+          loadEmployeesData();
+
+          toast({
+            title: "Add employee successfully!",
+            description: "Employee list has been changed.",
+            action: <ToastAction altText="Nice">Nice</ToastAction>,
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with creating info.",
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
+        }
       }
     }
   };
@@ -144,7 +218,9 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="">Add new employee</Button>
+          <Button onClick={() => setValidateError(["basic"])}>
+            Add new employee
+          </Button>
         </DialogTrigger>
         {validateError.length > 0 && (
           <DialogContent className="sm:max-w-[580px]">
@@ -210,6 +286,11 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
                   {validateError.includes("userid") && (
                     <Description className="text-red-500 font-semibold text-[12px]">
                       Do not let user id empty
+                    </Description>
+                  )}
+                  {validateError.includes("userexist") && (
+                    <Description className="text-red-500 font-semibold text-[12px]">
+                      User id not exist
                     </Description>
                   )}
                 </div>
@@ -304,7 +385,7 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
                 </div>
               </div>
               {/* Department */}
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="position" className="text-right">
                   Department Id
                 </Label>
@@ -316,6 +397,55 @@ function AddNewEmployeeDialog({ loadEmployeesData }) {
                     onChange={(e) => handleChangeField(e)}
                   />
                 </div>
+              </div> */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-[250px] justify-between"
+                    >
+                      {selectedDepartment
+                        ? departments?.find(
+                            (department) =>
+                              department.name === selectedDepartment.name
+                          )?.name
+                        : "Select coin..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[250px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search coin..." />
+                      <ScrollArea className="h-72">
+                        <CommandGroup>
+                          {departments?.map((department) => (
+                            <CommandItem
+                              key={department.id}
+                              value={department.name}
+                              onSelect={() => handleSelectedCoin(department)}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedDepartment === department
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {department.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
               {/* Hire date */}
               <div className="grid grid-cols-4 items-center gap-4">

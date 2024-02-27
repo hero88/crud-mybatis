@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { doGetAllTimeTracking } from "@/services/TimeTrackingAPI";
 import UpdateTrackingTimeDialog from "@/sections/TimeTrackingPage/UpdateTrackingTimeDialog";
+import AddTimeTrackingDialog from "@/sections/TimeTrackingPage/AddTimeTrackingDialog";
 
 function TimeTracking() {
   const [timeTrackingData, setTimeTrackingData] = useState([]);
@@ -26,10 +27,16 @@ function TimeTracking() {
   }, []);
 
   return (
-    <div className="px-28 py-4 flex flex-col">
+    <div className="px-24 pb-28 flex flex-col">
       <h2 className="text-3xl font-semibold text-gray-900 mt-8">
         Employee Time Tracking
       </h2>
+
+      <div className="flex justify-end mt-8">
+        <AddTimeTrackingDialog
+          loadTimeTrackingData={handleGetTimeTrackingData}
+        />
+      </div>
 
       <div className="mt-8 border rounded-md">
         <Table>

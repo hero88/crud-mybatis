@@ -10,18 +10,18 @@ function CompanyLayout({ children }) {
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("detail");
 
-  useEffect(() => {
-    if (location.pathname.includes("detail")) {
-      setSelectedTab("detail");
-    } else if (location.pathname.includes("list-user")) {
-      setSelectedTab("list-user");
-    } else if (location.pathname.includes("coins")) {
-      setSelectedTab("coins");
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname.includes("detail")) {
+  //     setSelectedTab("detail");
+  //   } else if (location.pathname.includes("list-user")) {
+  //     setSelectedTab("list-user");
+  //   } else if (location.pathname.includes("coins")) {
+  //     setSelectedTab("coins");
+  //   }
+  // }, [location.pathname]);
 
   return (
-    <div className="w-screen h-screen">
+    <div className="w-full h-full">
       <CompanyHeader />
       {/* <div className="flex px-2">
         <div className="w-2/12 text-lg">
