@@ -43,8 +43,9 @@ function AddTimeTrackingDialog({ loadTimeTrackingData }) {
     clockOut: "",
   });
 
-  const [validateError, setValidateError] = useState(["basic"]);
+  const [validateError, setValidateError] = useState([]);
   const [selectedDateTrack, setSelectedDateTrack] = useState();
+  const [openDialog, setOpenDialog] = useState(false);
 
   const { employeeId, dateTrack, clockIn, clockOut } = currentTrackingData;
 
@@ -118,6 +119,7 @@ function AddTimeTrackingDialog({ loadTimeTrackingData }) {
 
           loadTimeTrackingData();
           setValidateError([]);
+          setOpenDialog(false);
           toast({
             title: "Add tracking time successfully!",
             description: "Tracking time list has been changed.",
@@ -137,125 +139,120 @@ function AddTimeTrackingDialog({ loadTimeTrackingData }) {
 
   return (
     <>
-      <Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
-          <Button onClick={() => setValidateError(["basic"])}>
-            Add time tracking
-          </Button>
+          <Button>Add time tracking</Button>
         </DialogTrigger>
-        {validateError.length > 0 && (
-          <DialogContent className="sm:max-w-[580px]">
-            <AlertDialogHeader>
-              <DialogTitle className="text-green-800">
-                Add new time tracking
-              </DialogTitle>
-              <DialogDescription>
-                Add new tracking time here. Click save when you&apos;re done.
-              </DialogDescription>
-            </AlertDialogHeader>
-            <div className="grid gap-4 py-4">
-              {/* Employee Id */}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="employeeId" className="text-right">
-                  Employee Id
-                </Label>
-                <div className="col-span-3">
-                  <Input
-                    name="employeeId"
-                    id="employeeId"
-                    value={employeeId}
-                    onChange={(e) => handleChangeField(e)}
-                  />
-                  {validateError.includes("employeeid") && (
-                    <Description className="text-red-500 font-semibold text-[12px]">
-                      Employee id do not exist.
-                    </Description>
-                  )}
-                </div>
-              </div>
-              {/* Date Track */}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="dateTrack" className="text-right">
-                  Date Track
-                </Label>
-                <div className="col-span-3">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] pl-3 text-left font-normal text-black",
-                          !selectedDateTrack &&
-                            "text-muted-foreground text-black"
-                        )}
-                      >
-                        {selectedDateTrack ? (
-                          format(selectedDateTrack, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDateTrack}
-                        onSelect={setSelectedDateTrack}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-              {/* Clock In */}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="clockIn" className="text-right">
-                  Clock In
-                </Label>
-                <div className="col-span-3">
-                  <Input
-                    type="time"
-                    className="font-semibold"
-                    name="clockIn"
-                    id="clockIn"
-                    value={clockIn}
-                    onChange={(e) => handleChangeField(e)}
-                  />
-                </div>
-              </div>
-              {/* Clock Out*/}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="clockOut" className="text-right">
-                  Clock Out
-                </Label>
-                <div className="col-span-3">
-                  <Input
-                    type="time"
-                    className="font-semibold"
-                    name="clockOut"
-                    id="clockOut"
-                    value={clockOut}
-                    onChange={(e) => handleChangeField(e)}
-                  />
-                  {validateError.includes("clockout") && (
-                    <Description className="text-red-500 font-semibold text-[12px]">
-                      Your clock out time is sooner than clock in time.
-                    </Description>
-                  )}
-                </div>
+        <DialogContent className="sm:max-w-[580px]">
+          <AlertDialogHeader>
+            <DialogTitle className="text-green-800">
+              Add new time tracking
+            </DialogTitle>
+            <DialogDescription>
+              Add new tracking time here. Click save when you&apos;re done.
+            </DialogDescription>
+          </AlertDialogHeader>
+          <div className="grid gap-4 py-4">
+            {/* Employee Id */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="employeeId" className="text-right">
+                Employee Id
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  name="employeeId"
+                  id="employeeId"
+                  value={employeeId}
+                  onChange={(e) => handleChangeField(e)}
+                />
+                {validateError.includes("employeeid") && (
+                  <Description className="text-red-500 font-semibold text-[12px]">
+                    Employee id do not exist.
+                  </Description>
+                )}
               </div>
             </div>
-            <DialogFooter>
-              <Button type="submit" onClick={handleSubmitCreate}>
-                Create
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        )}
+            {/* Date Track */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dateTrack" className="text-right">
+                Date Track
+              </Label>
+              <div className="col-span-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal text-black",
+                        !selectedDateTrack && "text-muted-foreground text-black"
+                      )}
+                    >
+                      {selectedDateTrack ? (
+                        format(selectedDateTrack, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDateTrack}
+                      onSelect={setSelectedDateTrack}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+            {/* Clock In */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="clockIn" className="text-right">
+                Clock In
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  type="time"
+                  className="font-semibold"
+                  name="clockIn"
+                  id="clockIn"
+                  value={clockIn}
+                  onChange={(e) => handleChangeField(e)}
+                />
+              </div>
+            </div>
+            {/* Clock Out*/}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="clockOut" className="text-right">
+                Clock Out
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  type="time"
+                  className="font-semibold"
+                  name="clockOut"
+                  id="clockOut"
+                  value={clockOut}
+                  onChange={(e) => handleChangeField(e)}
+                />
+                {validateError.includes("clockout") && (
+                  <Description className="text-red-500 font-semibold text-[12px]">
+                    Your clock out time is sooner than clock in time.
+                  </Description>
+                )}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={handleSubmitCreate}>
+              Create
+            </Button>
+          </DialogFooter>
+        </DialogContent>
       </Dialog>
     </>
   );

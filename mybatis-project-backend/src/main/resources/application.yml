@@ -1,23 +1,28 @@
 spring:
+  config:
+    import: optional:file:src/main/resources/app.env[.properties]
   datasource:
-    url: jdbc:mysql://localhost:3306/CRUDAllXone
-    username: admin
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER}
   sql:
     init:
       mode: always
       data-locations: classpath:data.sql
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: buithang12396@gmail.com
-    password: upzjlugzwrsxdmfx
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
+            enable: false
+            required: true
+          ssl:
             enable: true
 mybatis:
   mapper-locations: classpath:/mapper/*Mapper.xml

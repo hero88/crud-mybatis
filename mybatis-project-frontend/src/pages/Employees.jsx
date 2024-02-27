@@ -12,6 +12,7 @@ import UpdateEmployeeDialog from "@/sections/EmployeesPage/UpdateEmployeeDialog"
 import { doGetAllEmployees } from "@/services/EmployeeAPI";
 import { useEffect, useState } from "react";
 import AddNewEmployeeDialog from "@/sections/EmployeesPage/AddEmployeeDialog";
+import { doGetAllDepartments } from "@/services/Department";
 
 function Employees() {
   const [employees, setEmployees] = useState([]);
@@ -19,16 +20,16 @@ function Employees() {
 
   const handleGetEmployeesData = async () => {
     const { data: response } = await doGetAllEmployees();
-    console.log(response.data);
     setEmployees(response.data);
   };
 
-  // const handleGetDepartmentData  = async () => {
-  //   const {data: response};
-
-  // }
+  const handleGetDepartmentsData = async () => {
+    const { data: response } = await doGetAllDepartments();
+    setDepartments(response.data);
+  };
 
   useEffect(() => {
+    handleGetDepartmentsData();
     handleGetEmployeesData();
   }, []);
 
@@ -37,7 +38,10 @@ function Employees() {
       <h2 className="text-3xl font-semibold text-gray-900 mt-8">Employees</h2>
 
       <div className="flex justify-end mt-8">
-        <AddNewEmployeeDialog loadEmployeesData={handleGetEmployeesData} />
+        <AddNewEmployeeDialog
+          loadEmployeesData={handleGetEmployeesData}
+          departments={departments}
+        />
       </div>
 
       <div className="mt-3 border rounded-md">
@@ -124,6 +128,7 @@ function Employees() {
                 <TableCell className="flex items-center space-x-4 justify-center">
                   <UpdateEmployeeDialog
                     employee={employee}
+                    departments={departments}
                     loadEmployeesData={handleGetEmployeesData}
                   />
                   <DelEmployeeDialog
