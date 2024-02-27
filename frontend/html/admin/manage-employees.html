@@ -455,7 +455,7 @@
                     birthday: birthday,
                     gender: gender,
                     taxRate: taxRate,
-                    taxInformationId:taxInformationId
+                    taxInformationId: taxInformationId
                 };
 
                 if (id) {
@@ -529,14 +529,14 @@
 
                     $('#gender').val(item.gender);
                     $('#taxRate').val(item.taxRate);
-                  
-                 
+
+
                     const date = new Date(item.birthday);
                     const day = date.getDate().toString().padStart(2, '0');
                     const month = (date.getMonth() + 1).toString().padStart(2, '0');
                     const year = date.getFullYear();
                     const formattedDate = `${year}-${month}-${day}`;
-           
+
 
                     $('#birthday').val(formattedDate);
 
@@ -650,7 +650,7 @@
                 startPage = Math.max(1, endPage - maxButtons + 1);
             }
 
-    
+
             const prevButton = $('<a href="#" class="page-link">&laquo;</a>');
             prevButton.click(function () {
                 if (page > 1) {
@@ -669,7 +669,7 @@
                 }
 
                 pageLink.click(function () {
-            
+
                     fetchDataAndPopulateTable(apiUrl, i);
                 });
 
@@ -691,7 +691,6 @@
 
         function populateTable(data) {
             const tableBody = document.getElementById('employeesTable').getElementsByTagName('tbody')[0];
-      ng
             tableBody.innerHTML = '';
 
             const mapping = {
