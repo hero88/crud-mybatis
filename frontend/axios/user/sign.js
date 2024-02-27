@@ -13,7 +13,7 @@ import { instance } from "../config/config.js";
 
 const baseURL = instance.defaults.baseURL;
 
-$("#home-not-account").attr("href",window.location.origin+"/java_gr2/frontend/html/page/home.html");
+$("#home-not-account").attr("href",window.location.origin+"/html/page/home.html");
 
 $(".btn-login").click(function () {
     var mailLogin = $('.mailLogin').val();
@@ -25,7 +25,7 @@ $(".btn-login").click(function () {
         if(resp.data.data.status == 1){
             alert("Login successful")
             setCookie("token", resp.data.data.access_token, 30)
-            window.location.href = window.location.origin+"/java_gr2/frontend/html/page/home.html";
+            window.location.href = window.location.origin+"/html/page/home.html";
         }else{
             alert("Login fail. Check your information")
         }
