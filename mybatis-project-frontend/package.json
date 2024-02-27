@@ -47,6 +47,7 @@
     "react-timeit": "^1.2.12",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "vite-plugin-env-compatible": "^2.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
