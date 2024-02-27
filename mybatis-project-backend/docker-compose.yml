@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  database-service:
+    container_name: allxone-database
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: CRUDAllXone
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123456
+    ports:
+      - 3306:3306
+  allxone-mybatis-backend:
+    container_name: allxone-mybatis-backend
+    image: allxone-mybatis-backend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: stag
+    ports:
+      - 5555:5555

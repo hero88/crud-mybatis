@@ -1,0 +1,50 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "develop-java-gr3" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+jobs:
+  test-java:
+    runs-on: java-gr3
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        # ref: ${{ github.event.before }}  # Use the commit before the push
+        ref: "develop-java-gr3"
+
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: node_modules-${{hashFiles('package-lock.json')}}
+        restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+
+    - name: build_FE
+      run: |
+        cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-3/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
+        cd mybatis-project-frontend
+        npm install
+        npm run build
+        sudo rsync -a dist/. /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn
+
+    - name: copy_file
+      run: |
+        sudo rsync -a . /home/azureuser/crud_training/java_gr3/ --exclude .git
+        cp /home/azureuser/crud_training/java_gr3/firebase_config /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/main/resources/firebase_config.json
+        cp /home/azureuser/crud_training/java_gr3/app.env /home/azureuser/crud_training/java_gr3/mybatis-project-backend/src/main/resources/app.env
+        
+    - name: run_app
+      run: |
+        cd /home/azureuser/crud_training/java_gr3/mybatis-project-backend/
+        mvn spring-boot:run

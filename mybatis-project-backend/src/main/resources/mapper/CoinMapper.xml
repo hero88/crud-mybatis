@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.CoinMapper">
+    <resultMap id="coinResultMap" type="com.allxone.mybatisprojectbackend.model.Coin">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="symbol" column="symbol"/>
+        <result property="coinMarketId" column="coin_market_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
+        <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
+    </resultMap>
+
+    <insert id="saveCoin" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO coin (USER_ID, NAME, SYMBOL, COIN_MARKET_ID, QUANTITY, CREATED_AT, UPDATED_AT)
+        VALUES (#{userId}, #{name}, #{symbol}, #{coinMarketId}, #{quantity}, NOW(), NOW())
+    </insert>
+
+    <select id="getCoinById" parameterType="long" resultMap="coinResultMap">
+        SELECT c.ID
+             , c.USER_ID
+             , c.NAME
+             , c.SYMBOL
+             , c.COIN_MARKET_ID
+             , c.QUANTITY
+             , c.CREATED_AT
+             , c.UPDATED_AT
+        FROM coin c
+        WHERE c.ID = #{id}
+    </select>
+
+    <select id="getCoinByUserId" parameterType="long" resultMap="coinResultMap">
+        SELECT c.ID
+             , c.USER_ID
+             , c.NAME
+             , c.SYMBOL
+             , c.COIN_MARKET_ID
+             , c.QUANTITY
+             , c.CREATED_AT
+             , c.UPDATED_AT
+        FROM coin c
+        WHERE c.USER_ID = #{id}
+    </select>
+
+    <select id="getAllCoins" resultMap="coinResultMap">
+        SELECT c.ID
+             , c.USER_ID
+             , c.NAME
+             , c.SYMBOL
+             , c.COIN_MARKET_ID
+             , c.QUANTITY
+             , c.CREATED_AT
+             , c.UPDATED_AT
+        FROM coin c
+    </select>
+
+    <update id="updateCoin" parameterType="Coin" useGeneratedKeys="true" keyProperty="id">
+        UPDATE coin
+        SET NAME           = #{name},
+            SYMBOL         = #{symbol},
+            COIN_MARKET_ID = #{coinMarketId},
+            QUANTITY       = #{quantity},
+            UPDATED_AT     = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteCoinById" parameterType="Long">
+        DELETE
+        FROM coin
+        WHERE ID = #{id}
+    </delete>
+
+</mapper>
