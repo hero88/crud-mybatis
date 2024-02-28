@@ -99,9 +99,25 @@ public class TimeTrackingApi {
                 .build());
     }
 
+    @GetMapping("/list-all-time")
+    public ResponseEntity<?> getListTimeTrackingByDate(@RequestParam(value = "limit",defaultValue = "10") Integer limit) {
+        List<WorkingTimeDTO> list =timeTrackingService.getAllWorkingTimeEmployeeAllTime(limit);
+        if (list != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                    .message("successful")
+                    .success(true)
+                    .data(list)
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.builder()
+                .message("Don't have list time tracking in this date!")
+                .success(false)
+                .build());
+    }
+
     @GetMapping("/list-working")
     public ResponseEntity<?> getTimLieTrackingByDate(@RequestParam("date") Date date,@RequestParam(value = "limit",defaultValue = "10") Integer limit) {
-        List<WorkingTimeDTO> list = timeTrackingService.getAllWorkingTimeEmployee(date,10);
+        List<WorkingTimeDTO> list = timeTrackingService.getAllWorkingTimeEmployee(date,limit);
         if (list != null) {
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
                     .message("successful")
