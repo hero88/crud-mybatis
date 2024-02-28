@@ -349,4 +349,10 @@
     where ttr.date_track= #{date}
     order by ttr.clock_out desc limit #{limit}
   </select>
+
+  <select id="findAllWorkingTimeEmployeeAllTime" resultType="com.allxone.coinmarket.dto.response.WorkingTimeDTO">
+    select * from time_tracking ttr
+    join employees e on ttr.employee_id = e.id
+    order by ttr.date_track desc limit #{limit}
+  </select>
 </mapper>

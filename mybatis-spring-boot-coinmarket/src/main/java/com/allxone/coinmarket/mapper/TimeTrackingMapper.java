@@ -104,4 +104,6 @@ public interface TimeTrackingMapper {
 
     List<TimeTracking> getEmployeeIdWorkingTime(@Param("employee_id") Long id, @Param("month") int month);
     List<WorkingTimeDTO> findAllWorkingTimeEmployee(@Param("date") Date date,@Param("limit") Integer limit);
+
+    List<WorkingTimeDTO> findAllWorkingTimeEmployeeAllTime(@Param("limit") Integer limit);
 }

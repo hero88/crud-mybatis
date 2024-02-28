@@ -17,6 +17,8 @@ public interface TimeTrackingService {
     public List<TimeTracking> getListByDate(Date date);
 
     public List<WorkingTimeDTO> getAllWorkingTimeEmployee(Date date,Integer limit);
+
+    List<WorkingTimeDTO> getAllWorkingTimeEmployeeAllTime(Integer limit);
     
     BigDecimal sumTotalHoursWorking(Long id,int month);
 }
