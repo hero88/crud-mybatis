@@ -16,7 +16,6 @@ const NumberCounter = ({ coin }) => {
 
     const { data: response } = await updateCoin(newUpdatedCoin);
 
-    console.log(response);
   };
 
   const [count, setCount] = useState(quantity);

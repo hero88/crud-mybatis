@@ -24,7 +24,7 @@ jobs:
         ref: "develop-java-gr3"
 
     - name: Cache node modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: node_modules
         key: node_modules-${{hashFiles('package-lock.json')}}
@@ -36,7 +36,8 @@ jobs:
         cd mybatis-project-frontend
         npm install
         npm run build
-        sudo rsync -a dist/. /usr/share/nginx/html/java_gr3
+        sudo rsync -a dist/. /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn
+        sudo chown -R cannex_xone__usr:cannex_xone__usr /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn
 
     - name: copy_file
       run: |

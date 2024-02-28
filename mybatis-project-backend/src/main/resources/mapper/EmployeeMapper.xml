@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.EmployeeMapper">
+    <resultMap id="employeeResultMap" type="com.allxone.mybatisprojectbackend.model.Employee">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="firstname" column="first_name"/>
+        <result property="lastname" column="last_name"/>
+        <result property="birthday" column="birthday" javaType="java.time.Instant"/>
+        <result property="gender" column="gender"/>
+        <result property="contactNumber" column="contact_number"/>
+        <result property="email" column="email"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="position" column="position"/>
+        <result property="hireDate" column="hire_date" javaType="java.time.Instant"/>
+        <result property="terminationDate" column="termination_date" javaType="java.time.Instant"/>
+        <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
+        <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
+    </resultMap>
+
+    <insert id="saveEmployee" parameterType="Employee" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO employee (user_id, first_name, last_name, birthday, gender, contact_number, email, department_id,
+                              position, hire_date, termination_date, created_at, updated_at)
+        VALUES (#{userId}, #{firstname}, #{lastname}, #{birthday}, #{gender}, #{contactNumber}, #{email},
+                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, NOW(), NOW())
+    </insert>
+
+    <select id="getEmployeeById" parameterType="java.lang.Long" resultMap="employeeResultMap">
+        SELECT *
+        FROM employee
+        WHERE id = #{id}
+    </select>
+
+    <select id="getAllEmployees" resultMap="employeeResultMap">
+        SELECT *
+        FROM employee
+    </select>
+
+    <update id="updateEmployee" parameterType="Employee">
+        UPDATE employee
+        <set>
+            <if test="firstname != null">
+                first_name = #{firstname},
+            </if>
+            <if test="lastname != null">
+                last_name = #{lastname},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{contactNumber},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="departmentId != null">
+                department_id = #{departmentId},
+            </if>
+            <if test="position != null">
+                position = #{position},
+            </if>
+            <if test="hireDate != null">
+                hire_date = #{hireDate},
+            </if>
+            <if test="terminationDate != null">
+                termination_date = #{terminationDate},
+            </if>
+            updated_at = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteEmployeeById" parameterType="Long">
+        DELETE
+        FROM employee
+        WHERE id = #{id}
+    </delete>
+</mapper>

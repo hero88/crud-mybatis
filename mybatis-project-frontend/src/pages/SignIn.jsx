@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -51,8 +50,6 @@ const SignIn = () => {
       password: "",
     },
   });
-
-  const [error, setError] = useState("");
 
   const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
@@ -146,8 +143,6 @@ const SignIn = () => {
   const handleLoginNormally = async (userForm) => {
     const { data: response } = await login(userForm);
 
-    console.log(response);
-
     if (response.data) {
       localStorage.setItem("token", JSON.stringify(response.data.accessToken));
       localStorage.setItem("profile", JSON.stringify(response.data.user));
@@ -160,7 +155,6 @@ const SignIn = () => {
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       navigate("/sign-in");
-      setError("Your username or password is incorrect!");
     }
   };
 

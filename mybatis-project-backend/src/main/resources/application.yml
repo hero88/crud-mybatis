@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:file:src/main/resources/.env[.properties]
+    import: optional:file:src/main/resources/app.env[.properties]
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -48,3 +48,5 @@ springdoc:
     show-common-extensions: true
 server:
   port: 5555
+client:
+    url: ${CLIENT_URL}

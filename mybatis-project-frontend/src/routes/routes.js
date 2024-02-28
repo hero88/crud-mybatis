@@ -1,16 +1,23 @@
 import config from "@/config";
-import ProfileLayout from "@/layouts/ProfileLayout";
+
 import Coin from "@/pages/Coin";
 import Home from "@/pages/Home";
 import ListUser from "@/pages/ListUser";
 import Profile from "@/pages/Profile";
-
-import AuthLayout from "@/layouts/AuthLayout";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import CoinDetail from "@/pages/CoinDetail";
 import VerifyEmail from "@/pages/VerifyEmail";
-import { VerifyLayout } from "@/layouts";
+import Company from "@/pages/Company";
+import Employees from "@/pages/Employees";
+import TimeTracking from "@/pages/TimeTracking";
+import Payroll from "@/pages/Payroll";
+import {
+  CompanyLayout,
+  VerifyLayout,
+  AuthLayout,
+  ProfileLayout,
+} from "@/layouts";
 
 //Public routes
 const publicRoutes = [
@@ -22,6 +29,22 @@ const publicRoutes = [
   { path: config.routes.verify, component: VerifyEmail, layout: VerifyLayout },
   { path: config.routes.signin, component: SignIn, layout: AuthLayout },
   { path: config.routes.signup, component: SignUp, layout: AuthLayout },
+  { path: config.routes.company, component: Company, layout: CompanyLayout },
+  {
+    path: config.routes.employees,
+    component: Employees,
+    layout: CompanyLayout,
+  },
+  {
+    path: config.routes.timetracking,
+    component: TimeTracking,
+    layout: CompanyLayout,
+  },
+  {
+    path: config.routes.payroll,
+    component: Payroll,
+    layout: CompanyLayout,
+  },
 ];
 
 const privateRoutes = [];
