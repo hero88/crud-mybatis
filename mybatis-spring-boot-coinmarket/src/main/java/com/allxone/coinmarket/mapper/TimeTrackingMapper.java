@@ -106,4 +106,6 @@ public interface TimeTrackingMapper {
     List<WorkingTimeDTO> findAllWorkingTimeEmployee(@Param("date") Date date,@Param("limit") Integer limit);
 
     List<WorkingTimeDTO> findAllWorkingTimeEmployeeAllTime(@Param("limit") Integer limit);
+
+    BigDecimal sumTotalHoursMonth(TimeTrackingExample example);
 }

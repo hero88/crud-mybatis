@@ -13,4 +13,5 @@ public class CompanyDTO {
     private Long totalEmployees;
     private Long totalHoldings;
     private BigDecimal totalPayroll;
+    private BigDecimal totalHour;
 }
