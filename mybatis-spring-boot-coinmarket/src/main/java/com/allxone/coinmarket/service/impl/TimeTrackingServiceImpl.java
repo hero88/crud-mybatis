@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -115,8 +114,8 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
 
     public TimeTracking create(TimeTracking tracking, TimeTrackingExample example){
         example.createCriteria().andEmployeeIdEqualTo(tracking.getEmployeeId()).andDateTrackEqualTo(tracking.getDateTrack());
-        TimeTracking checkExist = mapper.selectByExample(example).get(0);
-        if(checkExist==null){
+        Integer checkExist = mapper.selectByExample(example).size();
+        if(checkExist==0){
             tracking.setDateTrack(new Date());
             tracking.setCreatedAt(new Date());
             tracking.setUpdatedAt(new Date());
