@@ -142,7 +142,7 @@ btnConfirmAdd.addEventListener("click", () => {
         employeeId: employeeId,
         clockIn: timeIn,
         clockOut: timeOut,
-        dateTrack: convertDate(new Date())
+        dateTrack: convertDate(date)
       })
       .then((resp) => {
         if (resp.data.success === true) {
