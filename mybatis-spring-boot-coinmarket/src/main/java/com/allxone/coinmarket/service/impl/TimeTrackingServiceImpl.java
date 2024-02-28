@@ -116,7 +116,7 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
         example.createCriteria().andEmployeeIdEqualTo(tracking.getEmployeeId()).andDateTrackEqualTo(tracking.getDateTrack());
         Integer checkExist = mapper.selectByExample(example).size();
         if(checkExist==0){
-            tracking.setDateTrack(new Date());
+            tracking.setDateTrack(tracking.getDateTrack());
             tracking.setCreatedAt(new Date());
             tracking.setUpdatedAt(new Date());
             tracking.setTotalHours(BigDecimal.valueOf((convertToDate(tracking.getClockOut()).getTime() - convertToDate(tracking.getClockIn()).getTime())/3600000));

@@ -142,12 +142,12 @@ btnConfirmAdd.addEventListener("click", () => {
         employeeId: employeeId,
         clockIn: timeIn,
         clockOut: timeOut,
-        dateTrack: convertDate(new Date())
+        dateTrack: convertDate(date)
       })
       .then((resp) => {
         if (resp.data.success === true) {
           swal("Create success!", "", "success").then(() => {
-            findListTimeTrackingByDate(new Date(), limit);
+            findListTimeTrackingByDate(date, limit);
           })
         } else {
           swal("Create failure!", "Check information again", "error");
