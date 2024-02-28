@@ -43,20 +43,17 @@ public class CompanyServiceimpl implements CompanyService {
         Long countEmployees = employeesMapper.countByExample(new EmployeesExample());
         companyDTO.setTotalEmployees(countEmployees);
 
-
         PayrollExample payrollExample = new PayrollExample();
         payrollExample.createCriteria()
                 .andPeriodEndBetween(firstDayOfCurrentMonth, lastDayOfCurrentMonth);
         BigDecimal totalPayroll = payrollMapper.sumSalaryByMonth(payrollExample);
         companyDTO.setTotalPayroll(totalPayroll != null ? totalPayroll : BigDecimal.ZERO);
 
-
         TimeTrackingExample timeTrackingExample = new TimeTrackingExample();
         timeTrackingExample.createCriteria()
                 .andDateTrackBetween(firstDayOfCurrentMonth, lastDayOfCurrentMonth);
         BigDecimal totalHour = timeTrackingMapper.sumTotalHoursMonth(timeTrackingExample);
         companyDTO.setTotalHour(totalHour != null ? totalHour : BigDecimal.ZERO);
-
 
         try {
             List<CoinsUserReponse> list = coinService.getAllCoinsUser();
