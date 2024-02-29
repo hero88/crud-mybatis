@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public class TimeTrackingApi {
     @PostMapping("")
     public ResponseEntity<?> createTimeTracking(@RequestBody TimeTracking tracking) {
         TimeTracking timeTracking = timeTrackingService.save(tracking);
-        if(timeTracking!=null) {
+        if (timeTracking != null) {
             TimeTrackingDTO dto = mapDTO.map(timeTracking, TimeTrackingDTO.class);
             if (dto != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
@@ -100,8 +101,8 @@ public class TimeTrackingApi {
     }
 
     @GetMapping("/list-all-time")
-    public ResponseEntity<?> getListTimeTrackingByDate(@RequestParam(value = "limit",defaultValue = "10") Integer limit) {
-        List<WorkingTimeDTO> list =timeTrackingService.getAllWorkingTimeEmployeeAllTime(limit);
+    public ResponseEntity<?> getListTimeTrackingByDate(@RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        List<WorkingTimeDTO> list = timeTrackingService.getAllWorkingTimeEmployeeAllTime(limit);
         if (list != null) {
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
                     .message("successful")
@@ -116,8 +117,8 @@ public class TimeTrackingApi {
     }
 
     @GetMapping("/list-working")
-    public ResponseEntity<?> getTimLieTrackingByDate(@RequestParam("date") Date date,@RequestParam(value = "limit",defaultValue = "10") Integer limit) {
-        List<WorkingTimeDTO> list = timeTrackingService.getAllWorkingTimeEmployee(date,limit);
+    public ResponseEntity<?> getTimeTrackingByDate(@RequestParam("date") Date date, @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        List<WorkingTimeDTO> list = timeTrackingService.getAllWorkingTimeEmployee(date, limit);
         if (list != null) {
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
                     .message("successful")
@@ -143,6 +144,26 @@ public class TimeTrackingApi {
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
                 .message("Don't have list time tracking in this date!")
+                .success(false)
+                .build());
+    }
+
+    @GetMapping("/list-working/filter")
+    public ResponseEntity<?> getTimeTrackingByFilter(@RequestParam("listId") String listId, @RequestParam("from") Date from,
+                                                     @RequestParam("to") Date to, @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        List<Integer> listID = Arrays.stream(listId.split(","))
+                            .map(Integer::parseInt)
+                            .collect(Collectors.toList());
+        List<WorkingTimeDTO> list = timeTrackingService.getAllWorkingTimeEmployeeByFilter(listID,from,to,limit);
+        if (!list.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                    .message("successful")
+                    .success(true)
+                    .data(list)
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                .message("No data")
                 .success(false)
                 .build());
     }

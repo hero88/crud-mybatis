@@ -194,4 +194,11 @@ public class EmployeesServiceImpl implements EmployeesService {
 	public List<EmployeeDTO> findAllEmployeeNotTermination() {
 		return employeesMapper.findAllEmployeeNotTermination();
 	}
+
+	@Override
+	public List<Employees> findAllEmployee() {
+		return employeesMapper.selectByExample(new EmployeesExample());
+	}
+
+
 }

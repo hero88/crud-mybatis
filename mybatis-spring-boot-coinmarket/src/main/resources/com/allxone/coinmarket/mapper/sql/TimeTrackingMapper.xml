@@ -355,7 +355,17 @@
     join employees e on ttr.employee_id = e.id
     order by ttr.date_track desc limit #{limit}
   </select>
-
+  <select id="findAllWorkingTimeEmployeeByFilter"
+            resultType="com.allxone.coinmarket.dto.response.WorkingTimeDTO">
+    select * from time_tracking ttr
+    join employees e on ttr.employee_id = e.id
+    where e.id in
+          <foreach collection="listId" item="id" open="(" separator="," close=")">
+            #{id}
+            </foreach>
+    and ttr.date_track between #{from} and #{to}
+    order by ttr.date_track desc limit #{limit}
+  </select>
   <select id="sumTotalHoursMonth" parameterType="com.allxone.coinmarket.model.TimeTrackingExample" resultType="java.math.BigDecimal">
     select sum(total_hours) from time_tracking
     <if test="_parameter != null">
