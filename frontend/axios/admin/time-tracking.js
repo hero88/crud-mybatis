@@ -19,10 +19,23 @@ const btnMore = document.getElementById('btn-more');
 const btnViewAll = document.getElementById('btn-view-all-tracking');
 const btnMoreAll = document.getElementById('btn-more-all');
 const containerViewAll = document.getElementById('container-view-all');
+const datalistEmployee = document.getElementById('employee-choices');
+const containerChoiceEmployee = document.getElementById('container-employee');
+const employeeChoice = document.getElementById('employee-choice');
+const filterFromDate = document.getElementById('filter-from-date');
+const filterToDate = document.getElementById('filter-to-date');
+const btnFilter =document.getElementById('btn-filter');
 
 var limit = 10;
-var date= new Date();
+var date = new Date();
 var sizeList = 0;
+var listIdEmployeeChoice = [];
+var listIdEmployee = [];
+var limitViewAll = 10;
+var sizeAll = 0;
+var from = new Date(-1);
+var to = new Date();
+var detail = {};
 
 for (let i = 0; i < 5; i++) {
   tableContainer.append(cardTemplate.content.cloneNode(true));
@@ -75,7 +88,7 @@ function findListTimeTrackingByDate(date, limited) {
                     </span>
                 </td>
                 <td class="p-3 pr-0 text-end">
-                    <button onclick="getDetail(${e.id},'${nameId}')"
+                    <button onclick="getDetail(${e.id},'${nameId}','detail')"
                         class="btn-detail ml-auto relative text-secondary-dark bg-light-dark hover:text-primary flex items-center h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">
                         <span
                             class="flex items-center justify-center p-0 m-0 leading-none shrink-0">
@@ -102,6 +115,71 @@ function findListTimeTrackingByDate(date, limited) {
     .catch((err) => { });
 }
 
+function findListTimeTrackingByFilter(list, from, to, limited) {
+  axios
+    .get(api + "/list-working/filter", {
+      params: {
+        listId: list.join(','),
+        from: convertDate(from),
+        to: convertDate(to),
+        limit: limited
+      },
+    })
+    .then((resp) => {
+      var trElm = "";
+      if (resp.data.success === true) {
+        if (sizeAll < resp.data.data.length) {
+          btnMoreAll.classList.add('show');
+          btnMoreAll.classList.remove('hidden');
+          sizeAll = resp.data.data.length;
+        } else {
+          btnMoreAll.classList.add('hidden');
+          btnMoreAll.classList.remove('show');
+        }
+        resp.data.data.map((e, index) => {
+          const nameId = `${e.employee_id} - ${e.last_name} ${e.first_name}`;
+          trElm += `<tr ondblclick="getDetail(${e.employee_id},'${nameId}','all')" class="border-b border-dashed last:border-b-0">
+              <td class=""><span>${index + 1}</span></td>
+              <td class="p-3 pl-0 text-start">
+                  <span class="font-semibold text-light-inverse text-md/normal">${nameId}</span>
+              </td>
+              <td class="p-3 pr-0 text-end">
+                  <span
+                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-success bg-success-light rounded-lg">
+                      ${e.clock_in}
+                  </span>
+              </td>
+              <td class="p-3 pr-0 text-end">
+                  <span
+                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-warning bg-success-light rounded-lg">
+                      ${e.clock_out}
+                  </span>
+              </td>
+              <td class="p-3 text-center">
+                  <span
+                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-warning bg-danger-light rounded-lg">
+                      ${e.total_hours} hours
+                  </span>
+              </td>
+              <td class="p-3 text-center">
+                  <span
+                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-primary bg-primary-light rounded-lg">
+                      ${e.date_track}
+                  </span>
+              </td>
+          </tr>`;
+        });
+        containerViewAll.innerHTML = trElm;
+      } else {
+        trElm = `<tr class="border-b border-dashed last:border-b-0">
+              <td colspan="6"  class="text-center"><span>No Data</span></td>
+          </tr>`;
+        containerViewAll.innerHTML = trElm;
+      }
+    })
+    .catch((err) => { });
+}
+
 findListTimeTrackingByDate(new Date(), limit);
 
 changeDate.addEventListener("change", (e) => {
@@ -110,6 +188,64 @@ changeDate.addEventListener("change", (e) => {
   date = new Date(e.target.value);
   findListTimeTrackingByDate(new Date(e.target.value), limit);
 });
+
+findAllEmployee();
+
+function findAllEmployee() {
+  axios
+    .get(baseURL + "v1/employees/list")
+    .then((resp) => {
+      var optionsElm = "";
+      if (resp.data.success === true) {
+        
+        resp.data.data.map((e, index) => {
+          listIdEmployee.push(e.id);
+          optionsElm += `<option value="${e.id}">${e.lastName} ${e.firstName}</option>`;
+          datalistEmployee.innerHTML = optionsElm;
+
+        });
+      } else {
+        optionsElm = `<option value="">No data</option>`;
+        datalistEmployee.innerHTML = optionsElm;
+      }
+    })
+    .catch((err) => { });
+}
+
+
+employeeChoice.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+  }
+});
+
+employeeChoice.addEventListener('change', (e) => {
+  var selectedOption = e.target.value.trim();
+  var options = document.querySelectorAll('#employee-choices option');
+  var search = "";
+  let check = false;
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].value == selectedOption) {
+      search = options[i].text;
+      check = true;
+      break;
+    }
+  }
+  if (selectedOption && selectedOption != "" && !listIdEmployeeChoice.includes(selectedOption) && check) {
+    listIdEmployeeChoice.push(selectedOption);
+
+    var option = document.createElement('option');
+    option.classList.add('mb-3', 'border-2','mx-2','rounded-lg','p-2');
+    option.value = selectedOption;
+    option.textContent = search;
+    containerChoiceEmployee.appendChild(option);
+    e.target.value = "";
+    option.addEventListener('click', function () {
+      containerChoiceEmployee.removeChild(option);
+      listIdEmployeeChoice = listIdEmployeeChoice.filter(e => e !== selectedOption);
+    });
+  }
+})
 
 btnCreate.addEventListener("click", () => {
   axios
@@ -160,8 +296,8 @@ btnConfirmAdd.addEventListener("click", () => {
 
 })
 
-var detail = {};
-window.getDetail = function (id, iden) {
+
+window.getDetail = function (id, iden,type) {
   axios
     .get(api, {
       params: {
@@ -174,8 +310,13 @@ window.getDetail = function (id, iden) {
       identify.textContent = iden + " : " + detail.totalHours + " hours";
       clockInUpdate.value = detail.clockIn;
       clockOutUpdate.value = detail.clockOut;
+      date = detail.dateTrack;
       containerDetail.classList.add("show");
       containerDetail.classList.remove("hidden");
+      if(type ==='all'){
+        document.getElementById('btn-close-all').click();
+        findListTimeTrackingByDate(date, limit);
+      }
     })
     .catch((err) => { });
 }
@@ -244,79 +385,29 @@ btnMore.addEventListener('click', () => {
   findListTimeTrackingByDate(date, limit);
 })
 
-var limitViewAll = 10;
-var sizeAll = 0;
-function viewAll(limitViewAll) {
-  axios
-    .get(api + "/list-all-time", {
-      params: {
-        limit: limitViewAll
-      },
-    })
-    .then((resp) => {
-      var trElm = "";
-      if (resp.data.success === true) {
-        if (sizeAll < resp.data.data.length) {
-          btnMoreAll.classList.add('show');
-          btnMoreAll.classList.remove('hidden');
-          sizeAll = resp.data.data.length;
-        } else {
-          btnMoreAll.classList.add('hidden');
-          btnMoreAll.classList.remove('show');
-        }
-        resp.data.data.map((e, index) => {
-          const nameId = `${e.employee_id} - ${e.last_name} ${e.first_name}`;
-          trElm += `<tr class="border-b border-dashed last:border-b-0">
-              <td class=""><span>${index + 1}</span></td>
-              <td class="p-3 pl-0 text-start">
-                  <span class="font-semibold text-light-inverse text-md/normal">${nameId}</span>
-              </td>
-              <td class="p-3 pr-0 text-end">
-                  <span
-                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-success bg-success-light rounded-lg">
-                      ${e.clock_in}
-                  </span>
-              </td>
-              <td class="p-3 pr-0 text-end">
-                  <span
-                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-warning bg-success-light rounded-lg">
-                      ${e.clock_out}
-                  </span>
-              </td>
-              <td class="p-3 text-center">
-                  <span
-                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-warning bg-danger-light rounded-lg">
-                      ${e.total_hours} hours
-                  </span>
-              </td>
-              <td class="p-3 text-center">
-                  <span
-                      class="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-primary bg-primary-light rounded-lg">
-                      ${e.date_track}
-                  </span>
-              </td>
-          </tr>`;
-        });
-        containerViewAll.innerHTML = trElm;
-      } else {
-        trElm = `<tr class="border-b border-dashed last:border-b-0">
-              <td colspan="6"  class="text-center"><span>No Data</span></td>
-          </tr>`;
-        containerViewAll.innerHTML = trElm;
-      }
-    })
-    .catch((err) => { });
-}
 
 btnViewAll.addEventListener('click', () => {
   limitViewAll = 10;
   sizeAll = 0;
-  viewAll(limitViewAll)
+  findListTimeTrackingByFilter(listIdEmployee, from, to, limitViewAll);
 })
 
 btnMoreAll.addEventListener('click', () => {
   limitViewAll += 10;
-  viewAll(limitViewAll)
+  findListTimeTrackingByFilter(listIdEmployee, from, to, limitViewAll);
+})
+
+btnFilter.addEventListener('click',()=>{
+    const list = listIdEmployeeChoice.length===0 ? listIdEmployee : listIdEmployeeChoice;
+    from = filterFromDate.value === '' ? new Date(-1) : new Date(filterFromDate.value);
+    to = filterToDate.value  === '' ? new Date() : new Date(filterToDate.value);
+    if(from > to){
+      swal("Something wrong!", {
+        icon: "error",
+      })
+    }else{
+      findListTimeTrackingByFilter(list, from, to, limitViewAll);
+    }
 })
 
 function convertHour(time) {

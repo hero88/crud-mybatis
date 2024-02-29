@@ -156,6 +156,11 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
         return list;
     }
 
+    @Override
+    public List<WorkingTimeDTO> getAllWorkingTimeEmployeeByFilter(List<Integer> id, Date from, Date to,Integer limit) {
+        return mapper.findAllWorkingTimeEmployeeByFilter(id, from, to, limit);
+    }
+
     public Date  convertToDate(String str){
         try {
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");

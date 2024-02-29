@@ -8,6 +8,7 @@ import com.allxone.coinmarket.dto.response.EmployeeDTO;
 import com.allxone.coinmarket.dto.response.PageResult;
 import com.allxone.coinmarket.exception.common.ParamInvalidException;
 import com.allxone.coinmarket.model.Departments;
+import com.allxone.coinmarket.model.Employees;
 
 public interface EmployeesService {
 
@@ -24,4 +25,6 @@ public interface EmployeesService {
 	List<Departments> getAllDepartments();
 
 	List<EmployeeDTO> findAllEmployeeNotTermination();
+
+	List<Employees> findAllEmployee();
 }

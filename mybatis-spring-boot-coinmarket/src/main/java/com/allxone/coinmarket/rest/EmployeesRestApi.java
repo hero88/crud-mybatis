@@ -1,6 +1,8 @@
 package com.allxone.coinmarket.rest;
 
+import com.allxone.coinmarket.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -64,6 +66,15 @@ public class EmployeesRestApi {
 			,@RequestParam(name = "size",defaultValue = "5") int size){
 		   int offset = (page - 1) * size;
 		return ResponseEntity.ok(employeesService.findAll(offset, size));
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<?> findAllEmployee(){
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+				.message("successful")
+				.success(true)
+				.data(employeesService.findAllEmployee())
+				.build());
 	}
 	
 	@GetMapping("get-departments")
