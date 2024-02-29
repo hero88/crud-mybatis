@@ -21,7 +21,7 @@ public class WorkingTimeDTO {
 
     private String last_name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone = "Asia/Ho_Chi_Minh" )
     private Date date_track;
 
     private String clock_in;

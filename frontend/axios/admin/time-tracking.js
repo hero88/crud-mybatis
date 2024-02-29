@@ -17,54 +17,52 @@ const clockOutUpdate = document.getElementById("clock_out_update");
 const identify = document.getElementById('identify');
 const btnMore = document.getElementById('btn-more');
 const btnViewAll = document.getElementById('btn-view-all-tracking');
-const btnMoreAll = document.getElementById('btn-more-all');
-const containerViewAll = document.getElementById('container-view-all');
 const datalistEmployee = document.getElementById('employee-choices');
 const containerChoiceEmployee = document.getElementById('container-employee');
 const employeeChoice = document.getElementById('employee-choice');
 const filterFromDate = document.getElementById('filter-from-date');
 const filterToDate = document.getElementById('filter-to-date');
-const btnFilter =document.getElementById('btn-filter');
+const btnFilter = document.getElementById('btn-filter');
 
 var limit = 10;
 var date = new Date();
-var sizeList = 0;
 var listIdEmployeeChoice = [];
 var listIdEmployee = [];
 var limitViewAll = 10;
-var sizeAll = 0;
 var from = new Date(-1);
 var to = new Date();
 var detail = {};
+//changeDate.value = date.toISOString().split('T')[0];
 
 for (let i = 0; i < 5; i++) {
   tableContainer.append(cardTemplate.content.cloneNode(true));
 }
 
 function findListTimeTrackingByDate(date, limited) {
-
-  axios
-    .get(api + "/list-working", {
-      params: {
-        date: convertDate(date),
-        limit: limited
-      },
-    })
-    .then((resp) => {
-      var trElm = "";
-      if (resp.data.success === true) {
-        const div = cardTemplate.content.cloneNode(true);
-        if (sizeList < resp.data.data.length) {
-          btnMore.classList.add('show');
-          btnMore.classList.remove('hidden');
-          sizeList = resp.data.data.length;
-        } else {
-          btnMore.classList.add('hidden');
-          btnMore.classList.remove('show');
-        }
-        resp.data.data.map((e, index) => {
-          const nameId = `${e.employee_id} - ${e.last_name} ${e.first_name}`;
-          trElm += `<tr class="border-b border-dashed last:border-b-0">
+  btnMore.classList.remove("all")
+  return new Promise((resolve, reject) => {
+    axios
+      .get(api + "/list-working", {
+        params: {
+          date: convertDate(date),
+          limit: limited
+        },
+      })
+      .then((resp) => {
+        var trElm = "";
+        if (resp.data.success === true) {
+          const div = cardTemplate.content.cloneNode(true);
+          // if (sizeList < resp.data.data.length) {
+          //   btnMore.classList.add('show');
+          //   btnMore.classList.remove('hidden');
+          //   sizeList = resp.data.data.length;
+          // } else {
+          //   btnMore.classList.add('hidden');
+          //   btnMore.classList.remove('show');
+          // }
+          resp.data.data.map((e, index) => {
+            const nameId = `${e.employee_id} - ${e.last_name} ${e.first_name}`;
+            trElm += `<tr class="border-b border-dashed last:border-b-0">
                 <td class=""><span>${index + 1}</span></td>
                 <td class="p-3 pl-0 text-start">
                     <span class="font-semibold text-light-inverse text-md/normal">${nameId}</span>
@@ -87,9 +85,9 @@ function findListTimeTrackingByDate(date, limited) {
                         ${e.total_hours} hours
                     </span>
                 </td>
-                <td class="p-3 pr-0 text-end">
+                <td class="p-3 pr-0 text-center">
                     <button onclick="getDetail(${e.id},'${nameId}','detail')"
-                        class="btn-detail ml-auto relative text-secondary-dark bg-light-dark hover:text-primary flex items-center h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">
+                        class="btn-detail ml-auto relative text-secondary-dark bg-light-dark hover:text-primary h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">
                         <span
                             class="flex items-center justify-center p-0 m-0 leading-none shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -102,20 +100,24 @@ function findListTimeTrackingByDate(date, limited) {
                     </button>
                 </td>
             </tr>`;
-        });
-        tableContainer.innerHTML = trElm;
-      } else {
-        const div = cardTemplate.content.cloneNode(true);
-        trElm = `<tr class="border-b border-dashed last:border-b-0">
+          });
+          tableContainer.innerHTML = trElm;
+          resolve();
+        } else {
+          const div = cardTemplate.content.cloneNode(true);
+          trElm = `<tr class="border-b border-dashed last:border-b-0">
                 <td colspan="6"  class="text-center"><span>No Data</span></td>
             </tr>`;
-        tableContainer.innerHTML = trElm;
-      }
-    })
-    .catch((err) => { });
+          tableContainer.innerHTML = trElm;
+          reject();
+        }
+      })
+      .catch((err) => { reject() })
+  });
 }
 
 function findListTimeTrackingByFilter(list, from, to, limited) {
+  btnMore.classList.add("all")
   axios
     .get(api + "/list-working/filter", {
       params: {
@@ -128,17 +130,9 @@ function findListTimeTrackingByFilter(list, from, to, limited) {
     .then((resp) => {
       var trElm = "";
       if (resp.data.success === true) {
-        if (sizeAll < resp.data.data.length) {
-          btnMoreAll.classList.add('show');
-          btnMoreAll.classList.remove('hidden');
-          sizeAll = resp.data.data.length;
-        } else {
-          btnMoreAll.classList.add('hidden');
-          btnMoreAll.classList.remove('show');
-        }
         resp.data.data.map((e, index) => {
           const nameId = `${e.employee_id} - ${e.last_name} ${e.first_name}`;
-          trElm += `<tr ondblclick="getDetail(${e.employee_id},'${nameId}','all')" class="border-b border-dashed last:border-b-0">
+          trElm += `<tr ondblclick="getDetail(${e.id},'${nameId}','all')" class="border-b border-dashed last:border-b-0">
               <td class=""><span>${index + 1}</span></td>
               <td class="p-3 pl-0 text-start">
                   <span class="font-semibold text-light-inverse text-md/normal">${nameId}</span>
@@ -169,47 +163,54 @@ function findListTimeTrackingByFilter(list, from, to, limited) {
               </td>
           </tr>`;
         });
-        containerViewAll.innerHTML = trElm;
+        tableContainer.innerHTML = trElm;
       } else {
         trElm = `<tr class="border-b border-dashed last:border-b-0">
               <td colspan="6"  class="text-center"><span>No Data</span></td>
           </tr>`;
-        containerViewAll.innerHTML = trElm;
+        tableContainer.innerHTML = trElm;
       }
     })
     .catch((err) => { });
 }
 
-findListTimeTrackingByDate(new Date(), limit);
+//findListTimeTrackingByDate(new Date(), limit);
 
 changeDate.addEventListener("change", (e) => {
   limit = 10;
   sizeList = 0;
   date = new Date(e.target.value);
   findListTimeTrackingByDate(new Date(e.target.value), limit);
+  btnMore.classList.remove("all")
 });
 
-findAllEmployee();
+findAllEmployee().then(() => {
+  findListTimeTrackingByFilter(listIdEmployee, from, to, limitViewAll);
+});
 
 function findAllEmployee() {
-  axios
-    .get(baseURL + "v1/employees/list")
-    .then((resp) => {
-      var optionsElm = "";
-      if (resp.data.success === true) {
-        
-        resp.data.data.map((e, index) => {
-          listIdEmployee.push(e.id);
-          optionsElm += `<option value="${e.id}">${e.lastName} ${e.firstName}</option>`;
+  return new Promise((resolve, reject) => {
+    axios
+      .get(baseURL + "v1/employees/list")
+      .then((resp) => {
+        var optionsElm = "";
+        if (resp.data.success === true) {
+          resp.data.data.forEach((e, index) => {
+            listIdEmployee.push(e.id);
+            optionsElm += `<option value="${e.id}">${e.lastName} ${e.firstName}</option>`;
+            datalistEmployee.innerHTML = optionsElm;
+          });
+          resolve(); // Gọi resolve() khi hoàn thành việc lấy dữ liệu
+        } else {
+          optionsElm = `<option value="">No data</option>`;
           datalistEmployee.innerHTML = optionsElm;
-
-        });
-      } else {
-        optionsElm = `<option value="">No data</option>`;
-        datalistEmployee.innerHTML = optionsElm;
-      }
-    })
-    .catch((err) => { });
+          reject(); // Gọi reject() nếu có lỗi xảy ra
+        }
+      })
+      .catch((err) => {
+        reject(); // Gọi reject() nếu có lỗi xảy ra
+      });
+  });
 }
 
 
@@ -235,7 +236,7 @@ employeeChoice.addEventListener('change', (e) => {
     listIdEmployeeChoice.push(selectedOption);
 
     var option = document.createElement('option');
-    option.classList.add('mb-3', 'border-2','mx-2','rounded-lg','p-2');
+    option.classList.add('mb-3', 'border-2', 'mx-2', 'rounded-lg', 'p-2');
     option.value = selectedOption;
     option.textContent = search;
     containerChoiceEmployee.appendChild(option);
@@ -297,7 +298,7 @@ btnConfirmAdd.addEventListener("click", () => {
 })
 
 
-window.getDetail = function (id, iden,type) {
+window.getDetail = function (id, iden, type) {
   axios
     .get(api, {
       params: {
@@ -313,9 +314,12 @@ window.getDetail = function (id, iden,type) {
       date = detail.dateTrack;
       containerDetail.classList.add("show");
       containerDetail.classList.remove("hidden");
-      if(type ==='all'){
-        document.getElementById('btn-close-all').click();
-        findListTimeTrackingByDate(date, limit);
+      if (type == 'all') {
+        changeDate.value = date;
+        date = new Date(changeDate.value);
+        findListTimeTrackingByDate(date, limit).then(() => {
+          document.getElementById('btn-close-all').click()
+        });
       }
     })
     .catch((err) => { });
@@ -337,7 +341,8 @@ window.upgrade = function () {
         swal("Poof! Your time tracking has been updated!", {
           icon: "success",
         }).then(() => {
-          findListTimeTrackingByDate(new Date(resp.data.data.dateTrack), limit);
+          date = new Date(resp.data.data.dateTrack)
+          findListTimeTrackingByDate(date, limit);
         })
 
       })
@@ -347,7 +352,7 @@ window.upgrade = function () {
 
 window.elimidate = function () {
   const id = detail.id;
-  const date = detail.dateTrack;
+  date = new Date(changeDate.value);
   swal({
     title: "Are you sure?",
     text: "Once deleted, you will not be able to recover this data!",
@@ -368,7 +373,7 @@ window.elimidate = function () {
             swal("Poof! Your time tracking has been deleted!", {
               icon: "success",
             }).then(() => {
-              findListTimeTrackingByDate(new Date(date), limit);
+              findListTimeTrackingByDate(date, limit);
               document.getElementById('container-detail').classList.add('hidden');
             });
 
@@ -381,33 +386,33 @@ window.elimidate = function () {
 }
 
 btnMore.addEventListener('click', () => {
-  limit += 10;
-  findListTimeTrackingByDate(date, limit);
+  if (btnMore.classList.contains('all')) {
+    limitViewAll += 10;
+    const list = listIdEmployeeChoice.length === 0 ? listIdEmployee : listIdEmployeeChoice;
+    findListTimeTrackingByFilter(list, from, to, limitViewAll);
+  } else {
+    limit += 10;
+    findListTimeTrackingByDate(date, limit);
+  }
+
 })
 
-
-btnViewAll.addEventListener('click', () => {
-  limitViewAll = 10;
-  sizeAll = 0;
-  findListTimeTrackingByFilter(listIdEmployee, from, to, limitViewAll);
+btnViewAll.addEventListener('click',()=>{
+  limitViewAll=10;
 })
 
-btnMoreAll.addEventListener('click', () => {
-  limitViewAll += 10;
-  findListTimeTrackingByFilter(listIdEmployee, from, to, limitViewAll);
-})
-
-btnFilter.addEventListener('click',()=>{
-    const list = listIdEmployeeChoice.length===0 ? listIdEmployee : listIdEmployeeChoice;
-    from = filterFromDate.value === '' ? new Date(-1) : new Date(filterFromDate.value);
-    to = filterToDate.value  === '' ? new Date() : new Date(filterToDate.value);
-    if(from > to){
-      swal("Something wrong!", {
-        icon: "error",
-      })
-    }else{
-      findListTimeTrackingByFilter(list, from, to, limitViewAll);
-    }
+btnFilter.addEventListener('click', () => {
+  const list = listIdEmployeeChoice.length === 0 ? listIdEmployee : listIdEmployeeChoice;
+  from = filterFromDate.value === '' ? new Date(-1) : new Date(filterFromDate.value);
+  to = filterToDate.value === '' ? new Date() : new Date(filterToDate.value);
+  if (from > to) {
+    swal("Something wrong!", {
+      icon: "error",
+    })
+  } else {
+    findListTimeTrackingByFilter(list, from, to, limitViewAll);
+    document.getElementById('container-detail').classList.add('hidden');
+  }
 })
 
 function convertHour(time) {
@@ -425,7 +430,7 @@ function convertHour(time) {
 
 
 function convertDate(time) {
-  const month = String(time.getMonth() + 1).padStart(2, "0"); // Month start from 0 so add 1
+  const month = String(time.getMonth() + 1).padStart(2, "0");
   const day = String(time.getDate()).padStart(2, "0");
   const year = time.getFullYear();
 

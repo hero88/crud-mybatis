@@ -158,6 +158,7 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
 
     @Override
     public List<WorkingTimeDTO> getAllWorkingTimeEmployeeByFilter(List<Integer> id, Date from, Date to,Integer limit) {
+        System.out.println(mapper.findAllWorkingTimeEmployeeByFilter(id, from, to, limit).toString());
         return mapper.findAllWorkingTimeEmployeeByFilter(id, from, to, limit);
     }
 

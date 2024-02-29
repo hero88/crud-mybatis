@@ -19,6 +19,7 @@ public class TimeTrackingDTO {
 
     private Long employeeId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Ho_Chi_Minh" )
     private Date dateTrack;
 
     private String clockIn;
