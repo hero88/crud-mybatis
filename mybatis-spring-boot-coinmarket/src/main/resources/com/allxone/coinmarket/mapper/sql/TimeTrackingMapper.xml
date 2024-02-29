@@ -366,4 +366,10 @@
     and ttr.date_track between #{from} and #{to}
     order by ttr.date_track desc limit #{limit}
   </select>
+  <select id="sumTotalHoursMonth" parameterType="com.allxone.coinmarket.model.TimeTrackingExample" resultType="java.math.BigDecimal">
+    select sum(total_hours) from time_tracking
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>
