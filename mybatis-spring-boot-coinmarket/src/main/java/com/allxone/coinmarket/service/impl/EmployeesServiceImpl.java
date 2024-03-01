@@ -31,6 +31,8 @@ import com.allxone.coinmarket.model.Users;
 import com.allxone.coinmarket.service.EmployeesService;
 import com.allxone.coinmarket.service.UserService;
 import com.allxone.coinmarket.utilities.ValidatorUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Service
 public class EmployeesServiceImpl implements EmployeesService {
@@ -66,8 +68,12 @@ public class EmployeesServiceImpl implements EmployeesService {
 		employees.setCreatedAt(new Date());
 		employees.setHireDate(new Date());
 
+		Gson gson = new Gson();
+        String json = gson.toJson(employeesDto.getInsuranceIds());
+        
+        employees.setInsuranceIds(json);
 		
-		
+       
 		int affectedRows = employeesMapper.insert(employees);
 
 		if (affectedRows == 1) {
@@ -85,7 +91,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 		
 		ValidatorUtils.checkNullParam(employeesDto.getId(),employeesDto.getBirthday(), employeesDto.getContactNumber(),
 				employeesDto.getFirstName(), employeesDto.getLastName(), employeesDto.getEmail(),employeesDto.getDepartmentId()
-				,employeesDto.getPosition(),employeesDto.getInsuranceId());
+				,employeesDto.getPosition());
 		
 		ValidatorUtils.checkEmail(employeesDto.getEmail());
 		ValidatorUtils.checkPhone(employeesDto.getContactNumber());
@@ -100,11 +106,16 @@ public class EmployeesServiceImpl implements EmployeesService {
 		dbEmployees.setCreatedAt(createAt);
 		dbEmployees.setHireDate(hireDate);
 		dbEmployees.setUpdatedAt(new Date());
+		
+		Gson gson = new Gson();
+        String json = gson.toJson(employeesDto.getInsuranceIds());
+        dbEmployees.setInsuranceIds(json);
+        
 
 		Users users = userService.getLoggedUser();
 		dbEmployees.setUserId(users.getId());
 		
-		System.err.println(dbEmployees.getInsuranceId()+" Đây là id");
+		
 		
 		employeesMapper.updateByPrimaryKey(dbEmployees);
 
@@ -170,6 +181,9 @@ public class EmployeesServiceImpl implements EmployeesService {
 		 EmployeesDto employeesDto = new EmployeesDto();
 		 BeanUtils.copyProperties(employees, employeesDto);
 		 
+		 List<Integer> list = convertJsonToList(employees.getInsuranceIds());
+		 employeesDto.setInsuranceIds(list);;
+		 
 		 if(employees.getId() != null) {
 			 
 			 TaxInformationExample taxInformationExample = new TaxInformationExample();
@@ -204,5 +218,8 @@ public class EmployeesServiceImpl implements EmployeesService {
 		return employeesMapper.selectByExample(new EmployeesExample());
 	}
 
-
+	 private List<Integer> convertJsonToList(String jsonString) {
+	        Gson gson = new Gson();
+	        return gson.fromJson(jsonString, new TypeToken<List<Integer>>(){}.getType());
+	    }
 }

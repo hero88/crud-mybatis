@@ -2,6 +2,7 @@ package com.allxone.coinmarket.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NegativeOrZero;
 
@@ -49,7 +50,9 @@ public class EmployeesDto {
     
     private Integer taxInformationId;
     
-    private Integer insuranceId;
+    private List<Integer> insuranceIds;
+    
+    private Short leavePaidDays;
     
 
 }
