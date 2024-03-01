@@ -22,6 +22,7 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="insurance_ids" jdbcType="OTHER" property="insuranceIds" />
+    <result column="leave_paid_days" jdbcType="smallint" property="leavePaidDays" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--

@@ -141,6 +141,16 @@ public class Employees {
 
     private String insuranceIds;
 
+    private Integer leavePaidDays;
+
+    public Integer getLeavePaidDays() {
+        return leavePaidDays;
+    }
+
+    public void setLeavePaidDays(Integer leavePaidDays) {
+        this.leavePaidDays = leavePaidDays;
+    }
+
     public String getInsuranceIds() {
         return insuranceIds;
     }

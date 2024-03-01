@@ -96,6 +96,16 @@ public class Payroll {
 
     private String holidayIds;
 
+    private Integer leavePaidDays;
+
+    public Integer getLeavePaidDays() {
+        return leavePaidDays;
+    }
+
+    public void setLeavePaidDays(Integer leavePaidDays) {
+        this.leavePaidDays = leavePaidDays;
+    }
+
     public String getHolidayIds() {
         return holidayIds;
     }
