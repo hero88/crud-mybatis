@@ -23,11 +23,12 @@
     <!-- create model at address package  -->							<!-- Name project -->
     <javaClientGenerator type="XMLMAPPER" targetPackage="com.allxone.coinmarket.mapper"  targetProject="mybatis-spring-boot-coinmarket"/>
 
-    <table tableName="holidays" domainObjectName="Holidays">      
-    </table>	
-    <table tableName="insurance_type" domainObjectName="insuranceType">
-    </table>
+<!--    <table tableName="holidays" domainObjectName="Holidays">      -->
+<!--    </table>	-->
+<!--    <table tableName="insurance_type" domainObjectName="insuranceType">-->
+<!--    </table>-->
 
+    <table tableName="insurance_type" domainObjectName="InsuranceType"></table>
 
   </context>
 </generatorConfiguration>

@@ -247,13 +247,20 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-lg-12">
+                                <label for="">LeavePaidDays</label>
+                                <input type="number" name="" id="leavePaidDays" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-lg-6">
                                 <label for="">TaxRate</label>
                                 <input type="number" step="0.1" name="" id="taxRate" class="form-control">
                             </div>
                             <div class="col-lg-6">
                                 <label for="">Insurance</label>
-                                <select class="form-control" id="insuranceSelect">
+                                <select class="form-control" id="insuranceSelect" multiple>
                                     <option value="">Choose insurance...</option>
                                 </select>
                             </div>
@@ -360,7 +367,7 @@
                                         <input type="text" name="" id="insuranceName" class="form-control">
                                     </div>
                                 </div>
-                             
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <label for="">Rate</label>
@@ -371,8 +378,9 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <label for="">Description</label>
-                                        <textarea name="" id="insuranceDescription" cols="10" rows="5" class="form-control"></textarea>
-                             
+                                        <textarea name="" id="insuranceDescription" cols="10" rows="5"
+                                            class="form-control"></textarea>
+
                                     </div>
                                 </div>
                             </div>
@@ -428,7 +436,7 @@
                                         <input type="text" name="" id="holidayName" class="form-control">
                                     </div>
                                 </div>
-                               
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <label for="">Duration Days</label>
@@ -438,8 +446,9 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <label for="">Description</label>
-                                        <textarea name=""id="holidayDescription"  class="form-control" cols="5" rows="5"></textarea>
-                                        
+                                        <textarea name="" id="holidayDescription" class="form-control" cols="5"
+                                            rows="5"></textarea>
+
                                     </div>
                                 </div>
                             </div>
@@ -507,41 +516,45 @@
         // hàm get cookies
 
 
-        window.saveOrUpdate = function () {
+        // window.saveOrUpdate = function () {
 
-            var id = $('#employeesId').val();
-            var firstName = $('#firstName').val();
-            var lastName = $('#lastName').val();
-            var email = $('#email').val();
-            var phone = $('#phone').val();
-            var position = $('#position').val();
-            var department = $('#departmentSelect').val();
-            var birthday = $('#birthday').val();
-            var gender = $('#gender').val();
-            var taxRate = $('#taxRate').val();
+        //     var id = $('#employeesId').val();
+        //     var firstName = $('#firstName').val();
+        //     var lastName = $('#lastName').val();
+        //     var email = $('#email').val();
+        //     var phone = $('#phone').val();
+        //     var position = $('#position').val();
+        //     var department = $('#departmentSelect').val();
+        //     var birthday = $('#birthday').val();
+        //     var gender = $('#gender').val();
+        //     var taxRate = $('#taxRate').val();
+        //     var leavePaidDays = $('#leavePaidDays').val();
+        //     var insuranceIds = $('#insuranceSelect').val()
 
-            var data = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                contactNumber: phone,
-                position: position,
-                departmentId: department,
-                birthday: birthday,
-                gender: gender,
-                taxRate: taxRate
-            };
+        //     var data = {
+        //         firstName: firstName,
+        //         lastName: lastName,
+        //         email: email,
+        //         contactNumber: phone,
+        //         position: position,
+        //         departmentId: department,
+        //         birthday: birthday,
+        //         gender: gender,
+        //         taxRate: taxRate,
+        //         leavePaidDays: leavePaidDays,
+        //         insuranceIds:insuranceIds
+        //     };
 
-            if (validateData(firstName, lastName, email, phone, position, department, birthday, gender, taxRate)) {
-                if (id) {
+        //     if (validateData(firstName, lastName, email, phone, position, department, birthday, gender, taxRate)) {
+        //         if (id) {
 
-                    updateEmployees(apiUrl + "/" + id, data);
-                } else {
+        //             updateEmployees(apiUrl + "/" + id, data);
+        //         } else {
 
-                    addToEmployees(apiUrl, data);
-                }
-            }
-        }
+        //             addToEmployees(apiUrl, data);
+        //         }
+        //     }
+        // }
 
 
         function showAlert(title, message, icon) {
@@ -616,7 +629,8 @@
             var gender = $('#gender').val();
             var taxRate = $('#taxRate').val();
             var taxInformationId = $("#taxInformationId").val();
-            var insuranceId = $("#insuranceSelect").val();
+            var insuranceIds = $("#insuranceSelect").val();
+            var leavePaidDays = $('#leavePaidDays').val();
 
             if (validateData(firstName, lastName, email, phone, position, department, birthday, gender, taxRate)) {
                 var data = {
@@ -630,7 +644,8 @@
                     gender: gender,
                     taxRate: taxRate,
                     taxInformationId: taxInformationId,
-                    insuranceId: insuranceId
+                    insuranceIds: insuranceIds,
+                    leavePaidDays: leavePaidDays
                 };
 
                 if (id) {
@@ -701,11 +716,31 @@
                     $('#position').val(item.position);
                     $('#departmentSelect').val(item.departmentId);
                     $('#taxInformationId').val(item.taxInformationId);
-                    $("#insuranceSelect").val(item.insuranceId);
 
+                    $('#leavePaidDays').val(item.leavePaidDays);
                     $('#gender').val(item.gender);
                     $('#taxRate').val(item.taxRate);
 
+                    var insuranceIds = item.insuranceIds;
+                    var selectElement = document.getElementById("insuranceSelect");
+                    var options = selectElement.options;
+
+                
+                    // Xóa tất cả các lựa chọn trước khi chọn lại
+                    for (var i = 0; i < options.length; i++) {
+                        options[i].removeAttribute("selected");
+                    }
+
+                    // Chọn lại các tùy chọn tương ứng
+                    for (var i = 0; i < options.length; i++) {
+                        var optionValue = parseInt(options[i].value);
+                        if (insuranceIds.includes(optionValue)) {
+                            options[i].setAttribute("selected", "selected");
+                        }
+                    }
+
+
+         
 
                     const date = new Date(item.birthday);
                     const day = date.getDate().toString().padStart(2, '0');
@@ -740,7 +775,12 @@
             $('#gender').val('');
             $('#taxRate').val('0.0');
             $('#taxInformationId').val('');
-            $("#insuranceSelect").val(0);
+
+            $('#leavePaidDays').val('');
+
+
+            var selectElement = document.getElementById("insuranceSelect");
+            selectElement.selectedIndex = -1;
 
         }
 
@@ -769,6 +809,10 @@
                 }
             });
         }
+
+
+
+
 
         function getCookie(cookieName) {
             var name = cookieName + "=";
@@ -962,8 +1006,8 @@
                     $('#insuranceSelect').empty();
 
 
-                    const defaultOption = $('<option>').attr('value', '0').text('Select Insurance').prop('selected', true);
-                    $('#insuranceSelect').append(defaultOption);
+                    // const defaultOption = $('<option>').attr('value', '0').text('Select Insurance').prop('selected', true);
+                    // $('#insuranceSelect').append(defaultOption);
 
                     item.forEach(item => {
 
