@@ -36,7 +36,7 @@ jobs:
         cd mybatis-project-frontend
         npm install
         npm run build
-        sudo rsync -a dist/. /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn
+        sudo rsync -a dist/. /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn/public
         sudo chown -R cannex_xone__usr:cannex_xone__usr /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn
 
     - name: copy_file
