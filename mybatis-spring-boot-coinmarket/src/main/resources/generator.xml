@@ -5,9 +5,9 @@
 <generatorConfiguration>
   <context id="DB2Tables" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                    connectionURL="jdbc:mysql://localhost:3306/coinmarket"
-                    userId="root"
-                    password="123456">
+        connectionURL="jdbc:mysql://localhost:3306/coinmarket"
+        userId="root"
+        password="123456">
     </jdbcConnection>
 
     <javaTypeResolver >
@@ -23,12 +23,9 @@
     <!-- create model at address package  -->							<!-- Name project -->
     <javaClientGenerator type="XMLMAPPER" targetPackage="com.allxone.coinmarket.mapper"  targetProject="mybatis-spring-boot-coinmarket"/>
 
-
-    <table tableName="holidays" domainObjectName="Holidays">
-
-    </table>
+    <table tableName="holidays" domainObjectName="Holidays">      
+    </table>	
     <table tableName="insurance_type" domainObjectName="insuranceType">
-
     </table>
 
 

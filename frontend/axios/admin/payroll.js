@@ -58,14 +58,23 @@ const getAllPayroll = async (month) => {
 
 function viewMonth() {
     var selectMonth = document.getElementById("select-month");
+    var selectMonthFrom = document.getElementById("select-month-from");
+    var selectMonthTo = document.getElementById("select-month-to");
     selectMonth.className =""
     selectMonth.innerHTML = '';
-
     for (var i = 1; i <= 12; i++) {
         var option = document.createElement("option");
         option.value = i; 
         option.text = i + "";  
+        var option1 = document.createElement("option");
+        option1.value = i; 
+        option1.text = i + ""; 
+        var option2 = document.createElement("option");
+        option2.value = i; 
+        option2.text = i + ""; 
         selectMonth.appendChild(option);
+        selectMonthFrom.appendChild(option1);
+        selectMonthTo.appendChild(option2);
     }
 }
 

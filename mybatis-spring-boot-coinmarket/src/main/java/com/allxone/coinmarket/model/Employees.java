@@ -139,7 +139,7 @@ public class Employees {
      */
     private Date updatedAt;
 
-    private Integer insuranceId;
+    private String insuranceIds;
 
     private Integer leavePaidDays;
 
@@ -150,13 +150,13 @@ public class Employees {
     public void setLeavePaidDays(Integer leavePaidDays) {
         this.leavePaidDays = leavePaidDays;
     }
-
-    public Integer getInsuranceId() {
-        return insuranceId;
+  
+    public String getInsuranceIds() {
+        return insuranceIds;
     }
 
-    public void setInsuranceId(Integer insuranceId) {
-        this.insuranceId = insuranceId;
+    public void setInsuranceIds(String insuranceIds) {
+        this.insuranceIds = insuranceIds; 
     }
 
     /**

@@ -17,6 +17,8 @@
     <result column="period_end" jdbcType="DATE" property="periodEnd" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="holiday_ids" jdbcType="OTHER" property="holidayIds" />
+    <result column="leave_paid_days" jdbcType="SMALLINT" property="leavePaidDays" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -365,7 +367,7 @@
   </update>
 
   <select id="getAllPayrolls" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    SELECT * FROM coinmaster.payroll where  month(period_start) = #{month,jdbcType=INTEGER}
+    SELECT * FROM payroll where  month(period_start) = #{month,jdbcType=INTEGER}
   </select>
 
   <select id="getAllSalary" parameterType="java.lang.Integer" resultType="com.allxone.coinmarket.dto.response.PayrollDTO">
