@@ -150,13 +150,13 @@ public class Employees {
     public void setLeavePaidDays(Integer leavePaidDays) {
         this.leavePaidDays = leavePaidDays;
     }
-
+  
     public String getInsuranceIds() {
         return insuranceIds;
     }
 
     public void setInsuranceIds(String insuranceIds) {
-        this.insuranceIds = insuranceIds;
+        this.insuranceIds = insuranceIds; 
     }
 
     /**

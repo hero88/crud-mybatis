@@ -49,6 +49,7 @@ public class EmployeesDto {
     
     private Integer taxInformationId;
     
+    private Integer insuranceId;
     
 
 }
