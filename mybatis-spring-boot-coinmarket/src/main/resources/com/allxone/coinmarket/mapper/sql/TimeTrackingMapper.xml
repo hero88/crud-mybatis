@@ -334,11 +334,11 @@
 
 
   <select id="sumTotalHours" parameterType="java.lang.Long" resultType="BigDecimal">
-    SELECT sum(total_hours) FROM coinmaster.time_tracking WHERE coinmaster.employee_id = #{employee_id,jdbcType=BIGINT};
+    SELECT sum(total_hours) FROM time_tracking WHERE employee_id = #{employee_id,jdbcType=BIGINT};
   </select>
 
   <select id="getEmployeeIdWorkingTime" parameterType="java.util.Map" resultMap="BaseResultMap">
-    SELECT * FROM coinmaster.time_tracking
+    SELECT * FROM time_tracking
              where employee_id = #{employee_id,jdbcType=BIGINT}
                   and  month(date_track) = #{month,jdbcType=INTEGER}
                   and year(date_track) = year(current_date())

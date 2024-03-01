@@ -21,6 +21,7 @@
     <result column="termination_date" jdbcType="DATE" property="terminationDate" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="insurance_ids" jdbcType="OTHER" property="insuranceIds" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--

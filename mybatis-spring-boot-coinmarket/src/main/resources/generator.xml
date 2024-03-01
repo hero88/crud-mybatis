@@ -5,7 +5,7 @@
 <generatorConfiguration>
   <context id="DB2Tables" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-        connectionURL="jdbc:mysql://localhost:3306/coinmaster"
+        connectionURL="jdbc:mysql://localhost:3306/coinmarket"
         userId="root"
         password="123456">
     </jdbcConnection>
@@ -24,21 +24,13 @@
     <javaClientGenerator type="XMLMAPPER" targetPackage="com.allxone.coinmarket.mapper"  targetProject="mybatis-spring-boot-coinmarket"/>
      
 
-    <table tableName="department" domainObjectName="Departments">
+    <table tableName="holidays" domainObjectName="Holidays">
       
     </table>	
-    <table tableName="employees" domainObjectName="Employees">
+    <table tableName="insurance_type" domainObjectName="insuranceType">
       
     </table>
-    <table tableName="payroll" domainObjectName="Payroll">
-      
-    </table>   
-    <table tableName="tax_information" domainObjectName="TaxInformation" >
-      
-    </table>
-      <table tableName="time_tracking" domainObjectName="TimeTracking" >
-      
-    </table>
+
 
   </context>
 </generatorConfiguration>
