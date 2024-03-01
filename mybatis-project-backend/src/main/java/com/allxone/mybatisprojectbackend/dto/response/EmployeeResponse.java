@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.dto.response;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,6 +21,8 @@ public class EmployeeResponse {
     private String position;
     private Instant hireDate;
     private Instant terminationDate;
+    private Short leavePaidDays;
+    private JsonNode insuranceIds;
     private Instant createdAt;
     private Instant updatedAt;
 }

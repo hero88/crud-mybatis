@@ -1,10 +1,9 @@
 package com.allxone.mybatisprojectbackend.controller;
 
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
-import com.allxone.mybatisprojectbackend.dto.request.DepartmentRequest;
-import com.allxone.mybatisprojectbackend.dto.response.CoinResponse;
-import com.allxone.mybatisprojectbackend.dto.response.DepartmentResponse;
-import com.allxone.mybatisprojectbackend.service.DepartmentService;
+import com.allxone.mybatisprojectbackend.dto.request.HolidayRequest;
+import com.allxone.mybatisprojectbackend.dto.response.HolidayResponse;
+import com.allxone.mybatisprojectbackend.service.HolidayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,51 +16,51 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Department")
+@RequestMapping("/api/holiday")
 @RequiredArgsConstructor
 //@PreAuthorize("hasAnyRole('ADMIN','USER')")
-public class DepartmentController {
+public class HolidayController {
 
-    private final DepartmentService departmentService;
+    private final HolidayService HolidayService;
 
-    @GetMapping("/getAllDepartment")
-    public CommonResponse<List<DepartmentResponse>> getAllDepartments() {
+    @GetMapping("/getAllHoliday")
+    public CommonResponse<List<HolidayResponse>> getAllHolidays() {
         try {
-            List<DepartmentResponse> data = departmentService.getAllDepartments();
+            List<HolidayResponse> data = HolidayService.getAllHolidays();
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PostMapping("/saveDepartment")
+    @PostMapping("/saveHoliday")
 //    @PreAuthorize("hasAuthority('admin:create')")
-    public CommonResponse<DepartmentResponse> saveDepartment(@RequestBody DepartmentRequest departmentRequest) {
+    public CommonResponse<HolidayResponse> saveHoliday(@RequestBody HolidayRequest holidayRequest) {
 
         try {
-            DepartmentResponse data = departmentService.saveDepartment(departmentRequest);
+            HolidayResponse data = HolidayService.saveHoliday(holidayRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @GetMapping("/getDepartmentById/{id}")
-    public CommonResponse<DepartmentResponse> getDepartmentById(@PathVariable Integer id) {
+    @GetMapping("/getHolidayById/{id}")
+    public CommonResponse<HolidayResponse> getHolidayById(@PathVariable Integer id) {
         try {
-            DepartmentResponse data = departmentService.getDepartmentById(id);
+            HolidayResponse data = HolidayService.getHolidayById(id);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }
 
-    @PutMapping("/updateDepartment")
+    @PutMapping("/updateHoliday")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
-    public CommonResponse<DepartmentResponse> updateDepartment(@RequestBody DepartmentRequest departmentRequest) {
+    public CommonResponse<HolidayResponse> updateHoliday(@RequestBody HolidayRequest holidayRequest) {
 
         try {
-            DepartmentResponse data = departmentService.updateDepartment(departmentRequest);
+            HolidayResponse data = HolidayService.updateHoliday(holidayRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             System.out.println(e);

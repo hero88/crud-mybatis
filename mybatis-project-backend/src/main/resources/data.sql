@@ -31,24 +31,42 @@ VALUES (1, 'Customer Services'),
        (3, 'Marketing');
 --employee
 INSERT INTO employee (id, user_id, first_name, last_name, birthday, gender, contact_number, email,
-                         department_id, position, hire_date, termination_date, created_at, updated_at)
+                      department_id, position, hire_date, termination_date, created_at, updated_at)
 VALUES (1, 1, 'A', 'Nguyen', NULL, NULL, NULL, NULL, 1, 'Call person', '2024-01-01', NULL, '2024-02-21 07:40:08',
         '2024-02-21 07:40:08'),
        (2, 1, 'B', 'Nguyen', NULL, NULL, NULL, NULL, 2, 'Negotiator', '2024-02-01', NULL, '2024-02-21 07:41:49',
         '2024-02-21 07:41:49');
+-- holidays
+
+INSERT INTO holiday (id, holiday_name, hodiday_description, duration_days)
+VALUES (1, 'Tet Holidays',
+        'The Vietnamese New Year, known as Tet holiday, stands as the most significant festival in Vietnam among other Vietnam holidays, a nationwide celebration marking the dawn of the new year in the traditional lunar calendar.',
+        7),
+       (2, 'New Year', 'First day of the year.', 1),
+       (3, 'Independence Day', 'A day celebrating the anniversary of national independence.', 1);
+--insurance_type
+INSERT INTO insurance_type (id, insurance_name, insurance_description, insurance_rate)
+VALUES (1, 'Unemployment Insurance',
+        'A type of insurance policy (= contract) that people pay into, so that they can receive money if they lose their job',
+        1.00),
+       (2, 'Social Insurance',
+        'As with Vietnamese employees, the mandatory social insurance scheme for foreign employees covers sickness, maternity, occupational diseases, accidents, retirement, and death.',
+        8.00),
+       (3, 'Health Insurance', 'Insurance for healthcare', 4.50);
 
 -- tax-information
 INSERT INTO tax_information (id, employee_id, tax_rate, tax_exemption, created_at, updated_at)
 VALUES (1, 1, 0.00, b'1', '2024-02-21 07:47:28', '2024-02-21 07:47:28');
 --payroll
-INSERT INTO payroll (id, employee_id, salary, bonus, deductions, net_salary, period_start, period_end, created_at, updated_at) VALUES
-    (1, 1, 15.00, NULL, NULL, 450.00, '2024-01-01', '2024-01-31', '2024-02-21 07:44:40', '2024-02-21 07:44:40');
+INSERT INTO payroll (id, employee_id, salary, bonus, deductions, net_salary, period_start, period_end, created_at,
+                     updated_at)
+VALUES (1, 1, 15.00, NULL, NULL, 450.00, '2024-01-01', '2024-01-31', '2024-02-21 07:44:40', '2024-02-21 07:44:40');
 --time_tracking
-INSERT INTO time_tracking (id, employee_id, date_track, clock_in, clock_out, total_hours, created_at, updated_at) VALUES
-(1, 1, '2024-01-03', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:05', '2024-02-21 07:46:05'),
-(2, 1, '2024-01-05', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:16', '2024-02-21 07:46:16'),
-(3, 1, '2024-01-08', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:27', '2024-02-21 07:46:27'),
-(4, 1, '2024-01-10', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:34', '2024-02-21 07:46:34'),
-(5, 1, '2024-01-11', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:41', '2024-02-21 07:46:41');
+INSERT INTO time_tracking (id, employee_id, date_track, clock_in, clock_out, total_hours, created_at, updated_at)
+VALUES (1, 1, '2024-01-03', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:05', '2024-02-21 07:46:05'),
+       (2, 1, '2024-01-05', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:16', '2024-02-21 07:46:16'),
+       (3, 1, '2024-01-08', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:27', '2024-02-21 07:46:27'),
+       (4, 1, '2024-01-10', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:34', '2024-02-21 07:46:34'),
+       (5, 1, '2024-01-11', '09:00:00', '17:00:00', 8.00, '2024-02-21 07:46:41', '2024-02-21 07:46:41');
 
 

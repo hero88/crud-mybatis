@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.dto.request;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 import java.time.Instant;
@@ -18,4 +19,6 @@ public class EmployeeRequest {
     private String position;
     private Instant hireDate;
     private Instant terminationDate;
+    private Short leavePaidDays;
+    private JsonNode insuranceIds;
 }

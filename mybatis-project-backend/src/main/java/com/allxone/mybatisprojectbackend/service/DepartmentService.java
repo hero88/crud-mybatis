@@ -6,7 +6,7 @@ import com.allxone.mybatisprojectbackend.dto.response.DepartmentResponse;
 import java.util.List;
 
 public interface DepartmentService {
-    List<DepartmentResponse> getAllDepartment();
+    List<DepartmentResponse> getAllDepartments();
     DepartmentResponse updateDepartment(DepartmentRequest departmentRequest);
     void deleteDepartmentById(Integer id);
     DepartmentResponse saveDepartment(DepartmentRequest departmentRequest);
