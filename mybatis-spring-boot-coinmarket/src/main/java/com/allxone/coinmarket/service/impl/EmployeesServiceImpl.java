@@ -66,6 +66,8 @@ public class EmployeesServiceImpl implements EmployeesService {
 		employees.setCreatedAt(new Date());
 		employees.setHireDate(new Date());
 
+		
+		
 		int affectedRows = employeesMapper.insert(employees);
 
 		if (affectedRows == 1) {
@@ -83,7 +85,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 		
 		ValidatorUtils.checkNullParam(employeesDto.getId(),employeesDto.getBirthday(), employeesDto.getContactNumber(),
 				employeesDto.getFirstName(), employeesDto.getLastName(), employeesDto.getEmail(),employeesDto.getDepartmentId()
-				,employeesDto.getPosition());
+				,employeesDto.getPosition(),employeesDto.getInsuranceId());
 		
 		ValidatorUtils.checkEmail(employeesDto.getEmail());
 		ValidatorUtils.checkPhone(employeesDto.getContactNumber());
@@ -101,6 +103,8 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 		Users users = userService.getLoggedUser();
 		dbEmployees.setUserId(users.getId());
+		
+		System.err.println(dbEmployees.getInsuranceId()+" Đây là id");
 		
 		employeesMapper.updateByPrimaryKey(dbEmployees);
 
