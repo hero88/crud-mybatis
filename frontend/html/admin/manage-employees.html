@@ -706,6 +706,7 @@
             axios.get(apiUrl + "/" + id)
                 .then(res => {
 
+
                     var item = res.data;
 
                     $('#employeesId').val(item.id);
@@ -725,22 +726,20 @@
                     var selectElement = document.getElementById("insuranceSelect");
                     var options = selectElement.options;
 
-                
-                    // Xóa tất cả các lựa chọn trước khi chọn lại
                     for (var i = 0; i < options.length; i++) {
                         options[i].removeAttribute("selected");
                     }
-
-                    // Chọn lại các tùy chọn tương ứng
-                    for (var i = 0; i < options.length; i++) {
-                        var optionValue = parseInt(options[i].value);
-                        if (insuranceIds.includes(optionValue)) {
-                            options[i].setAttribute("selected", "selected");
+                    if (insuranceIds != null) {
+                        for (var i = 0; i < options.length; i++) {
+                            var optionValue = parseInt(options[i].value);
+                            if (insuranceIds.includes(optionValue)) {
+                                options[i].setAttribute("selected", "selected");
+                            } else {
+                                options[i].removeAttribute("selected");
+                            }
                         }
                     }
 
-
-         
 
                     const date = new Date(item.birthday);
                     const day = date.getDate().toString().padStart(2, '0');
@@ -780,7 +779,11 @@
 
 
             var selectElement = document.getElementById("insuranceSelect");
-            selectElement.selectedIndex = -1;
+            var options = selectElement.options;
+
+            for (var i = 0; i < options.length; i++) {
+                options[i].removeAttribute("selected");
+            }
 
         }
 
