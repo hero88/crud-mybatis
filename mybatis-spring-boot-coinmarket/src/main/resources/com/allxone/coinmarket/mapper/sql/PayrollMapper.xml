@@ -392,4 +392,39 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+  <select id="calcNetSalary" parameterType="com.allxone.coinmarket.model.PayrollExample" resultType="java.util.Map">
+    WITH hour_calc AS (
+    SELECT sum(
+        CASE
+            WHEN DAYOFWEEK(date_track) = 1 THEN total_hours * 2
+            WHEN DAYOFWEEK(date_track) = 7 OR clock_in >= '20:00:00' OR (clock_in >= '00:00:00' AND clock_out &lt;= '06:00:00') THEN total_hours * 1.5
+            ELSE total_hours
+        END) as working_hrs,
+        employee_id,
+        month(date_track) as month, year(date_track) as year
+    FROM time_tracking
+    WHERE
+        employee_id in
+      <foreach collection="list" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach> and
+    (Month(date_track) between #{monthFrom} and #{monthTo}) and (Year(date_track) between #{yearFrom} and #{yearTo}) group by employee_id, month
+    )
+
+    select p.id, p.employee_id, concat(e.last_name,' ',e.first_name) as name, p.salary, (h.working_hrs+(p.leave_paid_days * 8) +
+    ((SELECT SUM(duration_days) FROM holidays h WHERE h.id IN (SUBSTRING_INDEX(SUBSTRING_INDEX(p.holiday_ids, '[', -1),']', 1))) * 8)
+    ) * p.salary * (100 - ti.tax_rate - (SELECT SUM(insurance_rate) FROM insurance_type t WHERE t.id IN (SUBSTRING_INDEX(SUBSTRING_INDEX(e.insurance_ids,
+    '[', -1), ']', 1)))
+    ) / 100 + p.bonus - p.deductions AS Net , h.month, h.year
+    from hour_calc h
+    JOIN
+    payroll p ON p.employee_id = h.employee_id
+    JOIN
+    tax_information ti
+    JOIN
+    employees e ON e.id = h.employee_id
+    where month(p.period_start) = h.month
+    group by p.employee_id, p.id
+  </select>
 </mapper>
