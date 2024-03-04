@@ -108,4 +108,7 @@ public interface PayrollMapper {
     Payroll getEmployeeSalaryByMonth(@Param("month") Integer month, @Param("employeeId") Long employeeId);
 
     List<Payroll> getTopThreeLatestSalaries(@Param("employeeId") Long employeeId);
+    BigDecimal sumSalaryByMonth(PayrollExample payrollExample);
+
+    List<Object> calcNetSalary(@Param("list") List<Integer> listId,@Param("monthFrom") Integer monthFrom, @Param("monthTo") Integer monthTo, @Param("yearFrom") Integer yearFrom, @Param("yearTo") Integer yearTo);
 }
