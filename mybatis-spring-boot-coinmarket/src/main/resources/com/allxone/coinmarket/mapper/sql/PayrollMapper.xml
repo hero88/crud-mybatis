@@ -413,9 +413,8 @@
     )
 
     select p.id, p.employee_id, concat(e.last_name,' ',e.first_name) as name, p.salary, (h.working_hrs+(p.leave_paid_days * 8) +
-    ((SELECT SUM(duration_days) FROM holidays h WHERE h.id IN (SUBSTRING_INDEX(SUBSTRING_INDEX(p.holiday_ids, '[', -1),']', 1))) * 8)
-    ) * p.salary * (100 - ti.tax_rate - (SELECT SUM(insurance_rate) FROM insurance_type t WHERE t.id IN (SUBSTRING_INDEX(SUBSTRING_INDEX(e.insurance_ids,
-    '[', -1), ']', 1)))
+    ((SELECT SUM(duration_days) FROM holidays h WHERE JSON_CONTAINS(p.holiday_ids, CAST(h.id AS JSON), '$')) * 8)
+    ) * p.salary * (100 - ti.tax_rate - (SELECT SUM(insurance_rate) FROM insurance_type t WHERE JSON_CONTAINS(e.insurance_ids, CAST(t.id AS JSON), '$'))
     ) / 100 + p.bonus - p.deductions AS Net , h.month, h.year
     from hour_calc h
     JOIN
