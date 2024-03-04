@@ -7,13 +7,10 @@ import com.allxone.mybatisprojectbackend.mapper.HolidayMapper;
 import com.allxone.mybatisprojectbackend.mapper.InsuranceTypeMapper;
 import com.allxone.mybatisprojectbackend.mapper.PayrollMapper;
 import com.allxone.mybatisprojectbackend.mapper.TaxInformationMapper;
-import com.allxone.mybatisprojectbackend.model.Holiday;
-import com.allxone.mybatisprojectbackend.model.InsuranceType;
 import com.allxone.mybatisprojectbackend.model.Payroll;
 import com.allxone.mybatisprojectbackend.model.TaxInformation;
 import com.allxone.mybatisprojectbackend.service.PayrollService;
 import lombok.RequiredArgsConstructor;
-import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,6 +70,9 @@ public class PayrollServiceImpl implements PayrollService {
         if (payrollRequest.getHolidayIds() != null) {
             payroll.setHolidayIds(payrollRequest.getHolidayIds());
         }
+
+        payrollMapper.updatePayroll(payroll);
+
         if (payroll.getHolidayIds() != null && payroll.getLeavePaidDays() != null) {
             Double insuranceRate =
                     insuranceTypeMapper.getInsuranceTypeByEmployeeId(payroll.getEmployeeId())
@@ -105,10 +105,7 @@ public class PayrollServiceImpl implements PayrollService {
                     taxInformation.getTaxRate(),
                     insuranceRate));
         }
-//        try {
-            payrollMapper.updatePayroll(payroll);
-//        }catch (MyBatisSystemException e){
-//        }
+        payrollMapper.updatePayroll(payroll);
         return getPayrollById(payroll.getId());
     }
 
