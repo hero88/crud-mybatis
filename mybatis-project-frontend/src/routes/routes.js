@@ -18,6 +18,8 @@ import {
   AuthLayout,
   ProfileLayout,
 } from "@/layouts";
+import Insurance from "@/pages/Insurance";
+import Holiday from "@/pages/Holiday";
 
 //Public routes
 const publicRoutes = [
@@ -43,6 +45,16 @@ const publicRoutes = [
   {
     path: config.routes.payroll,
     component: Payroll,
+    layout: CompanyLayout,
+  },
+  {
+    path: config.routes.insurance,
+    component: Insurance,
+    layout: CompanyLayout,
+  },
+  {
+    path: config.routes.holiday,
+    component: Holiday,
     layout: CompanyLayout,
   },
 ];

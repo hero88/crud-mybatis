@@ -24,7 +24,7 @@ function AvatarTray({ user, handleLogout }) {
                   className="h-9 w-9 cursor-pointer"
                   onClick={() => navigate(`/profile/detail/${user?.id}`)}
                 >
-                  <AvatarImage src="" alt="@shadcn" />
+                  <AvatarImage src="" alt="A" />
                   <AvatarFallback className="bg-blue-300 font-semibold">
                     {user?.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
@@ -37,7 +37,7 @@ function AvatarTray({ user, handleLogout }) {
                       className="h-12 w-12 cursor-pointer"
                       onClick={() => navigate(`/profile/detail/${user?.id}`)}
                     >
-                      <AvatarImage src="" alt="@shadcn" />
+                      <AvatarImage src="" alt="A" />
                       <AvatarFallback>
                         {user?.name.charAt(0).toUpperCase()}
                       </AvatarFallback>
@@ -59,6 +59,11 @@ function AvatarTray({ user, handleLogout }) {
                 <Link to={`/profile/coins`}>
                   <DropdownMenuItem className="py-2 font-medium text-sm">
                     Dashboard
+                  </DropdownMenuItem>
+                </Link>
+                <Link to={`/company`}>
+                  <DropdownMenuItem className="py-2 font-medium text-sm">
+                    Company mode
                   </DropdownMenuItem>
                 </Link>
 
