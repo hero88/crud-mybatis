@@ -17,6 +17,8 @@ public class PayrollConvert {
                 .netSalary(payroll.getNetSalary())
                 .periodStart(payroll.getPeriodStart())
                 .periodEnd(payroll.getPeriodEnd())
+                .leavePaidDays(payroll.getLeavePaidDays())
+                .holidayIds(payroll.getHolidayIds())
                 .createdAt(payroll.getCreatedAt())
                 .updatedAt(payroll.getUpdatedAt())
                 .build();
@@ -29,6 +31,8 @@ public class PayrollConvert {
                 .bonus(payrollRequest.getBonus())
                 .deductions(payrollRequest.getDeductions())
                 .netSalary(payrollRequest.getNetSalary())
+                .leavePaidDays(payrollRequest.getLeavePaidDays())
+                .holidayIds(payrollRequest.getHolidayIds())
                 .periodStart(payrollRequest.getPeriodStart())
                 .periodEnd(payrollRequest.getPeriodEnd())
                 .build();

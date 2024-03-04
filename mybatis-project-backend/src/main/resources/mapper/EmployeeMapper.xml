@@ -16,17 +16,24 @@
         <result property="hireDate" column="hire_date" javaType="java.time.Instant"/>
         <result property="terminationDate" column="termination_date" javaType="java.time.Instant"/>
         <result property="leavePaidDays" column="leave_paid_days"/>
-        <result property="insuranceIds" column="insurance_ids"/>
+        <result property="insuranceIds" column="insurance_ids"
+                jdbcType="OTHER"
+                javaType="com.fasterxml.jackson.databind.JsonNode"
+                typeHandler="com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler"
+        />
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
         <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
-    </resultMap>
 
+
+    </resultMap>
     <insert id="saveEmployee" parameterType="Employee" useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO employee (user_id, first_name, last_name, birthday, gender, contact_number, email, department_id,
                               position, hire_date, termination_date, leave_paid_days, insurance_ids, created_at, updated_at)
         VALUES (#{userId}, #{firstname}, #{lastname}, #{birthday}, #{gender}, #{contactNumber}, #{email},
-                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, #{leavePaidDays}, #{insuranceIds} , NOW(), NOW())
+                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, #{leavePaidDays},
+                #{insuranceIds, jdbcType=OTHER, javaType=com.fasterxml.jackson.databind.JsonNode,typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler} ,
+                NOW(), NOW())
     </insert>
 
     <select id="getEmployeeById" parameterType="java.lang.Long" resultMap="employeeResultMap">
@@ -89,4 +96,5 @@
         FROM employee
         WHERE id = #{id}
     </delete>
+
 </mapper>

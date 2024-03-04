@@ -22,6 +22,16 @@
         SELECT * FROM insurance_type
     </select>
 
+    <select id="getInsuranceTypeByEmployeeId" resultMap="insuranceTypeResultMap" parameterType="Long">
+        SELECT it.*
+        FROM employee e
+        JOIN insurance_type it ON it.id
+        IN (SELECT * FROM JSON_TABLE(e.insurance_ids, '$[*]' COLUMNS (insurance_id INT PATH '$')) as tmp)
+        where e.id = #{id}
+    </select>
+
+
+
     <update id="updateInsuranceType" parameterType="InsuranceType">
         UPDATE insurance_type
         <set>

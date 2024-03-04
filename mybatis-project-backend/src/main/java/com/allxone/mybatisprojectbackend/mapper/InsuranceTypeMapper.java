@@ -11,5 +11,6 @@ public interface InsuranceTypeMapper {
     void updateInsuranceType(InsuranceType insuranceType);
     void deleteInsuranceTypeById(Integer id);
     void saveInsuranceType(InsuranceType insuranceType);
-    InsuranceType getInsuranceTypeById(Integer id);
+    InsuranceType getInsuranceTypeById(Integer id); 
+    List<InsuranceType> getInsuranceTypeByEmployeeId(Long id);
 }

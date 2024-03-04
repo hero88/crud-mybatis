@@ -1,0 +1,5 @@
+<configuration>
+    <typeHandlers>
+        <typeHandler handler="com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler"/>
+    </typeHandlers>
+</configuration>

@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.dto.request;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 import java.time.Instant;
@@ -13,6 +14,8 @@ public class PayrollRequest {
     private Double bonus;
     private Double deductions;
     private Double netSalary;
+    private Short leavePaidDays;
+    private JsonNode holidayIds;
     private LocalDate periodStart;
     private LocalDate periodEnd;
 }

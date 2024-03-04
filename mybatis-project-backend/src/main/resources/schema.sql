@@ -126,6 +126,8 @@ CREATE TABLE payroll
     net_salary   decimal(10, 2)      DEFAULT NULL,
     period_start date                DEFAULT NULL,
     period_end   date                DEFAULT NULL,
+    leave_paid_days smallint NOT NULL DEFAULT '0',
+    holiday_ids json DEFAULT NULL,
     created_at   timestamp      NULL DEFAULT NULL,
     updated_at   timestamp      NULL DEFAULT NULL
 );

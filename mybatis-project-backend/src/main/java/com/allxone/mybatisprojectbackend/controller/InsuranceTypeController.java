@@ -5,6 +5,7 @@ import com.allxone.mybatisprojectbackend.dto.request.InsuranceTypeRequest;
 import com.allxone.mybatisprojectbackend.dto.response.InsuranceTypeResponse;
 import com.allxone.mybatisprojectbackend.service.InsuranceTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +22,12 @@ import java.util.List;
 //@PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class InsuranceTypeController {
 
-    private final InsuranceTypeService InsuranceTypeService;
+    private final InsuranceTypeService insuranceTypeService;
 
     @GetMapping("/getAllInsuranceType")
     public CommonResponse<List<InsuranceTypeResponse>> getAllInsuranceTypes() {
         try {
-            List<InsuranceTypeResponse> data = InsuranceTypeService.getAllInsuranceTypes();
+            List<InsuranceTypeResponse> data = insuranceTypeService.getAllInsuranceTypes();
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
@@ -38,7 +39,7 @@ public class InsuranceTypeController {
     public CommonResponse<InsuranceTypeResponse> saveInsuranceType(@RequestBody InsuranceTypeRequest insuranceTypeRequest) {
 
         try {
-            InsuranceTypeResponse data = InsuranceTypeService.saveInsuranceType(insuranceTypeRequest);
+            InsuranceTypeResponse data = insuranceTypeService.saveInsuranceType(insuranceTypeRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
@@ -48,7 +49,7 @@ public class InsuranceTypeController {
     @GetMapping("/getInsuranceTypeById/{id}")
     public CommonResponse<InsuranceTypeResponse> getInsuranceTypeById(@PathVariable Integer id) {
         try {
-            InsuranceTypeResponse data = InsuranceTypeService.getInsuranceTypeById(id);
+            InsuranceTypeResponse data = insuranceTypeService.getInsuranceTypeById(id);
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
@@ -60,10 +61,22 @@ public class InsuranceTypeController {
     public CommonResponse<InsuranceTypeResponse> updateInsuranceType(@RequestBody InsuranceTypeRequest insuranceTypeRequest) {
 
         try {
-            InsuranceTypeResponse data = InsuranceTypeService.updateInsuranceType(insuranceTypeRequest);
+            InsuranceTypeResponse data = insuranceTypeService.updateInsuranceType(insuranceTypeRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
             System.out.println(e);
+            return CommonResponse.error(null);
+        }
+    }
+
+    @DeleteMapping("/deleteInsuranceTypeId/{id}")
+//    @PreAuthorize("hasAuthority('admin:delete')")
+    public CommonResponse<Integer> deleteInsuranceTypeId(@PathVariable Integer id) {
+
+        try {
+            insuranceTypeService.deleteInsuranceTypeById(id);
+            return CommonResponse.success(id);
+        } catch (Exception e) {
             return CommonResponse.error(null);
         }
     }

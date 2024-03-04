@@ -2,6 +2,8 @@ package com.allxone.mybatisprojectbackend.controller;
 
 import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
 import com.allxone.mybatisprojectbackend.dto.request.PayrollRequest;
+import com.allxone.mybatisprojectbackend.dto.request.PayrollRequest;
+import com.allxone.mybatisprojectbackend.dto.response.PayrollResponse;
 import com.allxone.mybatisprojectbackend.dto.response.PayrollResponse;
 import com.allxone.mybatisprojectbackend.service.PayrollService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,19 @@ public class PayrollController {
             PayrollResponse data = payrollService.savePayroll(payrollRequest);
             return CommonResponse.success(data);
         } catch (Exception e) {
+            return CommonResponse.error(null);
+        }
+    }
+
+    @PutMapping("/updatePayroll")
+//    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
+    public CommonResponse<PayrollResponse> updatePayroll(@RequestBody PayrollRequest PayrollRequest) {
+
+        try {
+            PayrollResponse data = payrollService.updatePayroll(PayrollRequest);
+            return CommonResponse.success(data);
+        } catch (Exception e) {
+            System.out.println(e);
             return CommonResponse.error(null);
         }
     }

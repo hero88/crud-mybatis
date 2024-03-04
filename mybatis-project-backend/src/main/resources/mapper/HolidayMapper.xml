@@ -40,6 +40,14 @@
         WHERE id = #{id}
     </update>
 
+    <select id="getTotalHolidayByPayrollId" resultMap="holidayResultMap" parameterType="Long">
+        SELECT h.*
+        FROM payroll p
+                 JOIN holiday h ON h.id
+            IN (SELECT * FROM JSON_TABLE(p.holiday_ids, '$[*]' COLUMNS (holiday_id INT PATH '$')) as tmp)
+        where p.id = #{id}
+    </select>
+
     <delete id="deleteHolidayById" parameterType="Integer">
         DELETE FROM holiday WHERE id = #{id}
     </delete>
