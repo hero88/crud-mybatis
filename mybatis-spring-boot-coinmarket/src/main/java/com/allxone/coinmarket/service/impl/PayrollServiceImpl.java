@@ -42,7 +42,7 @@ public class PayrollServiceImpl implements PayrollService {
             BigDecimal taxRate = taxInformationMapper.selectByExample(taxInformationSQL).get(0).getTaxRate();
             BigDecimal netSalary = ((BigDecimal)((Map<?, ?>) obj).get("Net"));;
             payroll.setNetSalary(netSalary);
-            payrollSQL.createCriteria().andEmployeeIdEqualTo(payroll.getEmployeeId());
+            payrollSQL.createCriteria().andIdEqualTo(((Long)((Map<?, ?>) obj).get("id")));
             payrollMapper.updateByPrimaryKey(payroll);
             payrollSQL.clear();
         }
