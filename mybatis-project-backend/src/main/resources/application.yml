@@ -47,6 +47,6 @@ springdoc:
     show-extensions: true
     show-common-extensions: true
 server:
-  port: 5555
+  port: ${BASE_PORT}
 client:
     url: ${CLIENT_URL}

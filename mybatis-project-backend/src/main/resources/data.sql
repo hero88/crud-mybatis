@@ -61,10 +61,16 @@ VALUES (1, 'Unemployment Insurance',
 -- tax-information
 INSERT INTO tax_information (id, employee_id, tax_rate, tax_exemption, created_at, updated_at)
 VALUES (1, 1, 0.00, b'1', '2024-02-21 07:47:28', '2024-02-21 07:47:28');
+INSERT INTO tax_information (id, employee_id, tax_rate, tax_exemption, created_at, updated_at)
+VALUES (2, 2, 0.00, b'1', '2024-02-21 07:47:28', '2024-02-21 07:47:28');
 --payroll
 INSERT INTO payroll (id, employee_id, salary, bonus, deductions, net_salary, leave_paid_days, holiday_ids, period_start,
                      period_end, created_at, updated_at)
 VALUES (1, 1, 15.00, NULL, NULL, 450.00, 0, '[1, 2]', '2024-01-01', '2024-01-31', '2024-02-21 07:44:40',
+        '2024-02-21 07:44:40');
+INSERT INTO payroll (id, employee_id, salary, bonus, deductions, net_salary, leave_paid_days, holiday_ids, period_start,
+                     period_end, created_at, updated_at)
+VALUES (2, 2, 15.00, NULL, NULL, 0, 0, null, '2024-01-01', '2024-01-31', '2024-02-21 07:44:40',
         '2024-02-21 07:44:40');
 --time_tracking
 INSERT INTO time_tracking (id, employee_id, date_track, clock_in, clock_out, total_hours, created_at, updated_at)

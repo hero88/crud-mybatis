@@ -57,7 +57,9 @@
                 net_salary = #{netSalary},
             </if>
             <if test="holidayIds != null">
-                holiday_ids = #{holidayIds},
+                holiday_ids = #{holidayIds,
+                jdbcType=OTHER,
+                typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler},
             </if>
             <if test="leavePaidDays != null">
                 leave_paid_days = #{leavePaidDays},
