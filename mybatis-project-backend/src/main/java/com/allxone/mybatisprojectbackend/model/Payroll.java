@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,8 @@ public class Payroll {
     private Double bonus;
     private Double deductions;
     private Double netSalary;
+    private Short leavePaidDays;
+    private JsonNode holidayIds;
     private LocalDate periodStart;
     private LocalDate periodEnd;
     private Instant createdAt;

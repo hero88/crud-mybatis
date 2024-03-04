@@ -15,16 +15,26 @@
         <result property="position" column="position"/>
         <result property="hireDate" column="hire_date" javaType="java.time.Instant"/>
         <result property="terminationDate" column="termination_date" javaType="java.time.Instant"/>
+        <result property="leavePaidDays" column="leave_paid_days"/>
+        <result property="insuranceIds" column="insurance_ids"
+                jdbcType="OTHER"
+                javaType="com.fasterxml.jackson.databind.JsonNode"
+                typeHandler="com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler"
+        />
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
         <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
-    </resultMap>
 
+
+    </resultMap>
     <insert id="saveEmployee" parameterType="Employee" useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO employee (user_id, first_name, last_name, birthday, gender, contact_number, email, department_id,
-                              position, hire_date, termination_date, created_at, updated_at)
+                              position, hire_date, termination_date, leave_paid_days, insurance_ids, created_at, updated_at)
         VALUES (#{userId}, #{firstname}, #{lastname}, #{birthday}, #{gender}, #{contactNumber}, #{email},
-                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, NOW(), NOW())
+                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, #{leavePaidDays},
+                #{insuranceIds, jdbcType=OTHER, javaType=com.fasterxml.jackson.databind.JsonNode,typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler} ,
+                NOW(), NOW())
+
     </insert>
 
     <select id="getEmployeeById" parameterType="java.lang.Long" resultMap="employeeResultMap">
@@ -70,6 +80,12 @@
             </if>
             <if test="terminationDate != null">
                 termination_date = #{terminationDate},
+            </if>
+            <if test="leavePaidDays != null">
+                leave_paid_days = #{leavePaidDays},
+            </if>
+            <if test="leavePaidDays != null">
+                insurance_ids = #{insuranceIds},
             </if>
             updated_at = NOW()
         </set>

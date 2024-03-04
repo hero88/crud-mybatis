@@ -1,6 +1,7 @@
 package com.allxone.mybatisprojectbackend.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,9 @@ public class PayrollResponse {
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 
     private LocalDate periodEnd;
+  
+    private Short leavePaidDays;
+    private JsonNode holidayIds;
     private Instant createdAt;
     private Instant updatedAt;
 }

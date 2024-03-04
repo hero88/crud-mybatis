@@ -25,7 +25,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentMapper departmentMapper;
 
     @Override
-    public List<DepartmentResponse> getAllDepartment() {
+    public List<DepartmentResponse> getAllDepartments() {
+
         return departmentMapper.getAllDepartments()
                 .stream()
                 .map(DepartmentConvert::toDto)

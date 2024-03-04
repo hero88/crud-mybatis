@@ -10,6 +10,12 @@
         <result property="bonus" column="bonus"/>
         <result property="deductions" column="deductions"/>
         <result property="netSalary" column="net_salary" />
+        <result property="leavePaidDays" column="leave_paid_days"/>
+        <result property="holidayIds" column="holiday_ids"
+                jdbcType="OTHER"
+                javaType="com.fasterxml.jackson.databind.JsonNode"
+                typeHandler="com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler"
+        />
         <result property="periodStart" column="period_start" javaType="java.time.LocalDate"/>
         <result property="periodEnd" column="period_end" javaType="java.time.LocalDate"/>
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
@@ -50,11 +56,12 @@
             <if test="netSalary != null">
                 net_salary = #{netSalary},
             </if>
-            <if test="periodStart != null">
-                period_start = #{periodStart},
+            <if test="holidayIds != null">
+                holiday_ids = #{holidayIds},
             </if>
-            <if test="periodEnd != null">
-                period_end = #{periodEnd},
+            <if test="leavePaidDays != null">
+                leave_paid_days = #{leavePaidDays},
+
             </if>
                 updated_at = NOW()
         </set>

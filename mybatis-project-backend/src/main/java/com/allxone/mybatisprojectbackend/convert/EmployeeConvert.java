@@ -3,6 +3,7 @@ package com.allxone.mybatisprojectbackend.convert;
 import com.allxone.mybatisprojectbackend.dto.request.EmployeeRequest;
 import com.allxone.mybatisprojectbackend.dto.response.EmployeeResponse;
 import com.allxone.mybatisprojectbackend.model.Employee;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,6 +23,8 @@ public class EmployeeConvert {
                 .position(employee.getPosition())
                 .hireDate(employee.getHireDate())
                 .terminationDate(employee.getTerminationDate())
+                .leavePaidDays(employee.getLeavePaidDays())
+                .insuranceIds(employee.getInsuranceIds())
                 .createdAt(employee.getCreatedAt())
                 .updatedAt(employee.getUpdatedAt())
                 .build();
@@ -41,6 +44,8 @@ public class EmployeeConvert {
                 .position(employeeRequest.getPosition())
                 .hireDate(employeeRequest.getHireDate())
                 .terminationDate(employeeRequest.getTerminationDate())
+                .leavePaidDays(employeeRequest.getLeavePaidDays())
+                .insuranceIds(employeeRequest.getInsuranceIds())
                 .build();
     }
 }

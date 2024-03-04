@@ -25,9 +25,9 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping("/getAllDepartment")
-    public CommonResponse<List<DepartmentResponse>> getAllDepartment() {
+    public CommonResponse<List<DepartmentResponse>> getAllDepartments() {
         try {
-            List<DepartmentResponse> data = departmentService.getAllDepartment();
+            List<DepartmentResponse> data = departmentService.getAllDepartments();
             return CommonResponse.success(data);
         } catch (Exception e) {
             return CommonResponse.error(null);
