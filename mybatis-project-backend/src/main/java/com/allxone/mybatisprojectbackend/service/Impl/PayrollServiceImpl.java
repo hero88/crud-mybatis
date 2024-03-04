@@ -1,6 +1,5 @@
 package com.allxone.mybatisprojectbackend.service.Impl;
 
-import com.allxone.mybatisprojectbackend.convert.HolidayConvert;
 import com.allxone.mybatisprojectbackend.convert.PayrollConvert;
 import com.allxone.mybatisprojectbackend.dto.request.PayrollRequest;
 import com.allxone.mybatisprojectbackend.dto.response.PayrollResponse;
@@ -8,8 +7,6 @@ import com.allxone.mybatisprojectbackend.mapper.HolidayMapper;
 import com.allxone.mybatisprojectbackend.mapper.InsuranceTypeMapper;
 import com.allxone.mybatisprojectbackend.mapper.PayrollMapper;
 import com.allxone.mybatisprojectbackend.mapper.TaxInformationMapper;
-import com.allxone.mybatisprojectbackend.model.Holiday;
-import com.allxone.mybatisprojectbackend.model.InsuranceType;
 import com.allxone.mybatisprojectbackend.model.Payroll;
 import com.allxone.mybatisprojectbackend.model.TaxInformation;
 import com.allxone.mybatisprojectbackend.service.PayrollService;
@@ -51,28 +48,63 @@ public class PayrollServiceImpl implements PayrollService {
 
     @Override
     public PayrollResponse updatePayroll(PayrollRequest payrollRequest) {
-        Payroll payroll = PayrollConvert.toPayroll(payrollRequest);
 
-        Double insuranceRate =
-                insuranceTypeMapper.getInsuranceTypeByEmployeeId(payroll.getEmployeeId())
-                        .stream()
-                        .mapToDouble(InsuranceType::getInsuranceRate)
-                        .reduce(0.0, Double::sum);
+        Payroll payroll = payrollMapper.getPayrollById(payrollRequest.getId());
 
-        TaxInformation taxInformation =
-                taxInformationMapper.getTaxInformationByEmployeeId(payroll.getEmployeeId());
+        if (payrollRequest.getSalary() != null) {
+            payroll.setSalary(payrollRequest.getSalary());
+        }
 
-        Double holidayDays = holidayMapper.getTotalHolidayByPayrollId(payroll.getId())
-                .stream()
-                .mapToDouble(Holiday::getDurationDays)
-                .reduce(0.0, Double::sum);
+        if (payrollRequest.getBonus() != null) {
+            payroll.setBonus(payrollRequest.getBonus());
+        }
 
-        payroll.setNetSalary(getNetSalary(payroll,
-                holidayDays * 8,
-                1.0,
-                taxInformation.getTaxRate(),
-                insuranceRate));
+        if (payrollRequest.getDeductions() != null) {
+            payroll.setDeductions(payrollRequest.getDeductions());
+        }
 
+        if (payrollRequest.getLeavePaidDays() != null) {
+            payroll.setLeavePaidDays(payrollRequest.getLeavePaidDays());
+        }
+
+        if (payrollRequest.getHolidayIds() != null) {
+            payroll.setHolidayIds(payrollRequest.getHolidayIds());
+        }
+
+        payrollMapper.updatePayroll(payroll);
+
+        if (payroll.getHolidayIds() != null && payroll.getLeavePaidDays() != null) {
+            Double insuranceRate =
+                    insuranceTypeMapper.getInsuranceTypeByEmployeeId(payroll.getEmployeeId())
+                            .stream()
+                            .mapToDouble(insuranceType ->
+                                    insuranceType.getInsuranceRate() != null
+                                            ?
+                                            insuranceType.getInsuranceRate()
+                                            : 0.0
+                            )
+                            .reduce(0.0, Double::sum);
+
+            TaxInformation taxInformation =
+                    taxInformationMapper.getTaxInformationByEmployeeId(payroll.getEmployeeId());
+
+            double holidayDays = holidayMapper.getTotalHolidayByPayrollId(payroll.getId())
+                    .stream()
+                    .mapToDouble(holiday ->
+                            holiday.getDurationDays() != null
+                                    ?
+                                    holiday.getDurationDays()
+                                    : 0.0
+                    )
+                    .reduce(0.0, Double::sum);
+
+            Double leavePaidDays = Double.valueOf(payroll.getLeavePaidDays());
+            payroll.setNetSalary(getNetSalary(payroll,
+                    holidayDays * 8 + leavePaidDays * 8,
+                    1.0,
+                    taxInformation.getTaxRate(),
+                    insuranceRate));
+        }
         payrollMapper.updatePayroll(payroll);
         return getPayrollById(payroll.getId());
     }
@@ -82,9 +114,10 @@ public class PayrollServiceImpl implements PayrollService {
                                Double bonus,
                                Double taxRate,
                                Double insuranceRate) {
+        double deductions = payroll.getDeductions() != null ? payroll.getDeductions() : 0.0;
         return payroll.getNetSalary()
                 + (payroll.getSalary() * hour * (100 - taxRate - insuranceRate)) / 100
                 + bonus
-                - payroll.getDeductions();
+                - deductions;
     }
 }
