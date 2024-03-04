@@ -3,21 +3,16 @@ package com.allxone.coinmarket.service.impl;
 import com.allxone.coinmarket.dto.response.PayrollDTO;
 import com.allxone.coinmarket.mapper.PayrollMapper;
 import com.allxone.coinmarket.mapper.TaxInformationMapper;
-import com.allxone.coinmarket.mapper.TimeTrackingMapper;
 import com.allxone.coinmarket.model.Payroll;
 import com.allxone.coinmarket.model.PayrollExample;
 import com.allxone.coinmarket.model.TaxInformationExample;
-import com.allxone.coinmarket.model.TimeTracking;
 import com.allxone.coinmarket.service.PayrollService;
 import com.allxone.coinmarket.service.TimeTrackingService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,14 +34,13 @@ public class PayrollServiceImpl implements PayrollService {
         TaxInformationExample taxInformationSQL = new TaxInformationExample();
         PayrollExample payrollSQL = new PayrollExample();
         for (Payroll payroll : payrollList) {
+            Integer[] id = {Math.toIntExact(payroll.getEmployeeId())};
+            Object obj = payrollMapper.calcNetSalary(Arrays.asList(id), month, month, LocalDate.now().getYear(), LocalDate.now().getYear()).get(0);
 
             taxInformationSQL.createCriteria().andEmployeeIdEqualTo(payroll.getEmployeeId());
             BigDecimal totalHours = timeTrackingService.sumTotalHoursWorking(payroll.getEmployeeId(), month);
             BigDecimal taxRate = taxInformationMapper.selectByExample(taxInformationSQL).get(0).getTaxRate();
-            BigDecimal netSalary = payroll.getSalary()
-                    .multiply(totalHours)
-                    .multiply(new BigDecimal(100).subtract(taxRate))
-                    .divide(new BigDecimal(100));
+            BigDecimal netSalary = ((BigDecimal)((Map<?, ?>) obj).get("Net"));;
             payroll.setNetSalary(netSalary);
             payrollSQL.createCriteria().andEmployeeIdEqualTo(payroll.getEmployeeId());
             payrollMapper.updateByPrimaryKey(payroll);
