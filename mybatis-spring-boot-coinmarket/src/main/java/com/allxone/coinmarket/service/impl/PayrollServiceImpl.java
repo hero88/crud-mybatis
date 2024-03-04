@@ -10,6 +10,7 @@ import com.allxone.coinmarket.model.TaxInformationExample;
 import com.allxone.coinmarket.model.TimeTracking;
 import com.allxone.coinmarket.service.PayrollService;
 import com.allxone.coinmarket.service.TimeTrackingService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PayrollServiceImpl implements PayrollService {
@@ -41,15 +43,13 @@ public class PayrollServiceImpl implements PayrollService {
             taxInformationSQL.createCriteria().andEmployeeIdEqualTo(payroll.getEmployeeId());
             BigDecimal totalHours = timeTrackingService.sumTotalHoursWorking(payroll.getEmployeeId(), month);
             BigDecimal taxRate = taxInformationMapper.selectByExample(taxInformationSQL).get(0).getTaxRate();
-//            System.out.println("totalHours: "+totalHours+" | taxRate: "+ taxRate);
             BigDecimal netSalary = payroll.getSalary()
                     .multiply(totalHours)
                     .multiply(new BigDecimal(100).subtract(taxRate))
                     .divide(new BigDecimal(100));
-//            System.out.println("netSalary = " + netSalary);
             payroll.setNetSalary(netSalary);
             payrollSQL.createCriteria().andEmployeeIdEqualTo(payroll.getEmployeeId());
-            payrollMapper.updateByExample(payroll, payrollSQL);
+            payrollMapper.updateByPrimaryKey(payroll);
             payrollSQL.clear();
         }
         return payrollMapper.getAllSalary(month);
@@ -58,6 +58,11 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public List<PayrollDTO> getAllPayrollByFirstName(Integer month, String firstname) {
         return payrollMapper.getAllSalaryByFirstName( month,  firstname);
+    }
+
+    @Override
+    public List<Object> getNetSalary(List<Integer> listId,Integer monthFrom, Integer monthTo, Integer yearFrom, Integer yearTo) {
+        return payrollMapper.calcNetSalary(listId,monthFrom,monthTo,yearFrom,yearTo);
     }
 
 }
