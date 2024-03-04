@@ -372,4 +372,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+  <select id="findAllWorkingTimeEmployeeByFilters" parameterType="java.util.Map" resultType="com.allxone.coinmarket.dto.response.WorkingTimeDTO">
+  <![CDATA[
+    SELECT *
+    FROM time_tracking tt
+    WHERE tt.date_track BETWEEN #{startDate, jdbcType=DATE} AND #{endDate, jdbcType=DATE}
+    ]]>
+</select>
 </mapper>

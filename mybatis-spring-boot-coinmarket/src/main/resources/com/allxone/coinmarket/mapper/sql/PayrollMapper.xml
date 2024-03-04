@@ -393,6 +393,24 @@
     </if>
   </select>
 
+  <select id="getEmployeeSalaryByMonth" parameterType="java.util.Map" resultMap="BaseResultMap">
+  <![CDATA[
+    SELECT *
+    FROM payroll
+    WHERE employee_id = #{employeeId, jdbcType=BIGINT}
+      AND MONTH(period_start) = #{month, jdbcType=INTEGER}
+      AND YEAR(period_start) = YEAR(CURRENT_DATE())
+    ]]>
+</select>
+
+  <select id="getTopThreeLatestSalaries" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    SELECT *
+    FROM payroll
+    WHERE employee_id = #{employeeId, jdbcType=BIGINT}
+    ORDER BY period_start DESC
+      LIMIT 3
+  </select>
+
   <select id="calcNetSalary" parameterType="com.allxone.coinmarket.model.PayrollExample" resultType="java.util.Map">
     WITH hour_calc AS (
     SELECT sum(

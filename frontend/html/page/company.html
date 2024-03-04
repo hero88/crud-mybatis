@@ -7,7 +7,8 @@
     <title>Company</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <!-- <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .col-md-2 .btn-dark {
             opacity: 0;
@@ -20,6 +21,48 @@
         .col-md-2:hover .btn-dark {
             opacity: 1;
             /* Hiển thị nút khi hover */
+        }
+
+        .hdhgk {
+            font-family: Muli, sans-serif !important;
+            font-style: normal;
+            font-weight: 700;
+            font-size: .875rem;
+            text-transform: capitalize;
+            margin-bottom: .938rem;
+        }
+
+        .employee-list>.employee {
+            margin-bottom: 20px;
+            /* Điều chỉnh giá trị margin bottom theo mong muốn */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .visible {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .hidden {
+            animation: fadeOut 1s ease forwards;
         }
     </style>
 </head>
@@ -94,28 +137,7 @@
             </div>
         </div>
     </nav>
-    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="../../img/slide3.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../../img/slide1.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../../img/slide2.png" class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+    <div class="container employee-list" id="listEmployee">
     </div>
     <div class="container-fluid">
         <div class="row justify-content-center p-2">
@@ -222,7 +244,6 @@
             </div>
         </div>
     </div>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
@@ -301,7 +322,6 @@
         if (getCookie('token') != null) {
             profile(apiProfile);
         }
-
         // call data hiển thị lên trang company
 
         function getDataCompany(api) {
@@ -323,7 +343,7 @@
                     return response.data;
                 })
                 .then(data => {
-                    console.log(data);
+                    console.log(data.data.listTop2);
                     const totalHoldings = formatNumber(data.data.totalHoldings);
                     const totalPayroll = formatNumber(data.data.totalPayroll);
                     const timeTrackings = formatNumber(data.data.totalHour);
@@ -331,6 +351,7 @@
                     holding.textContent = totalHoldings + ' USD';
                     payroll.textContent = totalPayroll + ' USD';
                     timetracking.textContent = timeTrackings + ' Hour ';
+                    createListEmployee(data.data.listTop2);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -341,6 +362,184 @@
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
         getDataCompany(apiData);
+
+        function createListEmployee(userList) {
+            var userListContainer = document.getElementById("listEmployee");
+            // Lặp qua danh sách và tạo các thẻ div
+            userList.forEach(function (user) {
+                var userDiv = document.createElement("div");
+                userDiv.className = "row d-flex justify-content-center rounded-2 employee";
+                userDiv.style.backgroundColor = "#FFF";
+                userDiv.innerHTML = `
+                    <div class="row" id="${user.employee_id}" onClick="handleRowClick(this.id)">
+                        <div class="col-md-3 d-flex">
+                            <img src="../../img/user.png" class="rounded-circle justify-content-center p-2" style="max-width: 70px;" />
+                            <div class="col-md-8 d-flex flex-column justify-content-center">
+                                <div class="col-md-12 d-flex flex-column">
+                                    <span style="font-size: 20px;font-family: Muli, sans-serif !important;">${user.first_name} ${user.last_name}</span>
+                                    <span style="font-size: 12px;">${user.department_name}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">
+                            <div class="col-md-12 text-center">
+                                <span class="hdhgk">${user.email}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">
+                            <div class="col-md-8">
+                                <div class="col-md-12 d-flex flex-column text-center">
+                                    <span class="text-center" style="font-size: 20px;">${user.position}</span>
+                                    <span style="font-size: 12px;font-family: Muli, sans-serif !important;">Position</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">   
+                            <div class="col-md-8 d-flex flex-column justify-content-center">
+                                <div class="col-md-12 d-flex flex-column text-center">
+                                    <span style="font-size: 20px;color: blue;">USD ${user.net_salary}</span>
+                                    <span style="font-size: 12px;font-family: Muli, sans-serif !important;">Total Salary</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row rounded-3 p-3" id="employee-${user.employee_id}" style="background-color: #FFF;" hidden>
+                        <div class="col-md-7 d-flex flex-column justify-content-center">
+                            <h4 class="hdhgk">Employer cost</h4>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <b>
+                                        <p class="hdhgk">Gross monthly salary
+                                        </p>
+                                    </b>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <b>
+                                        <span class="hdhgk">USD ${user.net_salary}</span>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <b>
+                                        <p class="hdhgk">Estimated taxes & contributions</p>
+                                    </b>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <b>
+                                        <span class="hdhgk">USD ${user.total_tax}</span>
+                                    </b>
+                                </div>
+                            </div>
+            
+                            <div class="row d-flex justify-content-center p-3">
+                                <div class="row border rounded-2" style="padding: inherit;">
+                                    <div class="col-md-8">
+                                        <b>
+                                            <p class="hdhgk">Social Insurance</p>
+                                        </b>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <b>
+                                            <span class="hdhgk">USD ${user.social_insurance}</span>
+                                        </b>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <b>
+                                            <p class="hdhgk">Health Insurance</p>
+                                        </b>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <b>
+                                            <span class="hdhgk">USD ${user.health_insurance}</span>
+                                        </b>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <b>
+                                            <p class="hdhgk">Unemployment Insurance</p>
+                                        </b>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <b>
+                                            <span class="hdhgk">USD ${user.unemployment_insurance}</span>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <canvas id="myChart-${user.employee_id}" width="700" height="400"></canvas>
+                        </div>
+                    </div>
+                `;
+                //Thêm userDiv vào DOM
+                userListContainer.appendChild(userDiv);
+                var labels = [];
+                var datas = [];
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+
+                function getMonthName(monthNumber) {
+                    return monthNames[monthNumber - 1];
+                }
+
+                user.listHistoryPayroll.forEach(function (i) {
+                    const dateParts = i.periodStart.split('-'); // Tách chuỗi thành mảng các phần tử, phân tách bằng dấu '-'
+                    var month = parseInt(dateParts[1]);
+                    month = getMonthName(month);
+                    var data = i.netSalary
+                    console.log(data)
+                    labels.push(month);
+                    datas.push(data);
+                });
+
+                const salaryData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Salary USD',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        data: datas,
+                    }]
+                };
+
+                var id = `myChart-${user.employee_id}`;
+                // Lấy thẻ canvas và vẽ biểu đồ cột
+                const ctx = document.getElementById(id).getContext('2d');
+                const salaryChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: salaryData,
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+
+        }
+    </script>
+    <script>
+        function handleRowClick(id) {
+            var ids = `employee-${id}`;
+            var element = document.getElementById(ids)
+            if (element.hasAttribute("hidden")) {
+                // Nếu có, loại bỏ thuộc tính "hidden"
+                element.removeAttribute("hidden");
+                element.classList.add("visible");
+            } else {
+                // Nếu không, thêm thuộc tính "hidden"
+                element.setAttribute("hidden", "");
+                element.classList.remove("visible");
+            }
+        }
     </script>
 </body>
 

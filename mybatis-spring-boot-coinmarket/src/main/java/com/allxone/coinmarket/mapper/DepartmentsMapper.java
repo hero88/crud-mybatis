@@ -52,4 +52,6 @@ public interface DepartmentsMapper {
 	 * @mbg.generated  Thu Feb 22 09:13:49 ICT 2024
 	 */
 	int updateByExample(@Param("row") Departments row, @Param("example") DepartmentsExample example);
+
+	Departments selectByPrimaryKey(@Param("id") Integer id);
 }

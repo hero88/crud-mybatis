@@ -2,9 +2,7 @@ package com.allxone.coinmarket.mapper;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -107,6 +105,9 @@ public interface PayrollMapper {
 
     List<PayrollDTO> getAllSalaryByFirstName(@Param("month") Integer month, @Param("firstname") String firstname);
 
+    Payroll getEmployeeSalaryByMonth(@Param("month") Integer month, @Param("employeeId") Long employeeId);
+
+    List<Payroll> getTopThreeLatestSalaries(@Param("employeeId") Long employeeId);
     BigDecimal sumSalaryByMonth(PayrollExample payrollExample);
 
     List<Object> calcNetSalary(@Param("list") List<Integer> listId,@Param("monthFrom") Integer monthFrom, @Param("monthTo") Integer monthTo, @Param("yearFrom") Integer yearFrom, @Param("yearTo") Integer yearTo);
