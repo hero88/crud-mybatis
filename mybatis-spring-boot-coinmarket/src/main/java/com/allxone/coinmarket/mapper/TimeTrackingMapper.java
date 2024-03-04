@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.allxone.coinmarket.dto.EmployeesDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -109,4 +110,6 @@ public interface TimeTrackingMapper {
 
     List<WorkingTimeDTO> findAllWorkingTimeEmployeeByFilter(@Param("listId") List<Integer> listId,@Param("from") Date from,@Param("to") Date to,@Param("limit") Integer limit);
     BigDecimal sumTotalHoursMonth(TimeTrackingExample example);
+
+    List<WorkingTimeDTO> findAllWorkingTimeEmployeeByFilters(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

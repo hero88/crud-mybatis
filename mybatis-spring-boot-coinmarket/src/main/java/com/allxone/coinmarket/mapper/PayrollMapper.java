@@ -105,6 +105,7 @@ public interface PayrollMapper {
 
     List<PayrollDTO> getAllSalaryByFirstName(@Param("month") Integer month, @Param("firstname") String firstname);
 
+    Payroll getEmployeeSalaryByMonth(@Param("month") Integer month, @Param("employeeId") Long employeeId);
 
-    BigDecimal sumSalaryByMonth(PayrollExample payrollExample);
+    List<Payroll> getTopThreeLatestSalaries(@Param("employeeId") Long employeeId);
 }
