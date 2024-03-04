@@ -1,5 +1,7 @@
+
 USE
     CRUDAllXone;
+
 
 -- DROP TABLES
 
@@ -19,6 +21,7 @@ DROP TABLE IF EXISTS
     department,
     holiday,
     insurance_type
+
 ;
 
 CREATE TABLE coin
@@ -233,14 +236,17 @@ ALTER TABLE user
     MODIFY id bigint NOT NULL AUTO_INCREMENT,
     AUTO_INCREMENT = 3;
 
+
 ALTER TABLE coin
     ADD CONSTRAINT FK_userCoin FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE employee
     ADD CONSTRAINT employees_ibfk_1 FOREIGN KEY (department_id) REFERENCES department (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+
     ADD CONSTRAINT employees_ibfk_2 FOREIGN KEY (user_id) REFERENCES user (id) ON
         DELETE
         RESTRICT ON UPDATE RESTRICT;
+
 
 ALTER TABLE payroll
     ADD CONSTRAINT payroll_ibfk_1 FOREIGN KEY (employee_id) REFERENCES employee (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -253,6 +259,7 @@ ALTER TABLE time_tracking
 
 ALTER TABLE user_role
     ADD CONSTRAINT FK_role FOREIGN KEY (role_id) REFERENCES role (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+
     ADD CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES user (id) ON
         DELETE
         RESTRICT ON UPDATE RESTRICT;
@@ -260,3 +267,4 @@ COMMIT;
 
 SET
     FOREIGN_KEY_CHECKS = 1;
+

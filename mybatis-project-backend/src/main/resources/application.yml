@@ -50,3 +50,4 @@ server:
   port: 5555
 client:
     url: ${CLIENT_URL}
+

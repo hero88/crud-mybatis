@@ -27,7 +27,7 @@ public class PayrollResponse {
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 
     private LocalDate periodEnd;
-
+  
     private Short leavePaidDays;
     private JsonNode holidayIds;
     private Instant createdAt;

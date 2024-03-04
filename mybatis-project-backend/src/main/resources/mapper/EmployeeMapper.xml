@@ -34,6 +34,7 @@
                 #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, #{leavePaidDays},
                 #{insuranceIds, jdbcType=OTHER, javaType=com.fasterxml.jackson.databind.JsonNode,typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler} ,
                 NOW(), NOW())
+
     </insert>
 
     <select id="getEmployeeById" parameterType="java.lang.Long" resultMap="employeeResultMap">
@@ -96,5 +97,4 @@
         FROM employee
         WHERE id = #{id}
     </delete>
-
 </mapper>

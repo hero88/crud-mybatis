@@ -61,6 +61,7 @@
             </if>
             <if test="leavePaidDays != null">
                 leave_paid_days = #{leavePaidDays},
+
             </if>
                 updated_at = NOW()
         </set>
