@@ -85,7 +85,9 @@
                 leave_paid_days = #{leavePaidDays},
             </if>
             <if test="leavePaidDays != null">
-                insurance_ids = #{insuranceIds},
+                insurance_ids = #{insuranceIds,
+                jdbcType=OTHER,
+                typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler},
             </if>
             updated_at = NOW()
         </set>
