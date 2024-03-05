@@ -27,7 +27,11 @@
     </select>
 
     <select id="getTaxInformationByEmployeeId" parameterType="Long" resultMap="taxInformationResultMap">
-        SELECT * FROM tax_information WHERE employee_id = #{id}
+        SELECT * FROM tax_information WHERE employee_id = #{id} and status = 1
+    </select>
+
+    <select id="getTaxInformationByEmployeeIdAndStatus" resultMap="taxInformationResultMap">
+        SELECT * FROM tax_information WHERE employee_id = #{id} and status = #{status, jdbcType=BIT}
     </select>
 
     <update id="updatePayroll" parameterType="Payroll">

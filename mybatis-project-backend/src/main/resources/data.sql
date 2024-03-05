@@ -31,8 +31,8 @@ VALUES (1, 'Customer Services'),
        (3, 'Marketing');
 --employee
 INSERT INTO employee (id, user_id, first_name, last_name, birthday, gender, contact_number, email,
-                         department_id, position, hire_date, termination_date, leave_paid_days,
-                         insurance_ids, created_at, updated_at)
+                      department_id, position, hire_date, termination_date, leave_paid_days,
+                      insurance_ids, created_at, updated_at)
 VALUES (1, 1, 'A', 'Nguyen', '1970-01-01', 'Male', '1234567890', 'a@company.com', 1, 'Call person', '2024-01-01', NULL,
         0, 'null', '2024-02-21 07:40:08', '2024-02-28 02:29:11'),
        (2, 1, 'B', 'Nguyen', '1970-01-01', 'FeMale', '1335604979', 'b@company.com', 2, 'Negotiator', '2024-02-01', NULL,
@@ -60,10 +60,9 @@ VALUES (1, 'Unemployment Insurance',
 
 
 -- tax-information
-INSERT INTO tax_information (id, employee_id, tax_rate, tax_exemption, created_at, updated_at)
-VALUES (1, 1, 0.00, b'1', '2024-02-21 07:47:28', '2024-02-21 07:47:28');
-INSERT INTO tax_information (id, employee_id, tax_rate, tax_exemption, created_at, updated_at)
-VALUES (2, 2, 0.00, b'1', '2024-02-21 07:47:28', '2024-02-21 07:47:28');
+INSERT INTO tax_information (id, employee_id, tax_rate, status, date_start, tax_exemption, created_at, updated_at)
+VALUES (1, 1, 15.00, b'1', NULL, b'0', '2024-02-21 07:47:28', '2024-03-05 02:52:41'),
+       (2, 3, 10.00, b'1', NULL, b'0', '2024-02-28 02:28:17', NULL);
 --payroll
 INSERT INTO payroll (id, employee_id, salary, bonus, deductions, net_salary, leave_paid_days, holiday_ids, period_start,
                      period_end, created_at, updated_at)

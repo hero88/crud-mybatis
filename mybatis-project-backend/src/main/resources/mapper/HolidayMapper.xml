@@ -24,17 +24,17 @@
         SELECT * FROM holiday
     </select>
 
-    <update id="updateHoliday" parameterType="Holiday">
+    <update id="updateHoliday" parameterType="Holiday" useGeneratedKeys="true" keyProperty="id">
         UPDATE holiday
         <set>
             <if test="holidayName != null">
-                holidayName = #{holiday_name},
+                holiday_name = #{holidayName},
             </if>
             <if test="holidayDescription != null">
-                holidayDescription = #{holiday_description},
+                holiday_description = #{holidayDescription},
             </if>
             <if test="durationDays != null">
-                durationDays = #{duration_days},
+                duration_days = #{durationDays},
             </if>
         </set>
         WHERE id = #{id}

@@ -25,7 +25,6 @@ public class PayrollResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-
     private LocalDate periodEnd;
   
     private Short leavePaidDays;

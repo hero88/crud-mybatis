@@ -28,7 +28,7 @@
         SELECT * FROM time_tracking
     </select>
 
-    <update id="updateTimeTracking" parameterType="TimeTracking">
+    <update id="updateTimeTracking" parameterType="TimeTracking" useGeneratedKeys="true" keyProperty="id">
         UPDATE time_tracking
         <set>
             <if test="employeeId != null">

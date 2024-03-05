@@ -18,6 +18,7 @@ public class HolidayConvert {
 
     public static Holiday toHoliday(HolidayRequest holidayRequest) {
         return Holiday.builder()
+                .id(holidayRequest.getId())
                 .holidayName(holidayRequest.getHolidayName())
                 .holidayDescription(holidayRequest.getHolidayDescription())
                 .durationDays(holidayRequest.getDurationDays())
