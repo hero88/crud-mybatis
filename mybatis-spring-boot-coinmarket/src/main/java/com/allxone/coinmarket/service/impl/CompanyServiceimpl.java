@@ -5,19 +5,14 @@ import com.allxone.coinmarket.mapper.*;
 import com.allxone.coinmarket.model.*;
 import com.allxone.coinmarket.service.CoinService;
 import com.allxone.coinmarket.service.CompanyService;
-import com.allxone.coinmarket.service.InsuranceTypeService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
