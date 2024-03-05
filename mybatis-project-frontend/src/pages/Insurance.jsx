@@ -7,16 +7,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { doGetAllEmployees } from "@/services/EmployeeAPI";
 import AddNewInsuranceDialog from "@/sections/InsurancePage/AddInsuranceDialog";
 import UpdateInsuranceDialog from "@/sections/InsurancePage/UpdateInsuranceDialog";
 import DelInsuranceDialog from "@/sections/InsurancePage/DelInsuranceDialog";
+import { doGetAllInsurances } from "@/services/InsuranceAPI";
 
 function Insurance() {
   const [insurances, setInsurances] = useState([]);
 
   const handleGetInsurancesData = async () => {
-    const { data: response } = await doGetAllEmployees();
+    const { data: response } = await doGetAllInsurances();
     setInsurances(response.data);
   };
 

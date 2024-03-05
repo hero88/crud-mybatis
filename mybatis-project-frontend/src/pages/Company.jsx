@@ -8,7 +8,6 @@ function Company() {
 
   const handleGetEmployeesData = async () => {
     const { data: response } = await doGetAllEmployees();
-    console.log(response.data);
     setEmployees(response.data);
   };
 

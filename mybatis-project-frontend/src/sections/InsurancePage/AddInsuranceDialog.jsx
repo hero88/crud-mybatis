@@ -78,8 +78,8 @@ function AddNewInsuranceDialog({ loadInsurancesData }) {
           loadInsurancesData();
           setOpenDialog(false);
           toast({
-            title: "Add employee successfully!",
-            description: "Employee list has been changed.",
+            title: "Add Insurance successfully!",
+            description: "Insurance list has been changed.",
             action: <ToastAction altText="Nice">Nice</ToastAction>,
           });
         } else {

@@ -13,9 +13,9 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const doGetAllInsurances = () => {
+export const doGetAllHoliday = () => {
   try {
-    const res = API.get("api/InsuranceType/getAllInsuranceType");
+    const res = API.get("api/holiday/getAllHoliday");
     return res;
   } catch (error) {
     console.log(error);
@@ -23,9 +23,9 @@ export const doGetAllInsurances = () => {
   }
 };
 
-export const doAddNewInsurance = (insuranceForm) => {
+export const doAddNewHoliday = (holidayForm) => {
   try {
-    const res = API.post("api/InsuranceType/saveInsuranceType", insuranceForm);
+    const res = API.post("api/holiday/saveHoliday", holidayForm);
     return res;
   } catch (error) {
     console.log(error);
@@ -33,9 +33,9 @@ export const doAddNewInsurance = (insuranceForm) => {
   }
 };
 
-export const doUpdateInsurance = (insuranceForm) => {
+export const doUpdateHoliday = (holidayForm) => {
   try {
-    const res = API.put("api/insurance/updateInsuranceType", insuranceForm);
+    const res = API.put("api/holiday/updateHoliday", holidayForm);
     return res;
   } catch (error) {
     console.log(error);
@@ -43,11 +43,9 @@ export const doUpdateInsurance = (insuranceForm) => {
   }
 };
 
-export const doDeleteInsurance = (insuranceId) => {
+export const doDeleteHoliday = (holidayId) => {
   try {
-    const res = API.delete(
-      `api/insurance/deleteInsuranceTypeById/${insuranceId}`
-    );
+    const res = API.delete(`api/holiday/deleteHolidayById/${holidayId}`);
     return res;
   } catch (error) {
     console.log(error);

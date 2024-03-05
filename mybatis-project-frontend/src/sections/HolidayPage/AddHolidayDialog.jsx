@@ -10,81 +10,66 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Description } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { doUpdateInsurance } from "@/services/InsuranceAPI";
-import { Pencil } from "lucide-react";
+import { doAddNewHoliday } from "@/services/HolidayAPI";
 
-function UpdateInsuranceDialog({ insurance, loadInsurancesData }) {
+function AddNewHolidayDialog({ loadHolidaysData }) {
   const { toast } = useToast();
 
-  const [currentInsurance, setCurrentInsurance] = useState({
-    name: "",
-    description: "",
-    rate: "",
+  const [currentHoliday, setCurrentHoliday] = useState({
+    holidayName: "",
+    holidayDescription: "",
+    durationDays: 1,
   });
 
   const [validateError, setValidateError] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { name, description, rate } = currentInsurance;
-
-  useEffect(() => {
-    setCurrentInsurance(insurance);
-  }, []);
+  const { holidayName, holidayDescription, durationDays } = currentHoliday;
 
   const handleChangeField = (e) => {
-    setCurrentInsurance({
-      ...currentInsurance,
+    setCurrentHoliday({
+      ...currentHoliday,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmitUpdate = async () => {
-    if (name === "" || description === "" || rate === "") {
-      if (name === "" && description === "" && rate === "") {
-        setValidateError(["name", "description", "rate"]);
-      } else if (name === "" && description == "") {
+  const handleSubmitCreate = async () => {
+    if (holidayName === "" || holidayDescription === "") {
+      if (holidayName === "" && holidayDescription == "") {
         setValidateError(["name", "description"]);
-      } else if (description === "" && rate === "") {
-        setValidateError(["description", "rate"]);
-      } else if (name === "") {
+      } else if (holidayName === "") {
         setValidateError(["name"]);
-      } else if (description === "") {
+      } else if (holidayDescription === "") {
         setValidateError(["description"]);
-      } else if (rate === "") {
-        setValidateError(["rate"]);
       }
     } else {
-      if (isNaN(parseFloat(rate))) {
-        setValidateError(["invalid"]);
+      if (parseInt(durationDays) < 0) {
+        setValidateError(["duration"]);
       } else {
-        let newInsurance = {
-          ...currentInsurance,
-          rate: parseFloat(rate),
+        let newHoliday = {
+          ...currentHoliday,
+          durationDays: parseInt(durationDays),
         };
 
-        console.log(newInsurance);
-
-        const { data: response } = await doUpdateInsurance(newInsurance);
-
-        console.log(response);
+        const { data: response } = await doAddNewHoliday(newHoliday);
 
         if (response.code === 200) {
-          setCurrentInsurance({
-            name: "",
-            description: "",
-            rate: "",
+          setCurrentHoliday({
+            holidayName: "",
+            holidaydescription: "",
+            durationDays: 1,
           });
 
           setValidateError([]);
-          loadInsurancesData();
+          loadHolidaysData();
           setOpenDialog(false);
           toast({
-            title: "Add Insurance Successfully!",
-            description: "Insurance info has been updated.",
+            title: "Add holiday successfully!",
+            description: "Holiday list has been changed.",
             action: <ToastAction altText="Nice">Nice</ToastAction>,
           });
         } else {
@@ -103,18 +88,15 @@ function UpdateInsuranceDialog({ insurance, loadInsurancesData }) {
     <>
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
-          <Button className="w-5 h-5 p-0 bg-transparent hover:bg-transparent">
-            <Pencil width={17} height={17} className="text-blue-500" />
-          </Button>
+          <Button>Add new holiday</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[560px]">
+        <DialogContent className="sm:max-w-[580px]">
           <AlertDialogHeader>
-            <DialogTitle className="text-blue-500">
-              Update employee infomation
+            <DialogTitle className="text-green-500">
+              Add new holiday
             </DialogTitle>
             <DialogDescription>
-              Make changes to insurance info here. Click save when
-              you&apos;re done.
+              Add new holiday info here. Click save when you&apos;re done.
             </DialogDescription>
           </AlertDialogHeader>
           <div className="grid gap-4 py-4">
@@ -125,14 +107,14 @@ function UpdateInsuranceDialog({ insurance, loadInsurancesData }) {
               </Label>
               <div className="col-span-3">
                 <Input
-                  name="name"
-                  id="name"
-                  value={name}
+                  name="holidayName"
+                  id="holidayName"
+                  value={holidayName}
                   onChange={(e) => handleChangeField(e)}
                 />
                 {validateError.includes("name") && (
                   <Description className="text-red-500 font-semibold text-[12px]">
-                    Do not let insurance name empty
+                    Do not let holiday name empty
                   </Description>
                 )}
               </div>
@@ -144,9 +126,9 @@ function UpdateInsuranceDialog({ insurance, loadInsurancesData }) {
               </Label>
               <div className="col-span-3">
                 <Input
-                  name="description"
-                  id="description"
-                  value={description}
+                  name="holidayDescription"
+                  id="holidayDescription"
+                  value={holidayDescription}
                   onChange={(e) => handleChangeField(e)}
                 />
                 {validateError.includes("description") && (
@@ -156,34 +138,30 @@ function UpdateInsuranceDialog({ insurance, loadInsurancesData }) {
                 )}
               </div>
             </div>
-            {/* Rate */}
+            {/* Duration */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="userId" className="text-right">
-                Rate
+                Duration days
               </Label>
               <div className="col-span-3">
                 <Input
-                  name="rate"
-                  id="rate"
-                  value={rate}
+                  type="number"
+                  name="durationDays"
+                  id="durationDays"
+                  value={durationDays}
                   onChange={(e) => handleChangeField(e)}
                 />
-                {validateError.includes("rate") && (
+                {validateError.includes("duration") && (
                   <Description className="text-red-500 font-semibold text-[12px]">
-                    Do not let rate empty
-                  </Description>
-                )}
-                {validateError.includes("invalid") && (
-                  <Description className="text-red-500 font-semibold text-[12px]">
-                    Please enter a valid rate number value
+                    Do not let the value of duration less than zero
                   </Description>
                 )}
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" onClick={handleSubmitUpdate}>
-              Save changes
+            <Button type="submit" onClick={handleSubmitCreate}>
+              Create
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -192,4 +170,4 @@ function UpdateInsuranceDialog({ insurance, loadInsurancesData }) {
   );
 }
 
-export default UpdateInsuranceDialog;
+export default AddNewHolidayDialog;
