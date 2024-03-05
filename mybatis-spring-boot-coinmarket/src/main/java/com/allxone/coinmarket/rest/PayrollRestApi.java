@@ -2,6 +2,7 @@ package com.allxone.coinmarket.rest;
 
 import com.allxone.coinmarket.dto.response.ApiResponse;
 import com.allxone.coinmarket.dto.response.PayrollDTO;
+import com.allxone.coinmarket.model.Payroll;
 import com.allxone.coinmarket.service.PayrollService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -67,4 +68,37 @@ public class PayrollRestApi {
                 .build());
     }
 
+    @GetMapping("/id")
+    public ResponseEntity<?> getPayrollById(@RequestParam(value = "id") Long id) {
+        Payroll payroll = payrollService.getPayrollById(id);
+        if (payroll!=null) {
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                    .message("Successfully")
+                    .success(true)
+                    .data(payroll)
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                .message("Something wrong")
+                .success(false)
+                .data(payroll)
+                .build());
+    }
+
+    @PutMapping()
+    public ResponseEntity<?> updatePayroll(@RequestBody Payroll payroll){
+        Payroll newPayroll = payrollService.updatePayrollById(payroll);
+        if (newPayroll!=null) {
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                    .message("Successfully")
+                    .success(true)
+                    .data(newPayroll)
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                .message("Employee dose not exist")
+                .success(false)
+                .data(newPayroll)
+                .build());
+    }
 }

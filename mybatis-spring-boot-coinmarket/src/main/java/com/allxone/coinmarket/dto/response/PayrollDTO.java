@@ -11,6 +11,8 @@ import java.util.Date;
 @Data
 public class PayrollDTO {
 
+    private Long id;
+
     private String first_name;
 
     private String last_name;

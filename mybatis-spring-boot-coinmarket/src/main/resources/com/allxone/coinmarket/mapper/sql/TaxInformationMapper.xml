@@ -13,6 +13,9 @@
     <result column="tax_exemption" jdbcType="BIT" property="taxExemption" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="date_start" jdbcType="DATE" property="dateStart" />
+
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
