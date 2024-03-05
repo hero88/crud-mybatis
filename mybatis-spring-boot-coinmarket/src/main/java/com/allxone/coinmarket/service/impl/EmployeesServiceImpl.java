@@ -1,6 +1,8 @@
 package com.allxone.coinmarket.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -36,27 +38,26 @@ import com.google.gson.reflect.TypeToken;
 
 @Service
 public class EmployeesServiceImpl implements EmployeesService {
-	
+
 	@Autowired
 	EmployeesMapper employeesMapper;
-	
+
 	@Autowired
 	TaxInformationMapper taxInformationMapper;
-	
+
 	@Autowired
 	UserService userService;
-	
-	
+
 	@Autowired
 	DepartmentsMapper departmentsMapper;
-	
+
 	@Override
 	public void addToEmployee(EmployeesDto employeesDto) throws ParamInvalidException {
 
 		ValidatorUtils.checkNullParam(employeesDto.getBirthday(), employeesDto.getContactNumber(),
-				employeesDto.getFirstName(), employeesDto.getLastName(), employeesDto.getEmail(),employeesDto.getDepartmentId()
-				,employeesDto.getPosition());
-		
+				employeesDto.getFirstName(), employeesDto.getLastName(), employeesDto.getEmail(),
+				employeesDto.getDepartmentId(), employeesDto.getPosition());
+
 		ValidatorUtils.checkEmail(employeesDto.getEmail());
 		ValidatorUtils.checkPhone(employeesDto.getContactNumber());
 
@@ -69,144 +70,204 @@ public class EmployeesServiceImpl implements EmployeesService {
 		employees.setHireDate(new Date());
 
 		Gson gson = new Gson();
-        String json = gson.toJson(employeesDto.getInsuranceIds());
-        
-        employees.setInsuranceIds(json);
-		
-       
+		String json = gson.toJson(employeesDto.getInsuranceIds());
+
+		employees.setInsuranceIds(json);
+
 		int affectedRows = employeesMapper.insert(employees);
 
 		if (affectedRows == 1) {
+			
+			LocalDate firstDayOfNextMonth = LocalDate.of(LocalDate.now().getYear(),
+					LocalDate.now().getMonthValue() + 1, 1);
+			Date date = Date.from(firstDayOfNextMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			
 			TaxInformation taxInformation = TaxInformation.builder().createdAt(new Date()).employeeId(employees.getId())
 					.taxRate(employeesDto.getTaxRate())
-					.taxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0).build();
+					.taxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0)
+					.status(false)
+					.dateStart(date)
+					.build();
+			
 
 			taxInformationMapper.insert(taxInformation);
 		}
 
 	}
-	
+
 	@Override
 	public void updateEmployee(EmployeesDto employeesDto) throws ParamInvalidException {
-		
-		ValidatorUtils.checkNullParam(employeesDto.getId(),employeesDto.getBirthday(), employeesDto.getContactNumber(),
-				employeesDto.getFirstName(), employeesDto.getLastName(), employeesDto.getEmail(),employeesDto.getDepartmentId()
-				,employeesDto.getPosition());
-		
+
+		ValidatorUtils.checkNullParam(employeesDto.getId(), employeesDto.getBirthday(), employeesDto.getContactNumber(),
+				employeesDto.getFirstName(), employeesDto.getLastName(), employeesDto.getEmail(),
+				employeesDto.getDepartmentId(), employeesDto.getPosition());
+
 		ValidatorUtils.checkEmail(employeesDto.getEmail());
 		ValidatorUtils.checkPhone(employeesDto.getContactNumber());
 
 		Employees dbEmployees = employeesMapper.selectByPrimaryKey(employeesDto.getId());
-		
+
 		Date createAt = dbEmployees.getCreatedAt();
 		Date hireDate = dbEmployees.getHireDate();
-		
-		
+
 		BeanUtils.copyProperties(employeesDto, dbEmployees);
 		dbEmployees.setCreatedAt(createAt);
 		dbEmployees.setHireDate(hireDate);
 		dbEmployees.setUpdatedAt(new Date());
-		
+
 		Gson gson = new Gson();
-        String json = gson.toJson(employeesDto.getInsuranceIds());
-        dbEmployees.setInsuranceIds(json);
-        
+		String json = gson.toJson(employeesDto.getInsuranceIds());
+		dbEmployees.setInsuranceIds(json);
 
 		Users users = userService.getLoggedUser();
 		dbEmployees.setUserId(users.getId());
-		
-		
-		
+
 		employeesMapper.updateByPrimaryKey(dbEmployees);
 
-		if (employeesDto.getTaxInformationId() != null) {
-			TaxInformation taxInformation = taxInformationMapper.selectByPrimaryKey(employeesDto.getTaxInformationId());
+		TaxInformationExample taxInformationExample = new TaxInformationExample();
+		taxInformationExample.createCriteria().andEmployeeIdEqualTo(dbEmployees.getId());
 
-			if (taxInformation != null) {
-				taxInformation.setUpdatedAt(new Date());
-				taxInformation.setTaxRate(employeesDto.getTaxRate());
-				taxInformation.setTaxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0);
+		List<TaxInformation> listTaxInformations = taxInformationMapper.selectByExample(taxInformationExample);
 
-				taxInformationMapper.updateByPrimaryKey(taxInformation);
+		
+		LocalDate firstDayOfNextMonth = LocalDate.of(LocalDate.now().getYear(),
+				LocalDate.now().getMonthValue() + 1, 1);
+		Date date = Date.from(firstDayOfNextMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		
+		if (listTaxInformations != null) {
+
+			if (listTaxInformations.size() == 1) {
+			
+
+				TaxInformation taxInformation = TaxInformation.builder().createdAt(new Date())
+						.employeeId(dbEmployees.getId()).taxRate(employeesDto.getTaxRate())
+						.taxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0).status(false)
+						.dateStart(date).build();
+				
+				taxInformationMapper.insert(taxInformation);
+				
+			} else if (listTaxInformations.size() == 2) {
+			
+
+				TaxInformation taxInformation = listTaxInformations
+						.stream().filter(item->!item.getStatus()).findFirst().orElse(null);
+
+				if (taxInformation != null) {
+					taxInformation.setUpdatedAt(new Date());
+					taxInformation.setTaxRate(employeesDto.getTaxRate());
+					taxInformation.setTaxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0);
+					taxInformation.setDateStart(date);
+					
+					taxInformationMapper.updateByPrimaryKey(taxInformation);
+				}
 			}
+
 		}
 
 	}
-	 
-	 @Override
-	public void deleteEmployee(Long id) throws ParamInvalidException {
-		 ValidatorUtils.checkNullParam(id);
-		 employeesMapper.deleteByPrimaryKey(id);
-		 
-		 TaxInformationExample taxInformationExample = new TaxInformationExample();
-		 taxInformationExample.createCriteria().andEmployeeIdEqualTo(id);
-		 
-		 List<TaxInformation> taxInformationList = taxInformationMapper.selectByExample(taxInformationExample);
-		 
-		 if (!taxInformationList.isEmpty()) {
-		     TaxInformation taxInformation = taxInformationList.get(0);
-		     taxInformationMapper.deleteByPrimaryKey(taxInformation.getId());
-		 }
 
-		 
-	 }
-	 
-	 
-	 @Override
+	@Override
+	public void deleteEmployee(Long id) throws ParamInvalidException {
+		ValidatorUtils.checkNullParam(id);
+		employeesMapper.deleteByPrimaryKey(id);
+
+		TaxInformationExample taxInformationExample = new TaxInformationExample();
+		taxInformationExample.createCriteria().andEmployeeIdEqualTo(id);
+
+		List<TaxInformation> taxInformationList = taxInformationMapper.selectByExample(taxInformationExample);
+
+		if (!taxInformationList.isEmpty()) {
+			TaxInformation taxInformation = taxInformationList.get(0);
+			taxInformationMapper.deleteByPrimaryKey(taxInformation.getId());
+		}
+
+	}
+
+	@Override
 	public EmployeesDto findById(Long id) throws ParamInvalidException {
-		 ValidatorUtils.checkNullParam(id);
+		ValidatorUtils.checkNullParam(id);
+
+		TaxInformationExample taxInformationExample = new TaxInformationExample();
+		taxInformationExample.createCriteria().andEmployeeIdEqualTo(id);
+
+		List<TaxInformation> listTaxInformations = taxInformationMapper.selectByExample(taxInformationExample);
+
+		if (listTaxInformations != null) {
+
+			if (listTaxInformations.size() == 2) {
+				Comparator<TaxInformation> comparator = Comparator.comparing(TaxInformation::getDateStart);
+
+				listTaxInformations.sort(comparator);
+
+				TaxInformation firstTaxInformation = listTaxInformations.get(0);
+				TaxInformation secondTaxInformation = listTaxInformations.get(1);
+				
+				if(firstTaxInformation!=null) {
+					firstTaxInformation.setStatus(true);
+					
+					taxInformationMapper.updateByPrimaryKey(firstTaxInformation);
+				}
+				
+				if(secondTaxInformation!=null) {
+					firstTaxInformation.setStatus(false);
+					taxInformationMapper.updateByPrimaryKey(secondTaxInformation);
+				}
+
+			}
+
+		}
+
 		return convertToEmployeesDto(employeesMapper.selectByPrimaryKey(id));
 	}
-	 
-	 @Override
-	public PageResult<EmployeesDto> findAll(int page,int size) {
-		 
-		 List<EmployeesDto> employeesDtoList = employeesMapper.getEmployees(page, size)
-				    .stream()
-				    .map(item -> convertToEmployeesDto(item))
-				    .toList();
-		 
-		 EmployeesExample employeesExample = new EmployeesExample();
-		 
-		 int totalEmployees = employeesMapper.selectByExample(employeesExample).size();
-		  int totalPages = (int) Math.ceil((double) totalEmployees / size);
-		  
-		  return new PageResult(employeesDtoList, totalPages);
 
-	 }
+	@Override
+	public PageResult<EmployeesDto> findAll(int page, int size) {
 
-	 
-	 public EmployeesDto convertToEmployeesDto(Employees employees) {
-	
-		 EmployeesDto employeesDto = new EmployeesDto();
-		 BeanUtils.copyProperties(employees, employeesDto);
-		 
-		 List<Integer> list = convertJsonToList(employees.getInsuranceIds());
-		 employeesDto.setInsuranceIds(list);;
-		 
-		 if(employees.getId() != null) {
-			 
-			 TaxInformationExample taxInformationExample = new TaxInformationExample();
-			 taxInformationExample.createCriteria().andEmployeeIdEqualTo(employees.getId());
-			 
-			 List<TaxInformation> taxInformationList = taxInformationMapper.selectByExample(taxInformationExample);
-			 
-			 if (!taxInformationList.isEmpty()) {
-			     TaxInformation taxInformation = taxInformationList.get(0);
-			     employeesDto.setTaxRate(taxInformation.getTaxRate());
-			     employeesDto.setTaxInformationId(taxInformation.getId());
-			 }
+		List<EmployeesDto> employeesDtoList = employeesMapper.getEmployees(page, size).stream()
+				.map(item -> convertToEmployeesDto(item)).toList();
 
-		 }
-		 
-		 return employeesDto;
-	 }
-	 
-		@Override
-		public List<Departments> getAllDepartments() {
-			DepartmentsExample departmentsExample = new DepartmentsExample();
-			return departmentsMapper.selectByExample(departmentsExample);
+		EmployeesExample employeesExample = new EmployeesExample();
+
+		int totalEmployees = employeesMapper.selectByExample(employeesExample).size();
+		int totalPages = (int) Math.ceil((double) totalEmployees / size);
+
+		return new PageResult(employeesDtoList, totalPages);
+
+	}
+
+	public EmployeesDto convertToEmployeesDto(Employees employees) {
+
+		EmployeesDto employeesDto = new EmployeesDto();
+		BeanUtils.copyProperties(employees, employeesDto);
+
+		List<Integer> list = convertJsonToList(employees.getInsuranceIds());
+		employeesDto.setInsuranceIds(list);
+		;
+
+		if (employees.getId() != null) {
+
+			TaxInformationExample taxInformationExample = new TaxInformationExample();
+			taxInformationExample.createCriteria().andEmployeeIdEqualTo(employees.getId());
+
+			List<TaxInformation> taxInformationList = taxInformationMapper.selectByExample(taxInformationExample)
+					.stream().filter(item->!item.getStatus()).toList();
+
+			if (!taxInformationList.isEmpty()) {
+				TaxInformation taxInformation = taxInformationList.get(0);
+				employeesDto.setTaxRate(taxInformation.getTaxRate());
+				employeesDto.setTaxInformationId(taxInformation.getId());
+			}
+
 		}
+
+		return employeesDto;
+	}
+
+	@Override
+	public List<Departments> getAllDepartments() {
+		DepartmentsExample departmentsExample = new DepartmentsExample();
+		return departmentsMapper.selectByExample(departmentsExample);
+	}
 
 	@Override
 	public List<EmployeeDTO> findAllEmployeeNotTermination() {
@@ -218,8 +279,10 @@ public class EmployeesServiceImpl implements EmployeesService {
 		return employeesMapper.selectByExample(new EmployeesExample());
 	}
 
-	 private List<Integer> convertJsonToList(String jsonString) {
-	        Gson gson = new Gson();
-	        return gson.fromJson(jsonString, new TypeToken<List<Integer>>(){}.getType());
-	    }
+	private List<Integer> convertJsonToList(String jsonString) {
+		Gson gson = new Gson();
+		return gson.fromJson(jsonString, new TypeToken<List<Integer>>() {
+		}.getType());
+	}
+
 }
