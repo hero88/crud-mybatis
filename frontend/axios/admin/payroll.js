@@ -2,7 +2,7 @@ import { instance } from "../config/config.js";
 const baseURL = instance.defaults.baseURL;
 var api = baseURL + "v1/payroll";
 
-const btnFilter =document.getElementById('btn-filter');
+const btnFilter = document.getElementById('btn-filter');
 const monthFrom = document.getElementById('select-month-from');
 const monthTo = document.getElementById('select-month-to');
 const viewTable = document.getElementById("tbody-table-payroll");
@@ -11,9 +11,14 @@ const containerChoiceEmployee = document.getElementById('container-employee');
 const employeeChoice = document.getElementById('employee-choice');
 var yearFrom = document.getElementById('filter-year-from');
 var yearTo = document.getElementById('filter-year-to');
+const containerModalDetail = document.getElementById('container-detail-payroll');
+const btnUpdateDetailPayroll =document.getElementById('btn-update-detail-payroll');
+const btnDetail = document.getElementById('btn-detail');
 var listIdEmployeeChoice = [];
 var listIdEmployee = [];
-
+var payrollDetail = {};
+var listHolidays = [];
+var max=0
 const getAllPayroll = async (month) => {
   try {
     const response = await axios.get(api, { params: { month: month } });
@@ -53,12 +58,17 @@ const getAllPayroll = async (month) => {
 
       const spanElement = document.createElement("span");
       spanElement.className = "bg-green-200 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400";
-      
+
       spanElement.textContent = `${payroll.net_salary} $`;
       cell5.appendChild(spanElement);
-      row.appendChild(cell5 );
-
+      row.appendChild(cell5);
+      row.setAttribute("data-modal-target", "default-view-payroll");
+      row.setAttribute("data-modal-toggle", "default-view-payroll");
+      row.onclick = function() { 
+         getDetail(payroll.id);
+      };
       viewTable.appendChild(row);
+
     });
   } catch (error) {
     console.log(error.message);
@@ -92,41 +102,41 @@ function findAllEmployee() {
 findAllEmployee()
 
 function viewMonth() {
-    var selectMonth = document.getElementById("select-month");
-    var selectMonthFrom = document.getElementById("select-month-from");
-    var selectMonthTo = document.getElementById("select-month-to");
-    selectMonth.className =""
-    selectMonth.innerHTML = '';
-    for (var i = 1; i <= 12; i++) {
-        var option = document.createElement("option");
-        option.value = i; 
-        option.text = i + "";  
-        var option1 = document.createElement("option");
-        option1.value = i; 
-        option1.text = i + ""; 
-        var option2 = document.createElement("option");
-        option2.value = i; 
-        option2.text = i + ""; 
-        selectMonth.appendChild(option);
-        selectMonthFrom.appendChild(option1);
-        selectMonthTo.appendChild(option2);
-    }
+  var selectMonth = document.getElementById("select-month");
+  var selectMonthFrom = document.getElementById("select-month-from");
+  var selectMonthTo = document.getElementById("select-month-to");
+  selectMonth.className = ""
+  selectMonth.innerHTML = '';
+  for (var i = 1; i <= 12; i++) {
+    var option = document.createElement("option");
+    option.value = i;
+    option.text = i + "";
+    var option1 = document.createElement("option");
+    option1.value = i;
+    option1.text = i + "";
+    var option2 = document.createElement("option");
+    option2.value = i;
+    option2.text = i + "";
+    selectMonth.appendChild(option);
+    selectMonthFrom.appendChild(option1);
+    selectMonthTo.appendChild(option2);
+  }
 }
 
 var selectMonth = document.getElementById("select-month");
-selectMonth.addEventListener("change", function() {
-    getAllPayroll(selectMonth.value);
+selectMonth.addEventListener("change", function () {
+  getAllPayroll(selectMonth.value);
 })
 
-window.searchEmployee = async () =>{
- 
+window.searchEmployee = async () => {
+
   const firstName = document.getElementById("table-search").value;
   try {
-    const response = await axios.get(api +`/${selectMonth.value}`, { params: { firstname: firstName } });
+    const response = await axios.get(api + `/${selectMonth.value}`, { params: { firstname: firstName } });
     const data = response.data.data;
     const viewTable = document.getElementById("tbody-table-payroll");
     viewTable.innerHTML = ''
-    
+
     data.forEach((payroll) => {
       // Create the main row element
       const row = document.createElement("tr");
@@ -161,36 +171,36 @@ window.searchEmployee = async () =>{
 
       const spanElement = document.createElement("span");
       spanElement.className = "bg-green-200 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400";
-      
+
       spanElement.textContent = `${payroll.net_salary} $`;
       cell5.appendChild(spanElement);
-      row.appendChild(cell5 );
+      row.appendChild(cell5);
 
       viewTable.appendChild(row);
     });
-  } catch (error) { 
+  } catch (error) {
     console.log(error.message);
   }
 }
 
-btnFilter.addEventListener('click', ()=>{
+btnFilter.addEventListener('click', () => {
   const mFrom = monthFrom.value;
   const mTo = monthTo.value;
   yearFrom = document.getElementById('filter-year-from').value = '' ? new Date().getFullYear() : document.getElementById('filter-year-from').value;
   yearTo = document.getElementById('filter-year-to').value = '' ? new Date().getFullYear() : document.getElementById('filter-year-to').value;
   const list = listIdEmployeeChoice.length == 0 ? listIdEmployee : listIdEmployeeChoice;
-  if(yearFrom > yearTo){
+  if (yearFrom > yearTo) {
     swal("Something wrong!", {
       icon: "error",
     })
-  }else if (mFrom > mTo){
+  } else if (mFrom > mTo) {
     swal("Something wrong!", {
       icon: "error",
     })
-  }else{
-    axios.get(api+"/net-salary",{
-      params:{
-        list:list.join(","),
+  } else {
+    axios.get(api + "/net-salary", {
+      params: {
+        list: list.join(","),
         monthFrom: mFrom,
         monthTo: mTo,
         yearFrom: yearFrom,
@@ -198,13 +208,11 @@ btnFilter.addEventListener('click', ()=>{
       }
     }).then(resp => {
       viewTable.innerHTML = ''
-      document.getElementById('nameQuery').textContent ='Month - Year'
+      document.getElementById('nameQuery').textContent = 'Month - Year'
       resp.data.data.forEach((payroll) => {
         // Create the main row element
         const row = document.createElement("tr");
-        row.className =
-          "text-sm bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600";
-  
+        row.className = "text-sm bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 btn";
         // Create the cells
         const cell1 = document.createElement("th");
         cell1.scope = "row";
@@ -212,39 +220,45 @@ btnFilter.addEventListener('click', ()=>{
           "px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white";
         cell1.textContent = `${payroll.id}`;
         row.appendChild(cell1);
-  
+
         const cell2 = document.createElement("td");
         cell2.className = "px-6 py-4";
         cell2.textContent = `${payroll.employee_id} - ${payroll.name}`;
         row.appendChild(cell2);
-  
+
         const cell3 = document.createElement("td");
         cell3.className = "px-6 py-4";
         cell3.textContent = `${payroll.salary} $`;
         row.appendChild(cell3);
-  
+
         const cell4 = document.createElement("td");
         cell4.className = "px-6 py-4";
         cell4.textContent = `${payroll.month}/${payroll.year}`;
         row.appendChild(cell4);
-  
+
         const cell5 = document.createElement("td");
         cell5.className = "px-6 py-4 net-salary-class";
-  
+
         const spanElement = document.createElement("span");
         spanElement.className = "bg-green-200 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400";
-        
+
         spanElement.textContent = `${payroll.Net} $`;
         cell5.appendChild(spanElement);
-        row.appendChild(cell5 );
-  
+        row.appendChild(cell5);
+
+        row.setAttribute("data-modal-target", "default-view-payroll");
+        row.setAttribute("data-modal-toggle", "default-view-payroll");
+        row.onclick = function () {
+          getDetail(payroll.id);
+        };
         viewTable.appendChild(row);
+
       });
     }).catch(err => {
 
     })
   }
- 
+
 })
 
 employeeChoice.addEventListener('keydown', function (event) {
@@ -252,6 +266,100 @@ employeeChoice.addEventListener('keydown', function (event) {
     event.preventDefault();
   }
 });
+
+function getAllHolidays() {
+  return new Promise((resolve, reject) => {
+    axios.get(baseURL + "v1/holidays")
+      .then(resp => {
+        listHolidays = resp.data;
+        resolve(resp.data.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+getAllHolidays();
+function getDetail(id) {
+  btnDetail.click();
+  axios.get(api + "/id", {
+    params: {
+      id: id
+    }
+  }).then(resp => {
+    payrollDetail = resp.data.data;
+    axios.get(api+"/employee/"+payrollDetail.employeeId).then(respE => {
+        max = respE.data.leavePaidDays;
+        containerModalDetail.innerHTML=`<form class="max-w-md mx-auto">
+        <div class="relative z-0 w-full my-5 group">
+            <div>
+                <label for="holidays" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Holidays</label>
+            </div>
+            <div class="flex justify-between align-center">
+            ${listHolidays.map(e => `
+            <div>
+            <input value="${e.id}" type="checkbox" name="holidays" class="" placeholder=" " required  ${payrollDetail.holidayIds.includes(e.id) ? 'checked' : ''}/><span> ${e.holidayName}</span></div>
+            `).join('')}
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 md:gap-6">
+          <div class="relative z-0 w-full mb-5 group">
+              <input value="${payrollDetail.salary}" type="text" name="salary" id="salary" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="salary" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Salary</label>
+          </div>
+          <div class="relative z-0 w-full mb-5 group">
+              <input value="${payrollDetail.bonus}" type="text" name="bonus" id="bonus" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="bonus" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Bonus</label>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 md:gap-6">
+          <div class="relative z-0 w-full mb-5 group">
+              <input value="${payrollDetail.deductions}" type="tel" name="deduction" id="deduction" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="deduction" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Deduction</label>
+          </div>
+          <div class="relative z-0 w-full mb-5 group">
+              <input value="${payrollDetail.leavePaidDays}" type="number" min="0" max="${max}" name="leave-paid-day" id="leave-paid-day" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="leave-paid-day" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Leave paid day</label>
+          </div>
+        </div>
+        
+      </form>`
+    })
+  }).catch(err => {
+    console.log(err)
+  })
+}
+
+btnUpdateDetailPayroll.addEventListener('click',()=>{
+    const payroll = { ...payrollDetail};
+    payroll.salary = document.getElementById('salary').value;
+    let holidays =[];
+    
+    document.querySelectorAll('input[name="holidays"]:checked').forEach(e=>{
+      holidays.push(e.value);
+    });
+    payroll.holidayIds=holidays.toString();
+    payroll.bonus = document.getElementById('bonus').value;
+    payroll.deductions =document.getElementById('deduction').value;
+    payroll.leavePaidDays =document.getElementById('leave-paid-day').value;
+    if(max < document.getElementById('leave-paid-day').value){
+      swal("Something wrong!", {
+        icon: "error",
+      })
+    }else{
+      axios.put(api,payroll).then(resp =>{
+        payrollDetail=resp.data.data;
+        swal("Create success!", "", "success").then((resp) => {
+          getAllPayroll(selectMonth.value);
+        })
+      }).catch(err =>{
+        swal("Something wrong!", {
+          icon: "error",
+        })
+      })
+    }
+})
+
 
 employeeChoice.addEventListener('change', (e) => {
   var selectedOption = e.target.value.trim();

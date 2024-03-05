@@ -335,6 +335,7 @@
         if (getCookie('token') != null) {
             profile(apiProfile);
         }
+
         // call data hiển thị lên trang company
 
         function getDataCompany(api) {
@@ -356,7 +357,7 @@
                     return response.data;
                 })
                 .then(data => {
-                    console.log(data.data.listTop2);
+                    console.log(data);
                     const totalHoldings = formatNumber(data.data.totalHoldings);
                     const totalPayroll = formatNumber(data.data.totalPayroll);
                     const timeTrackings = formatNumber(data.data.totalHour);
@@ -407,7 +408,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">   
+                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">
                             <div class="col-md-8 d-flex flex-column justify-content-center">
                                 <div class="col-md-12 d-flex flex-column text-center">
                                     <span style="font-size: 20px;color: blue;">USD ${user.net_salary}</span>
@@ -444,7 +445,7 @@
                                     </b>
                                 </div>
                             </div>
-            
+
                             <div class="row d-flex justify-content-center p-3">
                                 <div class="row border rounded-2" style="padding: inherit;">
                                     <div class="col-md-8">

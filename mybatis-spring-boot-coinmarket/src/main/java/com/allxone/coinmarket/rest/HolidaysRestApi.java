@@ -59,7 +59,6 @@ public class HolidaysRestApi {
 
 	@GetMapping()
 	public ResponseEntity<?> findAll() {
-
 		return ResponseEntity.ok(holidaysService.getAll());
 	}
 }

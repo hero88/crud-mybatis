@@ -28,7 +28,7 @@
 <!--    <table tableName="insurance_type" domainObjectName="insuranceType">-->
 <!--    </table>-->
 
-    <table tableName="insurance_type" domainObjectName="InsuranceType"></table>
+    <table tableName="tax_information" domainObjectName="TaxInformation"></table>
 
   </context>
 </generatorConfiguration>
