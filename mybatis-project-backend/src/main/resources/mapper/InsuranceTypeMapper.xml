@@ -15,7 +15,7 @@
         VALUES (#{insuranceName}, #{insuranceDescription}, #{insuranceRate})
     </insert>
 
-    <select id="getInsuranceTypeById" parameterType="int" resultMap="insuranceTypeResultMap">
+    <select id="getInsuranceTypeById" parameterType="Integer" resultMap="insuranceTypeResultMap">
         SELECT * FROM insurance_type WHERE id = #{id}
     </select>
 
@@ -33,7 +33,7 @@
 
 
 
-    <update id="updateInsuranceType" parameterType="InsuranceType">
+    <update id="updateInsuranceType" parameterType="InsuranceType" useGeneratedKeys="true" keyProperty="id">
         UPDATE insurance_type
         <set>
             <if test="insuranceName != null">
@@ -49,7 +49,7 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="deleteInsuranceTypeById" parameterType="int">
+    <delete id="deleteInsuranceTypeById" parameterType="Integer">
         DELETE FROM insurance_type WHERE id = #{id}
     </delete>
 

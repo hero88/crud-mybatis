@@ -60,13 +60,13 @@ public class InsuranceTypeController {
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
     public CommonResponse<InsuranceTypeResponse> updateInsuranceType(@RequestBody InsuranceTypeRequest insuranceTypeRequest) {
 
-        try {
+//        try {
             InsuranceTypeResponse data = insuranceTypeService.updateInsuranceType(insuranceTypeRequest);
             return CommonResponse.success(data);
-        } catch (Exception e) {
-            System.out.println(e);
-            return CommonResponse.error(null);
-        }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return CommonResponse.error(null);
+//        }
     }
 
     @DeleteMapping("/deleteInsuranceTypeId/{id}")

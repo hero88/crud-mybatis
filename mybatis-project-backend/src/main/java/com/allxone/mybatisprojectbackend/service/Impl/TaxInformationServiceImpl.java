@@ -9,6 +9,7 @@ import com.allxone.mybatisprojectbackend.service.TaxInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,9 +29,25 @@ public class TaxInformationServiceImpl implements TaxInformationService {
 
     @Override
     public TaxInformationResponse updateTaxInformation(TaxInformationRequest taxInformationRequest) {
-        TaxInformation TaxInformation = TaxInformationConvert.toTaxInformation(taxInformationRequest);
-        taxInformationMapper.updateTaxInformation(TaxInformation);
-        return getTaxInformationById(TaxInformation.getId());
+        TaxInformation newTaxInformation = TaxInformationConvert.toTaxInformation(taxInformationRequest);
+        TaxInformation oldTaxInformation = taxInformationMapper.getTaxInformationByEmployeeIdAndStatus(taxInformationRequest.getEmployeeId(),false);
+
+        LocalDate firstDayOfNextMonth = LocalDate.now().withDayOfMonth(1).plusMonths(1);
+
+        if(oldTaxInformation == null){
+            newTaxInformation.setDateStart(firstDayOfNextMonth);
+            newTaxInformation.setStatus(false);
+            taxInformationMapper.saveTaxInformation(newTaxInformation);
+
+            return getTaxInformationById(newTaxInformation.getId());
+        }else {
+            oldTaxInformation.setTaxRate(taxInformationRequest.getTaxRate());
+            oldTaxInformation.setDateStart(firstDayOfNextMonth);
+            oldTaxInformation.setStatus(false);
+            taxInformationMapper.updateTaxInformation(oldTaxInformation);
+
+            return getTaxInformationById(oldTaxInformation.getId());
+        }
     }
 
     @Override
