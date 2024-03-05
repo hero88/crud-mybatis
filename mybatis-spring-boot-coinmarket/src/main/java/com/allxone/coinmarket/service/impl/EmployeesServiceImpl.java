@@ -195,7 +195,9 @@ public class EmployeesServiceImpl implements EmployeesService {
 		if (listTaxInformations != null) {
 
 			if (listTaxInformations.size() == 2) {
-				Comparator<TaxInformation> comparator = Comparator.comparing(TaxInformation::getDateStart);
+				  Comparator<TaxInformation> comparator = Comparator.comparing(TaxInformation::getDateStart, 
+						  Comparator.nullsLast(Comparator.naturalOrder()));
+
 
 				listTaxInformations.sort(comparator);
 
@@ -209,7 +211,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 				}
 				
 				if(secondTaxInformation!=null) {
-					firstTaxInformation.setStatus(false);
+					secondTaxInformation.setStatus(false);
 					taxInformationMapper.updateByPrimaryKey(secondTaxInformation);
 				}
 
@@ -242,7 +244,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 		List<Integer> list = convertJsonToList(employees.getInsuranceIds());
 		employeesDto.setInsuranceIds(list);
-		;
+		
 
 		if (employees.getId() != null) {
 
@@ -256,6 +258,14 @@ public class EmployeesServiceImpl implements EmployeesService {
 				TaxInformation taxInformation = taxInformationList.get(0);
 				employeesDto.setTaxRate(taxInformation.getTaxRate());
 				employeesDto.setTaxInformationId(taxInformation.getId());
+			}else {
+				TaxInformation taxInformation = taxInformationMapper
+						.selectByExample(taxInformationExample).stream().findFirst().orElse(null);
+				
+				if(taxInformation!=null) {
+					employeesDto.setTaxRate(taxInformation.getTaxRate());
+					employeesDto.setTaxInformationId(taxInformation.getId());
+				}
 			}
 
 		}
