@@ -27,10 +27,10 @@ public class InsuranceTypeServiceImpl implements InsuranceTypeService {
     }
 
     @Override
-    public InsuranceTypeResponse updateInsuranceType(InsuranceTypeRequest InsuranceTypeRequest) {
-        InsuranceType InsuranceType = InsuranceTypeConvert.toInsuranceType(InsuranceTypeRequest);
-        insuranceTypeMapper.updateInsuranceType(InsuranceType);
-        return getInsuranceTypeById(InsuranceType.getId());
+    public InsuranceTypeResponse updateInsuranceType(InsuranceTypeRequest insuranceTypeRequest) {
+        InsuranceType insuranceType = InsuranceTypeConvert.toInsuranceType(insuranceTypeRequest);
+        insuranceTypeMapper.updateInsuranceType(insuranceType);
+        return getInsuranceTypeById(insuranceType.getId());
     }
 
     @Override
@@ -39,22 +39,16 @@ public class InsuranceTypeServiceImpl implements InsuranceTypeService {
     }
 
     @Override
-    public InsuranceTypeResponse saveInsuranceType(InsuranceTypeRequest InsuranceTypeRequest) {
-        InsuranceType InsuranceType = InsuranceTypeConvert.toInsuranceType(InsuranceTypeRequest);
-        insuranceTypeMapper.saveInsuranceType(InsuranceType);
-        return getInsuranceTypeById(InsuranceType.getId());
+    public InsuranceTypeResponse saveInsuranceType(InsuranceTypeRequest insuranceTypeRequest) {
+        InsuranceType insuranceType = InsuranceTypeConvert.toInsuranceType(insuranceTypeRequest);
+        insuranceTypeMapper.saveInsuranceType(insuranceType);
+        return getInsuranceTypeById(insuranceType.getId());
     }
 
     @Override
     public InsuranceTypeResponse getInsuranceTypeById(Integer id) {
-        try {
-
-            InsuranceType InsuranceType = insuranceTypeMapper.getInsuranceTypeById(id);
-            return InsuranceTypeConvert.toDto(InsuranceType);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return null;
+        InsuranceType insuranceType = insuranceTypeMapper.getInsuranceTypeById(id);
+        return InsuranceTypeConvert.toDto(insuranceType);
     }
 }
 

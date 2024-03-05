@@ -26,6 +26,7 @@ public class PayrollConvert {
 
     public static Payroll toPayroll(PayrollRequest payrollRequest) {
         return Payroll.builder()
+                .id(payrollRequest.getId())
                 .employeeId(payrollRequest.getEmployeeId())
                 .salary(payrollRequest.getSalary())
                 .bonus(payrollRequest.getBonus())

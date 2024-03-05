@@ -16,6 +16,8 @@ public class TaxInformationConvert {
                 .employeeId(taxInformation.getEmployeeId())
                 .taxRate(taxInformation.getTaxRate())
                 .taxExemption(taxInformation.getTaxExemption())
+                .status(taxInformation.getStatus())
+                .dateStart(taxInformation.getDateStart())
                 .createdAt(taxInformation.getCreatedAt())
                 .updatedAt(taxInformation.getUpdatedAt())
                 .build();
@@ -27,6 +29,7 @@ public class TaxInformationConvert {
                 .employeeId(taxInformationRequest.getEmployeeId())
                 .taxRate(taxInformationRequest.getTaxRate())
                 .taxExemption(taxInformationRequest.getTaxExemption())
+                .status(taxInformationRequest.getStatus())
                 .build();
     }
 }

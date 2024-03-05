@@ -41,7 +41,7 @@
         SELECT * FROM payroll
     </select>
 
-    <update id="updatePayroll" parameterType="Payroll">
+    <update id="updatePayroll" parameterType="Payroll" useGeneratedKeys="true" keyProperty="id">
         UPDATE payroll
         <set>
             <if test="salary != null">

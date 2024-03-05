@@ -60,13 +60,13 @@ public class HolidayController {
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
     public CommonResponse<HolidayResponse> updateHoliday(@RequestBody HolidayRequest holidayRequest) {
 
-        try {
+//        try {
             HolidayResponse data = holidayService.updateHoliday(holidayRequest);
             return CommonResponse.success(data);
-        } catch (Exception e) {
-            System.out.println(e);
-            return CommonResponse.error(null);
-        }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return CommonResponse.error(null);
+//        }
     }
 
     @DeleteMapping("/deleteHolidayById/{id}")

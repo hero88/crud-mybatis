@@ -138,6 +138,8 @@ CREATE TABLE tax_information
     employee_id   bigint        NOT NULL,
     tax_rate      decimal(5, 2) NOT NULL,
     tax_exemption bit(1)             DEFAULT NULL,
+    status bit(1) NOT NULL DEFAULT b'1',
+    date_start date DEFAULT NULL,
     created_at    timestamp     NULL DEFAULT NULL,
     updated_at    timestamp     NULL DEFAULT NULL
 );

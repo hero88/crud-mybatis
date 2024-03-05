@@ -51,6 +51,31 @@ public class PayrollServiceImpl implements PayrollService {
 
         Payroll payroll = payrollMapper.getPayrollById(payrollRequest.getId());
 
+        Double insuranceRate =
+                insuranceTypeMapper.getInsuranceTypeByEmployeeId(payroll.getEmployeeId())
+                        .stream()
+                        .mapToDouble(insuranceType ->
+                                insuranceType.getInsuranceRate() != null
+                                        ?
+                                        insuranceType.getInsuranceRate()
+                                        : 0.0
+                        )
+                        .reduce(0.0, Double::sum);
+
+        TaxInformation taxInformation =
+                taxInformationMapper.getTaxInformationByEmployeeId(payroll.getEmployeeId());
+//      tien nghi le cu
+        double oldHolidayDays = getTotalHolidayByPayroll(payroll);
+        Double oldLeavePaidDays = Double.valueOf(payroll.getLeavePaidDays());
+
+        Double oldNetSalaryHolidayAndLeavePaidDays =
+                getNetSalaryHolidayAndLeavePaidDays(
+                        payroll,
+                        oldHolidayDays * 8 + oldLeavePaidDays * 8,
+                        taxInformation.getTaxRate(),
+                        insuranceRate);
+        payroll.setNetSalary(payroll.getNetSalary() - oldNetSalaryHolidayAndLeavePaidDays);
+
         if (payrollRequest.getSalary() != null) {
             payroll.setSalary(payrollRequest.getSalary());
         }
@@ -74,29 +99,7 @@ public class PayrollServiceImpl implements PayrollService {
         payrollMapper.updatePayroll(payroll);
 
         if (payroll.getHolidayIds() != null && payroll.getLeavePaidDays() != null) {
-            Double insuranceRate =
-                    insuranceTypeMapper.getInsuranceTypeByEmployeeId(payroll.getEmployeeId())
-                            .stream()
-                            .mapToDouble(insuranceType ->
-                                    insuranceType.getInsuranceRate() != null
-                                            ?
-                                            insuranceType.getInsuranceRate()
-                                            : 0.0
-                            )
-                            .reduce(0.0, Double::sum);
-
-            TaxInformation taxInformation =
-                    taxInformationMapper.getTaxInformationByEmployeeId(payroll.getEmployeeId());
-
-            double holidayDays = holidayMapper.getTotalHolidayByPayrollId(payroll.getId())
-                    .stream()
-                    .mapToDouble(holiday ->
-                            holiday.getDurationDays() != null
-                                    ?
-                                    holiday.getDurationDays()
-                                    : 0.0
-                    )
-                    .reduce(0.0, Double::sum);
+            Double holidayDays = getTotalHolidayByPayroll(payroll);
 
             Double leavePaidDays = Double.valueOf(payroll.getLeavePaidDays());
             payroll.setNetSalary(getNetSalary(payroll,
@@ -109,6 +112,13 @@ public class PayrollServiceImpl implements PayrollService {
         return getPayrollById(payroll.getId());
     }
 
+    public Double getNetSalaryHolidayAndLeavePaidDays(Payroll payroll,
+                                                      Double hour,
+                                                      Double taxRate,
+                                                      Double insuranceRate) {
+        return payroll.getNetSalary() - (payroll.getSalary() * hour * (100 - taxRate - insuranceRate)) / 100;
+    }
+
     public Double getNetSalary(Payroll payroll,
                                Double hour,
                                Double bonus,
@@ -119,5 +129,17 @@ public class PayrollServiceImpl implements PayrollService {
                 + (payroll.getSalary() * hour * (100 - taxRate - insuranceRate)) / 100
                 + bonus
                 - deductions;
+    }
+
+    public Double getTotalHolidayByPayroll(Payroll payroll) {
+        return holidayMapper.getTotalHolidayByPayrollId(payroll.getId())
+                .stream()
+                .mapToDouble(holiday ->
+                        holiday.getDurationDays() != null
+                                ?
+                                holiday.getDurationDays()
+                                : 0.0
+                )
+                .reduce(0.0, Double::sum);
     }
 }

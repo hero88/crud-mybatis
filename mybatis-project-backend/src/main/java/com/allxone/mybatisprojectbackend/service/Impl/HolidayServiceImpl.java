@@ -27,10 +27,10 @@ public class HolidayServiceImpl implements HolidayService {
     }
 
     @Override
-    public HolidayResponse updateHoliday(HolidayRequest HolidayRequest) {
-        Holiday Holiday = HolidayConvert.toHoliday(HolidayRequest);
-        holidayMapper.updateHoliday(Holiday);
-        return getHolidayById(Holiday.getId());
+    public HolidayResponse updateHoliday(HolidayRequest holidayRequest) {
+        Holiday holiday = HolidayConvert.toHoliday(holidayRequest);
+        holidayMapper.updateHoliday(holiday);
+        return getHolidayById(holiday.getId());
     }
 
     @Override
@@ -39,16 +39,16 @@ public class HolidayServiceImpl implements HolidayService {
     }
 
     @Override
-    public HolidayResponse saveHoliday(HolidayRequest HolidayRequest) {
-        Holiday Holiday = HolidayConvert.toHoliday(HolidayRequest);
-        holidayMapper.saveHoliday(Holiday);
-        return getHolidayById(Holiday.getId());
+    public HolidayResponse saveHoliday(HolidayRequest holidayRequest) {
+        Holiday holiday = HolidayConvert.toHoliday(holidayRequest);
+        holidayMapper.saveHoliday(holiday);
+        return getHolidayById(holiday.getId());
     }
 
     @Override
     public HolidayResponse getHolidayById(Integer id) {
-        Holiday Holiday = holidayMapper.getHolidayById(id);
-        return HolidayConvert.toDto(Holiday);
+        Holiday holiday = holidayMapper.getHolidayById(id);
+        return HolidayConvert.toDto(holiday);
     }
 }
 

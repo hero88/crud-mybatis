@@ -47,7 +47,7 @@
         FROM employee
     </select>
 
-    <update id="updateEmployee" parameterType="Employee">
+    <update id="updateEmployee" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
         UPDATE employee
         <set>
             <if test="firstname != null">

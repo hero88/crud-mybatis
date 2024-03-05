@@ -18,6 +18,7 @@ public class InsuranceTypeConvert {
 
     public static InsuranceType toInsuranceType(InsuranceTypeRequest insuranceTypeRequest) {
         return InsuranceType.builder()
+                .id(insuranceTypeRequest.getId())
                 .insuranceName(insuranceTypeRequest.getInsuranceName())
                 .insuranceDescription(insuranceTypeRequest.getInsuranceDescription())
                 .insuranceRate(insuranceTypeRequest.getInsuranceRate())
