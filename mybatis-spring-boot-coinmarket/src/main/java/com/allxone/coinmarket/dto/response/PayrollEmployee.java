@@ -25,7 +25,9 @@ public class PayrollEmployee {
 
     private BigDecimal net_salary;
 
-    private BigDecimal total_tax;
+    private BigDecimal tax_rate;
+
+    private BigDecimal estimate_tax_contribution;
 
     private BigDecimal unemployment_insurance;
 

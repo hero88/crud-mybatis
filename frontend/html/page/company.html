@@ -32,6 +32,14 @@
             margin-bottom: .938rem;
         }
 
+        .hdhgkg {
+            font-family: Muli, sans-serif !important;
+            font-style: normal;
+            font-weight: 700;
+            text-transform: capitalize;
+            margin-bottom: .938rem;
+        }
+
         .employee-list>.employee {
             margin-bottom: 20px;
             /* Điều chỉnh giá trị margin bottom theo mong muốn */
@@ -138,6 +146,11 @@
         </div>
     </nav>
     <div class="container employee-list" id="listEmployee">
+        <div class="row d-flex justify-content-center rounded-2">
+            <div class="col text-center">
+                <h3 class="hdhgkg">Last onth's Top Employees</h3>
+            </div>
+        </div>
     </div>
     <div class="container-fluid">
         <div class="row justify-content-center p-2">
@@ -322,6 +335,7 @@
         if (getCookie('token') != null) {
             profile(apiProfile);
         }
+
         // call data hiển thị lên trang company
 
         function getDataCompany(api) {
@@ -343,7 +357,7 @@
                     return response.data;
                 })
                 .then(data => {
-                    console.log(data.data.listTop2);
+                    console.log(data);
                     const totalHoldings = formatNumber(data.data.totalHoldings);
                     const totalPayroll = formatNumber(data.data.totalPayroll);
                     const timeTrackings = formatNumber(data.data.totalHour);
@@ -394,7 +408,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">   
+                        <div class="col-md-3 d-flex flex-column justify-content-center mb-2">
                             <div class="col-md-8 d-flex flex-column justify-content-center">
                                 <div class="col-md-12 d-flex flex-column text-center">
                                     <span style="font-size: 20px;color: blue;">USD ${user.net_salary}</span>
@@ -427,13 +441,23 @@
                                 </div>
                                 <div class="col-md-4 text-end">
                                     <b>
-                                        <span class="hdhgk">USD ${user.total_tax}</span>
+                                        <span class="hdhgk">USD ${user.estimate_tax_contribution}</span>
                                     </b>
                                 </div>
                             </div>
-            
+
                             <div class="row d-flex justify-content-center p-3">
                                 <div class="row border rounded-2" style="padding: inherit;">
+                                    <div class="col-md-8">
+                                        <b>
+                                            <p class="hdhgk">Tax</p>
+                                        </b>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <b>
+                                            <span class="hdhgk">USD ${user.tax_rate}</span>
+                                        </b>
+                                    </div>
                                     <div class="col-md-8">
                                         <b>
                                             <p class="hdhgk">Social Insurance</p>
@@ -482,11 +506,14 @@
                 ];
 
                 function getMonthName(monthNumber) {
+                    if (monthNumber == 1) {
+                        return monthNames[0];
+                    }
                     return monthNames[monthNumber - 1];
                 }
 
                 user.listHistoryPayroll.forEach(function (i) {
-                    const dateParts = i.periodStart.split('-'); // Tách chuỗi thành mảng các phần tử, phân tách bằng dấu '-'
+                    const dateParts = i.periodEnd.split('-'); // Tách chuỗi thành mảng các phần tử, phân tách bằng dấu '-'
                     var month = parseInt(dateParts[1]);
                     month = getMonthName(month);
                     var data = i.netSalary

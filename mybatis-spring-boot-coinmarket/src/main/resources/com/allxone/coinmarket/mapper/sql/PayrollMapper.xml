@@ -450,4 +450,23 @@
     where month(p.period_start) = h.month
     group by p.employee_id, p.id
   </select>
+
+  <select id="getTopTwoPreviousMonthPayrolls" resultMap="BaseResultMap">
+  <![CDATA[
+    SELECT *
+    FROM payroll
+    WHERE MONTH(period_end) =
+        (CASE
+      WHEN MONTH(CURRENT_DATE()) = 1 THEN 12
+      ELSE MONTH(CURRENT_DATE()) - 1
+      END)
+      AND YEAR(period_end) =
+        (CASE
+      WHEN MONTH(CURRENT_DATE()) = 1 THEN YEAR(CURRENT_DATE()) - 1
+      ELSE YEAR(CURRENT_DATE())
+      END)
+    ORDER BY net_salary DESC
+      LIMIT 2;
+    ]]>
+</select>
 </mapper>

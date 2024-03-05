@@ -5,16 +5,14 @@ import com.allxone.coinmarket.mapper.*;
 import com.allxone.coinmarket.model.*;
 import com.allxone.coinmarket.service.CoinService;
 import com.allxone.coinmarket.service.CompanyService;
-import com.allxone.coinmarket.service.InsuranceTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +45,7 @@ public class CompanyServiceimpl implements CompanyService {
         TimeTrackingExample timeTrackingExample = new TimeTrackingExample();
         timeTrackingExample.createCriteria()
                 .andDateTrackBetween(firstDayOfCurrentMonth, lastDayOfCurrentMonth);
+
         BigDecimal totalHour = timeTrackingMapper.sumTotalHoursMonth(timeTrackingExample);
         companyDTO.setTotalHour(totalHour != null ? totalHour : BigDecimal.ZERO);
 
@@ -59,14 +58,19 @@ public class CompanyServiceimpl implements CompanyService {
             ex.printStackTrace();
             companyDTO.setTotalHoldings(0L);
         }
+
+
         List<WorkingTimeDTO> workingTimeDTOS = timeTrackingMapper.findAllWorkingTimeEmployeeByFilters(firstDayOfCurrentMonth, lastDayOfCurrentMonth);
         List<PayrollEmployee> payrollDTOS = getTotalPayrollEmployeesMonth(workingTimeDTOS);
 
         BigDecimal totalSalary = BigDecimal.valueOf(payrollDTOS.stream().mapToLong(data -> data.getNet_salary().longValue()).sum());
         companyDTO.setTotalPayroll(totalSalary);
+//        List<PayrollEmployee> top2Payroll = top2Employees(payrollDTOS);
+//        companyDTO.setListTop2(top2Payroll);
 
-        List<PayrollEmployee> top2Payroll = top2Employees(payrollDTOS);
-        companyDTO.setListTop2(top2Payroll);
+        List<Payroll> payrolls = payrollMapper.getTopTwoPreviousMonthPayrolls();
+        List<PayrollEmployee> top2s = getMapPayroll_PayrollEmployee(payrolls);
+        companyDTO.setListTop2(top2s);
         return companyDTO;
     }
     // Tính tống lương của nhân viên tháng hiện tại
@@ -108,7 +112,7 @@ public class CompanyServiceimpl implements CompanyService {
             }
             dto.setEmployee_id(working.get(0).getEmployee_id());
             dto.setNet_salary(netSalary);
-            dto.setTotal_tax(totalHours.multiply(new BigDecimal(100).subtract(taxRate)).divide(new BigDecimal(100)));
+            dto.setTax_rate(taxRate);
             listPayroll.add(dto);
         }
         return listPayroll;
@@ -155,15 +159,10 @@ public class CompanyServiceimpl implements CompanyService {
         return calendar.get(Calendar.MONTH) + 1; // Tháng bắt đầu từ 0 nên cần cộng thêm 1
     }
 
-    // tìm và set up các thông tin liên quan đến top2 nhân viên có lương cao nhất tháng
-    public List<PayrollEmployee> top2Employees(List<PayrollEmployee> listPayroll){
-        // Tìm top2 nhân viên có luong cao nhất
-        List<PayrollEmployee> top2 = listPayroll.stream()
-                .sorted(Comparator.comparing(PayrollEmployee::getNet_salary).reversed())
-                .limit(2)
-                .collect(Collectors.toList());
-        // set up các trường cần thiết cho top 2
-        top2.forEach(y ->{
+    // tìm và set up các thông tin liên quan đến nhân viên ở tháng hiện tại
+    public List<PayrollEmployee> newSalaryThisMonth(List<PayrollEmployee> listPayroll){
+
+        listPayroll.forEach(y ->{
             Employees employee = employeesMapper.selectByPrimaryKey(y.getEmployee_id());
             String insuranceType = employee.getInsuranceIds();
             int[] insurance = null;
@@ -173,13 +172,12 @@ public class CompanyServiceimpl implements CompanyService {
                     InsuranceType insuranceType1 = insuranceTypeMapper.selectByPrimaryKey(id);
                     BigDecimal insuranceRate = insuranceType1.getInsuranceRate();
                     if (id == 1) {
-                        y.setUnemployment_insurance(insuranceRate);
+                        y.setUnemployment_insurance(y.getNet_salary().multiply(insuranceRate).divide(new BigDecimal(100)));
                     } else if (id == 2) {
-                        y.setSocial_insurance(insuranceRate);
+                        y.setSocial_insurance(y.getNet_salary().multiply(insuranceRate).divide(new BigDecimal(100)));
                     } else {
-                        y.setHealth_insurance(insuranceRate);
+                        y.setHealth_insurance(y.getNet_salary().multiply(insuranceRate).divide(new BigDecimal(100)));
                     }
-
                     if (y.getSocial_insurance() == null) {
                         y.setSocial_insurance(BigDecimal.ZERO);
                     }
@@ -198,14 +196,91 @@ public class CompanyServiceimpl implements CompanyService {
             }
             Departments departments = departmentsMapper.selectByPrimaryKey(employee.getDepartmentId());
             List<Payroll> listPayrolls = payrollMapper.getTopThreeLatestSalaries(employee.getId());
+            listPayrolls.sort(Comparator.comparing(payroll -> {
+                // Chuyển đổi Date thành LocalDateTime
+                return payroll.getPeriodEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            }));
             y.setLast_name(employee.getLastName());
             y.setEmail(employee.getEmail());
             y.setFirst_name(employee.getFirstName());
             y.setDepartment_name(departments.getName());
             y.setListHistoryPayroll(listPayrolls);
+            y.setEstimate_tax_contribution(((y.getNet_salary().multiply(y.getTax_rate())).divide(new BigDecimal(100))).add(y.getUnemployment_insurance().add(y.getHealth_insurance().add(y.getSocial_insurance()))));
             y.setPosition(employee.getPosition());
         });
-        return top2;
+        return listPayroll;
+    }
+
+    //  chuyển từ list Payroll sang  PayrollEmployee để trả về api
+    public List<PayrollEmployee> getMapPayroll_PayrollEmployee(List<Payroll> listPayroll){
+        List<PayrollEmployee> payrollEmployees = new ArrayList<>();
+        // dùng for để duyệt mảng
+        listPayroll.forEach(Payroll -> {
+            // tạo mới PayrollEmployee để đấy vào  list mới
+            PayrollEmployee payrollEmployee = new PayrollEmployee();
+            Employees employees = employeesMapper.selectByPrimaryKey(Payroll.getEmployeeId());
+
+            // truy xuất  thuế
+            TaxInformationExample taxInformationSQL = new TaxInformationExample();
+            taxInformationSQL.createCriteria().andEmployeeIdEqualTo(Payroll.getEmployeeId());
+            List<TaxInformation> taxInformations = taxInformationMapper.selectByExample(taxInformationSQL);
+            BigDecimal taxRate = new BigDecimal(0);
+            // kiểm tra danh sách thuế trả về nếu có bản ghi thì set data nếu không thì mặc định là 0
+            if(taxInformations.size() > 0) {
+                taxRate = taxInformations.get(0).getTaxRate();
+            }
+            // lấy mà để tính phí
+            String insuranceType = employees.getInsuranceIds();
+            int[] insurance = null;
+            if(!insuranceType.equals("null")){
+                insurance = getSo(insuranceType);
+                for (int id : insurance) {
+                    InsuranceType insuranceType1 = insuranceTypeMapper.selectByPrimaryKey(id);
+                    BigDecimal insuranceRate = insuranceType1.getInsuranceRate();
+                    if (id == 1) {
+                        payrollEmployee.setUnemployment_insurance(Payroll.getNetSalary().multiply(insuranceRate).divide(new BigDecimal(100)));
+                    } else if (id == 2) {
+                        payrollEmployee.setSocial_insurance(Payroll.getNetSalary().multiply(insuranceRate).divide(new BigDecimal(100)));
+                    } else {
+                        payrollEmployee.setHealth_insurance(Payroll.getNetSalary().multiply(insuranceRate).divide(new BigDecimal(100)));
+                    }
+                    if (payrollEmployee.getSocial_insurance() == null) {
+                        payrollEmployee.setSocial_insurance(BigDecimal.ZERO);
+                    }
+                    if (payrollEmployee.getUnemployment_insurance() == null) {
+                        payrollEmployee.setUnemployment_insurance(BigDecimal.ZERO);
+                    }
+                    if (payrollEmployee.getHealth_insurance() == null) {
+                        payrollEmployee.setHealth_insurance(BigDecimal.ZERO);
+                    }
+                }
+            }
+            else {
+                payrollEmployee.setUnemployment_insurance(new BigDecimal(0));
+                payrollEmployee.setSocial_insurance(new BigDecimal(0));
+                payrollEmployee.setHealth_insurance(new BigDecimal(0));
+            }
+            Departments departments = departmentsMapper.selectByPrimaryKey(employees.getDepartmentId());
+
+            // lấy lương 3 tháng gẫn nhất để vẽ biểu đồ
+            List<Payroll> listPayrolls = payrollMapper.getTopThreeLatestSalaries(employees.getId());
+            listPayrolls.sort(Comparator.comparing(payroll -> {
+                // Chuyển đổi Date thành LocalDateTime
+                return payroll.getPeriodEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            }));
+            payrollEmployee.setEmployee_id(Payroll.getEmployeeId());
+            payrollEmployee.setNet_salary(Payroll.getNetSalary());
+            payrollEmployee.setFirst_name(employees.getFirstName());
+            payrollEmployee.setLast_name(employees.getLastName());
+            payrollEmployee.setDepartment_name(departments.getName());
+            payrollEmployee.setEmail(employees.getEmail());
+            payrollEmployee.setTax_rate(taxRate.multiply(Payroll.getNetSalary()).divide(new BigDecimal(100)));
+            payrollEmployee.setPosition(employees.getPosition());
+            payrollEmployee.setListHistoryPayroll(listPayrolls);
+            payrollEmployee.setEstimate_tax_contribution(((Payroll.getNetSalary().multiply(taxRate)).divide(new BigDecimal(100))).add(payrollEmployee.getUnemployment_insurance().add(payrollEmployee.getHealth_insurance().add(payrollEmployee.getSocial_insurance()))));
+            payrollEmployees.add(payrollEmployee);
+        });
+        return payrollEmployees;
     }
 
     public int[] getSo(String chuoi){
