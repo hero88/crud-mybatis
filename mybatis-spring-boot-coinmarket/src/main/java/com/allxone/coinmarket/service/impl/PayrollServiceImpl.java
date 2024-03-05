@@ -1,6 +1,7 @@
 package com.allxone.coinmarket.service.impl;
 
 import com.allxone.coinmarket.dto.response.PayrollDTO;
+import com.allxone.coinmarket.mapper.EmployeesMapper;
 import com.allxone.coinmarket.mapper.PayrollMapper;
 import com.allxone.coinmarket.mapper.TaxInformationMapper;
 import com.allxone.coinmarket.model.Payroll;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,9 @@ public class PayrollServiceImpl implements PayrollService {
 
     @Autowired
     private TaxInformationMapper taxInformationMapper;
+
+    @Autowired
+    private EmployeesMapper employeesMapper;
 
     @Override
     public List<PayrollDTO> getAllPayroll( Integer month) {
@@ -59,4 +64,23 @@ public class PayrollServiceImpl implements PayrollService {
         return payrollMapper.calcNetSalary(listId,monthFrom,monthTo,yearFrom,yearTo);
     }
 
+    @Override
+    public Payroll getPayrollById(Long id) {
+        return payrollMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Payroll updatePayrollById(Payroll payroll) {
+        Payroll payrollUpdate = payrollMapper.selectByPrimaryKey(payroll.getId());
+        payrollUpdate.setSalary(payroll.getSalary());
+        payrollUpdate.setUpdatedAt(new Date());
+        payrollUpdate.setBonus(payroll.getBonus());
+        payrollUpdate.setDeductions(payroll.getDeductions());
+        payrollUpdate.setHolidayIds("["+payroll.getHolidayIds()+"]");
+        if(employeesMapper.selectByPrimaryKey(payroll.getEmployeeId()).getLeavePaidDays() > payroll.getLeavePaidDays()){
+            payrollUpdate.setLeavePaidDays(payroll.getLeavePaidDays());
+        }
+        payrollMapper.updateByPrimaryKey(payrollUpdate);
+        return payrollUpdate;
+    }
 }
