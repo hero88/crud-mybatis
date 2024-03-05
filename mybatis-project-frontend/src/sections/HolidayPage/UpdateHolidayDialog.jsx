@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { doUpdateHoliday } from "@/services/HolidayAPI";
 import { Pencil } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 function UpdateHolidayDialog({ holiday, loadHolidaysData }) {
   const { toast } = useToast();
@@ -62,15 +63,7 @@ function UpdateHolidayDialog({ holiday, loadHolidaysData }) {
 
         const { data: response } = await doUpdateHoliday(newHoliday);
 
-        console.log(response);
-
         if (response.code === 200) {
-          setCurrentHoliday({
-            holidayName: "",
-            holidaydescription: "",
-            durationDays: 1,
-          });
-
           setValidateError([]);
           loadHolidaysData();
           setOpenDialog(false);
@@ -133,11 +126,13 @@ function UpdateHolidayDialog({ holiday, loadHolidaysData }) {
                 Description
               </Label>
               <div className="col-span-3">
-                <Input
+                <Textarea
+                  placeholder="Type holiday description here"
                   name="holidayDescription"
                   id="holidayDescription"
                   value={holidayDescription}
                   onChange={(e) => handleChangeField(e)}
+                  className="min-h-40"
                 />
                 {validateError.includes("description") && (
                   <Description className="text-red-500 font-semibold text-[12px]">

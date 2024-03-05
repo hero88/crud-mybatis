@@ -35,7 +35,7 @@ export const doAddNewInsurance = (insuranceForm) => {
 
 export const doUpdateInsurance = (insuranceForm) => {
   try {
-    const res = API.put("api/insurance/updateInsuranceType", insuranceForm);
+    const res = API.put("api/InsuranceType/updateInsuranceType", insuranceForm);
     return res;
   } catch (error) {
     console.log(error);
@@ -46,7 +46,7 @@ export const doUpdateInsurance = (insuranceForm) => {
 export const doDeleteInsurance = (insuranceId) => {
   try {
     const res = API.delete(
-      `api/insurance/deleteInsuranceTypeById/${insuranceId}`
+      `api/InsuranceType/deleteInsuranceTypeId/${insuranceId}`
     );
     return res;
   } catch (error) {

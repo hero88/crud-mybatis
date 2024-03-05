@@ -15,6 +15,7 @@ import { Description } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { doAddNewHoliday } from "@/services/HolidayAPI";
+import { Textarea } from "@/components/ui/textarea";
 
 function AddNewHolidayDialog({ loadHolidaysData }) {
   const { toast } = useToast();
@@ -58,12 +59,6 @@ function AddNewHolidayDialog({ loadHolidaysData }) {
         const { data: response } = await doAddNewHoliday(newHoliday);
 
         if (response.code === 200) {
-          setCurrentHoliday({
-            holidayName: "",
-            holidaydescription: "",
-            durationDays: 1,
-          });
-
           setValidateError([]);
           loadHolidaysData();
           setOpenDialog(false);
@@ -125,11 +120,13 @@ function AddNewHolidayDialog({ loadHolidaysData }) {
                 Description
               </Label>
               <div className="col-span-3">
-                <Input
+                <Textarea
+                  placeholder="Type holiday description here"
                   name="holidayDescription"
                   id="holidayDescription"
                   value={holidayDescription}
                   onChange={(e) => handleChangeField(e)}
+                  className="min-h-40"
                 />
                 {validateError.includes("description") && (
                   <Description className="text-red-500 font-semibold text-[12px]">

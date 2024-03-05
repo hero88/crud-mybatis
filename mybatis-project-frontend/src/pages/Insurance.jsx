@@ -59,13 +59,13 @@ function Insurance() {
                   {insurance.id}
                 </TableCell>
                 <TableCell className="font-semibold">
-                  {insurance.name}
+                  {insurance.insuranceName}
                 </TableCell>
                 <TableCell className="font-semibold">
-                  {insurance.description}
+                  {insurance.insuranceDescription}
                 </TableCell>
                 <TableCell className="font-semibold">
-                  {insurance.rate}
+                  {insurance.insuranceRate}
                 </TableCell>
                 <TableCell className="flex items-center space-x-4 justify-center">
                   <UpdateInsuranceDialog

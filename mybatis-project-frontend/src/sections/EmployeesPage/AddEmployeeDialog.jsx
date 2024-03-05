@@ -125,6 +125,8 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
 
         const { data: response } = await doAddNewEmployee(newEmployee);
 
+        console.log(response);
+
         if (response.code === 200) {
           const employeeData = response.data;
 

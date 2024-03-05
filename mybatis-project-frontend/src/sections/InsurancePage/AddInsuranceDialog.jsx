@@ -15,20 +15,22 @@ import { Description } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { doAddNewInsurance } from "@/services/InsuranceAPI";
+import { Textarea } from "@/components/ui/textarea";
 
 function AddNewInsuranceDialog({ loadInsurancesData }) {
   const { toast } = useToast();
 
   const [currentInsurance, setCurrentInsurance] = useState({
-    name: "",
-    description: "",
-    rate: "",
+    insuranceName: "",
+    insuranceDescription: "",
+    insuranceRate: "",
   });
 
   const [validateError, setValidateError] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { name, description, rate } = currentInsurance;
+  const { insuranceName, insuranceDescription, insuranceRate } =
+    currentInsurance;
 
   const handleChangeField = (e) => {
     setCurrentInsurance({
@@ -38,42 +40,40 @@ function AddNewInsuranceDialog({ loadInsurancesData }) {
   };
 
   const handleSubmitCreate = async () => {
-    if (name === "" || description === "" || rate === "") {
-      if (name === "" && description === "" && rate === "") {
+    if (
+      insuranceName === "" ||
+      insuranceDescription === "" ||
+      insuranceRate === ""
+    ) {
+      if (
+        insuranceName === "" &&
+        insuranceDescription === "" &&
+        insuranceRate === ""
+      ) {
         setValidateError(["name", "description", "rate"]);
-      } else if (name === "" && description == "") {
+      } else if (insuranceName === "" && insuranceDescription == "") {
         setValidateError(["name", "description"]);
-      } else if (description === "" && rate === "") {
+      } else if (insuranceDescription === "" && insuranceRate === "") {
         setValidateError(["description", "rate"]);
-      } else if (name === "") {
+      } else if (insuranceName === "") {
         setValidateError(["name"]);
-      } else if (description === "") {
+      } else if (insuranceDescription === "") {
         setValidateError(["description"]);
-      } else if (rate === "") {
+      } else if (insuranceRate === "") {
         setValidateError(["rate"]);
       }
     } else {
-      if (isNaN(parseFloat(rate))) {
+      if (isNaN(parseFloat(insuranceRate)) || parseFloat(insuranceRate) < 0) {
         setValidateError(["invalid"]);
       } else {
         let newInsurance = {
           ...currentInsurance,
-          rate: parseFloat(rate),
+          rate: parseFloat(insuranceRate),
         };
-
-        console.log(newInsurance);
 
         const { data: response } = await doAddNewInsurance(newInsurance);
 
-        console.log(response);
-
         if (response.code === 200) {
-          setCurrentInsurance({
-            name: "",
-            description: "",
-            rate: "",
-          });
-
           setValidateError([]);
           loadInsurancesData();
           setOpenDialog(false);
@@ -112,14 +112,14 @@ function AddNewInsuranceDialog({ loadInsurancesData }) {
           <div className="grid gap-4 py-4">
             {/* Name */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="firstname" className="text-right">
+              <Label htmlFor="insuranceName" className="text-right">
                 Name
               </Label>
               <div className="col-span-3">
                 <Input
-                  name="name"
-                  id="name"
-                  value={name}
+                  name="insuranceName"
+                  id="insuranceName"
+                  value={insuranceName}
                   onChange={(e) => handleChangeField(e)}
                 />
                 {validateError.includes("name") && (
@@ -131,14 +131,16 @@ function AddNewInsuranceDialog({ loadInsurancesData }) {
             </div>
             {/* Description */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="lastname" className="text-right">
+              <Label htmlFor="insuranceDescription" className="text-right">
                 Description
               </Label>
               <div className="col-span-3">
-                <Input
-                  name="description"
-                  id="description"
-                  value={description}
+                <Textarea
+                  name="insuranceDescription"
+                  id="insuranceDescription"
+                  placeholder="Type insurance description here."
+                  className="min-h-40"
+                  value={insuranceDescription}
                   onChange={(e) => handleChangeField(e)}
                 />
                 {validateError.includes("description") && (
@@ -150,14 +152,14 @@ function AddNewInsuranceDialog({ loadInsurancesData }) {
             </div>
             {/* Rate */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="userId" className="text-right">
+              <Label htmlFor="insuranceRate" className="text-right">
                 Rate
               </Label>
               <div className="col-span-3">
                 <Input
-                  name="rate"
-                  id="rate"
-                  value={rate}
+                  name="insuranceRate"
+                  id="insuranceRate"
+                  value={insuranceRate}
                   onChange={(e) => handleChangeField(e)}
                 />
                 {validateError.includes("rate") && (
