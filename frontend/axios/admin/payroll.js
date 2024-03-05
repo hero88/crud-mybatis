@@ -288,7 +288,7 @@ function getDetail(id) {
     }
   }).then(resp => {
     payrollDetail = resp.data.data;
-    axios.get(baseURL+"v1/employees/"+payrollDetail.employeeId).then(respE => {
+    axios.get(api+"/employee/"+payrollDetail.employeeId).then(respE => {
         max = respE.data.leavePaidDays;
         containerModalDetail.innerHTML=`<form class="max-w-md mx-auto">
         <div class="relative z-0 w-full my-5 group">

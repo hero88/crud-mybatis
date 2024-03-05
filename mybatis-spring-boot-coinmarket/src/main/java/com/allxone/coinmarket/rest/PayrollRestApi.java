@@ -2,6 +2,8 @@ package com.allxone.coinmarket.rest;
 
 import com.allxone.coinmarket.dto.response.ApiResponse;
 import com.allxone.coinmarket.dto.response.PayrollDTO;
+import com.allxone.coinmarket.mapper.EmployeesMapper;
+import com.allxone.coinmarket.model.Employees;
 import com.allxone.coinmarket.model.Payroll;
 import com.allxone.coinmarket.service.PayrollService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class PayrollRestApi {
 
     private final PayrollService payrollService;
 
+    private final EmployeesMapper employeesMapper;
     @GetMapping()
     public ResponseEntity<?> getAllPayroll(@RequestParam(value = "month", defaultValue = "1") Integer month) {
         List<PayrollDTO> payrollList = payrollService.getAllPayroll(month);
@@ -99,6 +102,23 @@ public class PayrollRestApi {
                 .message("Employee dose not exist")
                 .success(false)
                 .data(newPayroll)
+                .build());
+    }
+
+    @GetMapping("/employee/{id}")
+    public ResponseEntity<?> updatePayroll(@PathVariable Long id){
+        Employees employee = employeesMapper.selectByPrimaryKey(id);
+        if (employee!=null) {
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                    .message("Successfully")
+                    .success(true)
+                    .data(employee)
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.builder()
+                .message("Employee dose not exist")
+                .success(false)
+                .data(employee)
                 .build());
     }
 }
