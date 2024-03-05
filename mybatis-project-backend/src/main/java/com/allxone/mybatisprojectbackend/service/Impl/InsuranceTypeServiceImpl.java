@@ -47,8 +47,14 @@ public class InsuranceTypeServiceImpl implements InsuranceTypeService {
 
     @Override
     public InsuranceTypeResponse getInsuranceTypeById(Integer id) {
-        InsuranceType InsuranceType = insuranceTypeMapper.getInsuranceTypeById(id);
-        return InsuranceTypeConvert.toDto(InsuranceType);
+        try {
+
+            InsuranceType InsuranceType = insuranceTypeMapper.getInsuranceTypeById(id);
+            return InsuranceTypeConvert.toDto(InsuranceType);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
     }
 }
 
