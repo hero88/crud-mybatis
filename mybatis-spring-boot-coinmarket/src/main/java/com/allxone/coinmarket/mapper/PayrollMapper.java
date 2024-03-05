@@ -111,4 +111,6 @@ public interface PayrollMapper {
     BigDecimal sumSalaryByMonth(PayrollExample payrollExample);
 
     List<Object> calcNetSalary(@Param("list") List<Integer> listId,@Param("monthFrom") Integer monthFrom, @Param("monthTo") Integer monthTo, @Param("yearFrom") Integer yearFrom, @Param("yearTo") Integer yearTo);
+
+    List<Payroll> getTopTwoPreviousMonthPayrolls();
 }
