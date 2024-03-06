@@ -332,14 +332,13 @@
   </update>
 
   <select resultMap="BaseResultMap" parameterType="map"  id="findByEmployees" >
-    select * from tax_information where employee_id = #{id} and status = 0;
+    select * from tax_information where employee_id = #{id} and status = #{status};
   </select>
 
   <select id="selectTaxInformation" parameterType="map" resultMap="BaseResultMap">
     SELECT * FROM tax_information
     WHERE employee_id = #{id}
-    AND date_start &lt;= CURRENT_DATE
-    ORDER BY id DESC
+    ORDER BY IFNULL(date_start, '9999-12-31') DESC
   </select>
 
 </mapper>
