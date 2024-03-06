@@ -330,4 +330,8 @@
       date_start = #{dateStart,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select resultMap="BaseResultMap" parameterType="map"  id="findByEmployees" >
+    select * from tax_information where employee_id = #{id} and status = 0;
+  </select>
 </mapper>

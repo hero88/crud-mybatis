@@ -129,13 +129,11 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 		List<TaxInformation> listTaxInformations = taxInformationMapper.selectByExample(taxInformationExample);
 
-		System.err.println(listTaxInformations.size());
 		LocalDate firstDayOfNextMonth = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 1, 1);
 		Date date = Date.from(firstDayOfNextMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 		if (listTaxInformations.size() == 0) {
 
-			System.err.println("Đã vào");
 
 			TaxInformation taxInformation = TaxInformation.builder().createdAt(new Date())
 					.employeeId(dbEmployees.getId()).taxRate(employeesDto.getTaxRate())
@@ -258,8 +256,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 			TaxInformationExample taxInformationExample = new TaxInformationExample();
 			taxInformationExample.createCriteria().andEmployeeIdEqualTo(employees.getId());
 
-			List<TaxInformation> taxInformationList = taxInformationMapper.selectByExample(taxInformationExample)
-					.stream().filter(item->!item.getStatus()).toList();
+			List<TaxInformation> taxInformationList = taxInformationMapper.findByEmployees(employees.getId());
 
 			if (!taxInformationList.isEmpty()) {
 				TaxInformation taxInformation = taxInformationList.get(0);

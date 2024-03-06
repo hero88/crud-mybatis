@@ -75,4 +75,6 @@ public interface TaxInformationMapper {
 	 * @mbg.generated  Tue Mar 05 14:49:58 ICT 2024
 	 */
 	int updateByPrimaryKey(TaxInformation row);
+	
+	List<TaxInformation> findByEmployees(Long id);
 }
