@@ -54,5 +54,7 @@ public class EmployeesDto {
     
     private Short leavePaidDays;
     
+    private BigDecimal currentTaxRate;
+    
 
 }

@@ -194,6 +194,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 		List<TaxInformation> listTaxInformations = taxInformationMapper.selectTaxInformation(id);
 
+		
 		if (listTaxInformations != null) {
 
 			if (listTaxInformations.size() == 2) {
@@ -216,14 +217,14 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 		}
 
-		return convertToEmployeesDto(employeesMapper.selectByPrimaryKey(id));
+		return convertToEmployeesDto(employeesMapper.selectByPrimaryKey(id),0);
 	}
 
 	@Override
 	public PageResult<EmployeesDto> findAll(int page, int size) {
 
 		List<EmployeesDto> employeesDtoList = employeesMapper.getEmployees(page, size).stream()
-				.map(item -> convertToEmployeesDto(item)).toList();
+				.map(item -> convertToEmployeesDto(item,1)).toList();
 
 		EmployeesExample employeesExample = new EmployeesExample();
 
@@ -234,7 +235,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 	}
 
-	public EmployeesDto convertToEmployeesDto(Employees employees) {
+	public EmployeesDto convertToEmployeesDto(Employees employees,int status) {
 
 		EmployeesDto employeesDto = new EmployeesDto();
 		BeanUtils.copyProperties(employees, employeesDto);
@@ -248,7 +249,13 @@ public class EmployeesServiceImpl implements EmployeesService {
 			TaxInformationExample taxInformationExample = new TaxInformationExample();
 			taxInformationExample.createCriteria().andEmployeeIdEqualTo(employees.getId());
 
-			List<TaxInformation> taxInformationList = taxInformationMapper.findByEmployees(employees.getId());
+			List<TaxInformation> taxInformationList = taxInformationMapper.findByEmployees(employees.getId(),status);
+			
+			List<TaxInformation> taxInformationCurrentList = taxInformationMapper.findByEmployees(employees.getId(), 1);
+			
+			if(taxInformationCurrentList.size()>0) {
+				employeesDto.setCurrentTaxRate(taxInformationCurrentList.get(0).getTaxRate());
+			}
 
 			if (!taxInformationList.isEmpty()) {
 				TaxInformation taxInformation = taxInformationList.get(0);

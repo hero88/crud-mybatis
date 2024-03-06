@@ -76,7 +76,7 @@ public interface TaxInformationMapper {
 	 */
 	int updateByPrimaryKey(TaxInformation row);
 	
-	List<TaxInformation> findByEmployees(Long id);
+	List<TaxInformation> findByEmployees(Long id,int status);
 	
 	List<TaxInformation> selectTaxInformation(Long id);
 }
