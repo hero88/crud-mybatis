@@ -288,18 +288,33 @@ function getDetail(id) {
     }
   }).then(resp => {
     payrollDetail = resp.data.data;
-    axios.get(api+"/employee/"+payrollDetail.employeeId).then(respE => {
-        max = respE.data.leavePaidDays;
-        containerModalDetail.innerHTML=`<form class="max-w-md mx-auto">
+    axios.get(api + "/employee/" + payrollDetail.employeeId).then(respE => {
+      max = respE.data.leavePaidDays;
+      containerModalDetail.innerHTML = `<form class="max-w-md mx-auto">
         <div class="relative z-0 w-full my-5 group">
             <div>
-                <label for="holidays" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Holidays</label>
-            </div>
-            <div class="flex justify-between align-center">
-            ${listHolidays.map(e => `
-            <div>
-            <input value="${e.id}" type="checkbox" name="holidays" class="" placeholder=" " required  ${payrollDetail.holidayIds.includes(e.id) ? 'checked' : ''}/><span> ${e.holidayName}</span></div>
-            `).join('')}
+              <button id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox"
+                  class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button">Holidays <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="m1 1 4 4 4-4" />
+                  </svg>
+              </button>
+              <div id="dropdownDefaultCheckbox"
+                  class="relative z-0 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 w-full">
+                  <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCheckboxButton">
+                  ${listHolidays.map(e => `    
+                  <li>
+                          <div class="flex items-center">
+                          <input value="${e.id}" type="checkbox" name="holidays" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" placeholder=" " required  ${payrollDetail.holidayIds.includes(e.id) ? 'checked' : ''}/>
+                          <label for="checkbox-item-1"
+                                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${e.holidayName}</label>
+                          </div>
+                      </li>
+                      `).join('')}
+                  </ul>
+              </div>
             </div>
         </div>
         <div class="grid md:grid-cols-2 md:gap-6">
@@ -324,6 +339,12 @@ function getDetail(id) {
         </div>
         
       </form>`
+      const dropdownButton = document.getElementById('dropdownCheckboxButton');
+      const dropdownContent = document.getElementById('dropdownDefaultCheckbox');
+
+      dropdownButton.addEventListener('click', () => {
+        dropdownContent.classList.toggle('hidden');
+      });
     })
   }).catch(err => {
     console.log(err)
