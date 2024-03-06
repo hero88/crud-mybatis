@@ -129,35 +129,42 @@ public class EmployeesServiceImpl implements EmployeesService {
 
 		List<TaxInformation> listTaxInformations = taxInformationMapper.selectByExample(taxInformationExample);
 
-		
-		LocalDate firstDayOfNextMonth = LocalDate.of(LocalDate.now().getYear(),
-				LocalDate.now().getMonthValue() + 1, 1);
+		System.err.println(listTaxInformations.size());
+		LocalDate firstDayOfNextMonth = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 1, 1);
 		Date date = Date.from(firstDayOfNextMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		
-		if (listTaxInformations != null) {
+
+		if (listTaxInformations.size() == 0) {
+
+			System.err.println("Đã vào");
+
+			TaxInformation taxInformation = TaxInformation.builder().createdAt(new Date())
+					.employeeId(dbEmployees.getId()).taxRate(employeesDto.getTaxRate())
+					.taxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0).status(false)
+					.dateStart(date).build();
+
+			taxInformationMapper.insert(taxInformation);
+		}else if (listTaxInformations != null) {
 
 			if (listTaxInformations.size() == 1) {
-			
 
 				TaxInformation taxInformation = TaxInformation.builder().createdAt(new Date())
 						.employeeId(dbEmployees.getId()).taxRate(employeesDto.getTaxRate())
 						.taxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0).status(false)
 						.dateStart(date).build();
-				
-				taxInformationMapper.insert(taxInformation);
-				
-			} else if (listTaxInformations.size() == 2) {
-			
 
-				TaxInformation taxInformation = listTaxInformations
-						.stream().filter(item->!item.getStatus()).findFirst().orElse(null);
+				taxInformationMapper.insert(taxInformation);
+
+			} else if (listTaxInformations.size() == 2) {
+
+				TaxInformation taxInformation = listTaxInformations.stream().filter(item -> !item.getStatus())
+						.findFirst().orElse(null);
 
 				if (taxInformation != null) {
 					taxInformation.setUpdatedAt(new Date());
 					taxInformation.setTaxRate(employeesDto.getTaxRate());
 					taxInformation.setTaxExemption(employeesDto.getTaxRate().compareTo(BigDecimal.ZERO) == 0);
 					taxInformation.setDateStart(date);
-					
+
 					taxInformationMapper.updateByPrimaryKey(taxInformation);
 				}
 			}
