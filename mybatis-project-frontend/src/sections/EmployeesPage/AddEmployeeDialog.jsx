@@ -34,8 +34,9 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import TagsInput from "@/components/shared/TagsInput";
 
-function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
+function AddNewEmployeeDialog({ loadEmployeesData, departments, insurances }) {
   const { toast } = useToast();
 
   const [currentEmployee, setCurrentEmployee] = useState({
@@ -44,8 +45,10 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
     gender: "",
     contactNumber: "",
     position: "",
-    departmentId: 1,
+    departmentId: "",
+    insuranceIds: "",
     userId: "",
+    leavePaidDays: 1,
   });
 
   const [users, setUsers] = useState([]);
@@ -56,9 +59,17 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
   const [selectedDepartment, setSelectedDepartment] = useState();
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
+  const [tags, setTags] = useState([]);
 
-  const { firstname, lastname, gender, contactNumber, position, userId } =
-    currentEmployee;
+  const {
+    firstname,
+    lastname,
+    gender,
+    contactNumber,
+    position,
+    userId,
+    leavePaidDays,
+  } = currentEmployee;
 
   const handleGetUsersData = async () => {
     const { data: response } = await getAllUsers();
@@ -115,13 +126,19 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
           ? Math.floor(selectedTerminationDate.getTime() / 1000)
           : null;
 
+        const insuranceArr = tags.map((item) => item.id);
+
         let newEmployee = {
           ...currentEmployee,
           birthday: formattedBirthday,
           hireDate: formattedHireDate,
           terminationDate: formattedTerminationDate,
           departmentId: selectedDepartment ? selectedDepartment.id : 1,
+          insuranceIds: insuranceArr,
+          leavePaidDays: parseInt(leavePaidDays),
         };
+
+        console.log(newEmployee);
 
         const { data: response } = await doAddNewEmployee(newEmployee);
 
@@ -179,7 +196,7 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
         <DialogTrigger asChild>
           <Button>Add new employee</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[580px]">
+        <DialogContent className="sm:max-w-[1100px]">
           <AlertDialogHeader>
             <DialogTitle className="text-green-500">
               Add new employee
@@ -188,7 +205,7 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
               Add new employee info here. Click save when you&apos;re done.
             </DialogDescription>
           </AlertDialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-2 gap-4">
             {/* Firstname */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="firstname" className="text-right">
@@ -391,6 +408,34 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
                 </PopoverContent>
               </Popover>
             </div>
+            {/* Tags Input */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="termination-date" className="text-right">
+                Insurances
+              </Label>
+              <div className="col-span-3">
+                <TagsInput
+                  insurances={insurances}
+                  tags={tags}
+                  setTags={setTags}
+                />
+              </div>
+            </div>
+            {/* Leave paid days */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="leavePaidDays" className="text-right">
+                Leave paid days
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  type="number"
+                  name="leavePaidDays"
+                  id="leavePaidDays"
+                  value={leavePaidDays}
+                  onChange={(e) => handleChangeField(e)}
+                />
+              </div>
+            </div>
             {/* Hire date */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="hire-date" className="text-right">
@@ -467,6 +512,7 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments }) {
               </div>
             </div>
           </div>
+
           <DialogFooter>
             <Button type="submit" onClick={handleSubmitCreate}>
               Create

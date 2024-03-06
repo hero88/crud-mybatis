@@ -13,13 +13,16 @@ import { doGetAllEmployees } from "@/services/EmployeeAPI";
 import { useEffect, useState } from "react";
 import AddNewEmployeeDialog from "@/sections/EmployeesPage/AddEmployeeDialog";
 import { doGetAllDepartments } from "@/services/Department";
+import { doGetAllInsurances } from "@/services/InsuranceAPI";
 
 function Employees() {
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [insurances, setInsurances] = useState([]);
 
   const handleGetEmployeesData = async () => {
     const { data: response } = await doGetAllEmployees();
+    console.log(response.data);
     setEmployees(response.data);
   };
 
@@ -28,7 +31,13 @@ function Employees() {
     setDepartments(response.data);
   };
 
+  const handleGetInsuranceData = async () => {
+    const { data: response } = await doGetAllInsurances();
+    setInsurances(response.data);
+  };
+
   useEffect(() => {
+    handleGetInsuranceData();
     handleGetDepartmentsData();
     handleGetEmployeesData();
   }, []);
@@ -129,10 +138,12 @@ function Employees() {
                   <UpdateEmployeeDialog
                     employee={employee}
                     departments={departments}
+                    insurances={insurances}
                     loadEmployeesData={handleGetEmployeesData}
                   />
                   <DelEmployeeDialog
                     employee={employee}
+                    insurances={insurances}
                     loadEmployeesData={handleGetEmployeesData}
                   />
                 </TableCell>
