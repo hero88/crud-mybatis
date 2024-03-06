@@ -690,6 +690,7 @@
                     clearFormFields()
                     showAlert("Thông báo!", res.data, "success")
 
+                    $('#exampleModal').modal('hide')
 
                 }).catch(err => {
                     console.log(err)
@@ -1174,6 +1175,8 @@
                     populateSelectInsurance()
 
                     showAlert("Thông báo!", response.data, "success")
+
+                    $("#insuranceModal").modal('hide');
                 })
                 .catch(err => {
                     if (err.response) {
@@ -1354,6 +1357,9 @@
                     clearFieldsHoliday()
 
                     showAlert("Thông báo!", response.data, "success")
+
+                    
+                    $("#holidayModal").modal('hide');
                 })
                 .catch(err => {
                     if (err.response) {

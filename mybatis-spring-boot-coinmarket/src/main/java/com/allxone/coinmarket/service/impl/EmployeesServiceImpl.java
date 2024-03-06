@@ -192,19 +192,11 @@ public class EmployeesServiceImpl implements EmployeesService {
 	public EmployeesDto findById(Long id) throws ParamInvalidException {
 		ValidatorUtils.checkNullParam(id);
 
-		TaxInformationExample taxInformationExample = new TaxInformationExample();
-		taxInformationExample.createCriteria().andEmployeeIdEqualTo(id);
-
-		List<TaxInformation> listTaxInformations = taxInformationMapper.selectByExample(taxInformationExample);
+		List<TaxInformation> listTaxInformations = taxInformationMapper.selectTaxInformation(id);
 
 		if (listTaxInformations != null) {
 
 			if (listTaxInformations.size() == 2) {
-				  Comparator<TaxInformation> comparator = Comparator.comparing(TaxInformation::getDateStart, 
-						  Comparator.nullsLast(Comparator.naturalOrder()));
-
-
-				listTaxInformations.sort(comparator);
 
 				TaxInformation firstTaxInformation = listTaxInformations.get(0);
 				TaxInformation secondTaxInformation = listTaxInformations.get(1);

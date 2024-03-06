@@ -334,4 +334,12 @@
   <select resultMap="BaseResultMap" parameterType="map"  id="findByEmployees" >
     select * from tax_information where employee_id = #{id} and status = 0;
   </select>
+
+  <select id="selectTaxInformation" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM tax_information
+    WHERE employee_id = #{id}
+    AND date_start &lt;= CURRENT_DATE
+    ORDER BY id DESC
+  </select>
+
 </mapper>
