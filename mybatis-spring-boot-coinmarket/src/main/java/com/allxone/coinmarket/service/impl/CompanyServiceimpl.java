@@ -283,15 +283,19 @@ public class CompanyServiceimpl implements CompanyService {
         return payrollEmployees;
     }
 
-    public int[] getSo(String chuoi){
-//        / Loại bỏ dấu "[" và "]" từ chuỗi
-        chuoi = chuoi.replace("[", "").replace("]", "");
-        // Phân tách chuỗi thành các phần tử, sử dụng dấu phẩy làm dấu phân cách
+    public int[] getSo(String chuoi) {
+        chuoi = chuoi.replaceAll("\\s+", ""); // Xóa tất cả khoảng trắng trong chuỗi
+        chuoi = chuoi.replaceAll("\\[", "");  // Xóa dấu "["
+        chuoi = chuoi.replaceAll("\\]", "");  // Xóa dấu "]"
+
         String[] mangChuoi = chuoi.split(",");
-        // Chuyển đổi mảng các chuỗi thành mảng các số nguyên
         int[] mangSoNguyen = new int[mangChuoi.length];
         for (int i = 0; i < mangChuoi.length; i++) {
-            mangSoNguyen[i] = Integer.parseInt(mangChuoi[i]);
+            try {
+                mangSoNguyen[i] = Integer.parseInt(mangChuoi[i]);
+            } catch (NumberFormatException e) {
+                mangSoNguyen[i] = 0;
+            }
         }
         return mangSoNguyen;
     }
