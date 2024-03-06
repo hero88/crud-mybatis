@@ -43,7 +43,6 @@ public class PayrollController {
             return CommonResponse.error(null);
         }
     }
-
     @PutMapping("/updatePayroll")
 //    @PreAuthorize("hasAnyAuthority('admin:update','user:update')")
     public CommonResponse<PayrollResponse> updatePayroll(@RequestBody PayrollRequest PayrollRequest) {
@@ -55,5 +54,4 @@ public class PayrollController {
 //            return CommonResponse.error(null);
 //        }
     }
-
 }

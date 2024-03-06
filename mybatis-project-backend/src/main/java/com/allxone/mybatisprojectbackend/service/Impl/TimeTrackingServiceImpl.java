@@ -79,12 +79,14 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
                         1.5,
                         taxInformation.getTaxRate(),
                         insuranceRate));
+
             } else if (dayOfWeekValue == 8) {
                 payrollEmployee.setNetSalary(getNetSalary(payrollEmployee,
                         timeTracking.getTotalHours(),
                         2.0,
                         taxInformation.getTaxRate(),
                         insuranceRate));
+
             } else if (clockIn >= 20) {
                 if (clockOut < 6) {
                     payrollEmployee.setNetSalary(getNetSalary(payrollEmployee,
@@ -95,6 +97,7 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
                             1.0,
                             taxInformation.getTaxRate(),
                             insuranceRate));
+
                 } else {
                     double firstPartHours = getTotalNumberOfWorkingHours8pmTo6am(
                             timeTracking.getClockIn(),
@@ -152,6 +155,7 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
                 + (payroll.getSalary() * hour * (100 - taxRate - insuranceRate)) / 100
                 + bonus
                 - deductions;
+
     }
 
     public Double getTotalNumberOfWorkingHours8pmTo6am(LocalTime startTime, LocalTime endTime) {
