@@ -393,14 +393,6 @@
       AND e.first_name LIKE #{firstname, jdbcType=NVARCHAR}
   </select>
 
-
-  <select id="sumSalaryByMonth" parameterType="com.allxone.coinmarket.model.PayrollExample" resultType="java.math.BigDecimal">
-    select sum(coalesce(bonus, 0) + coalesce(net_salary, 0)) from payroll
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-
   <select id="getEmployeeSalaryByMonth" parameterType="java.util.Map" resultMap="BaseResultMap">
   <![CDATA[
     SELECT *
@@ -451,7 +443,7 @@
     group by p.employee_id, p.id
   </select>
 
-  <select id="getTopTwoPreviousMonthPayrolls" resultMap="BaseResultMap">
+  <select id="getPayrollPreviousMonthPayrolls" resultMap="BaseResultMap">
   <![CDATA[
     SELECT *
     FROM payroll
@@ -465,8 +457,6 @@
       WHEN MONTH(CURRENT_DATE()) = 1 THEN YEAR(CURRENT_DATE()) - 1
       ELSE YEAR(CURRENT_DATE())
       END)
-    ORDER BY net_salary DESC
-      LIMIT 2;
     ]]>
 </select>
 </mapper>

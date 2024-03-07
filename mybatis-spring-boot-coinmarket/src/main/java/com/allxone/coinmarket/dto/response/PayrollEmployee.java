@@ -25,6 +25,10 @@ public class PayrollEmployee {
 
     private BigDecimal net_salary;
 
+    private BigDecimal gross_salary;
+
+    private BigDecimal totalHours;
+
     private BigDecimal tax_rate;
 
     private BigDecimal estimate_tax_contribution;
