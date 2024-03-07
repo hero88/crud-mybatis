@@ -65,7 +65,7 @@ function Payroll() {
                   {payroll.id}
                 </TableCell>
                 <TableCell className="font-semibold">
-                  {payroll.salary && <>{payroll.salary}$</>}
+                  {payroll.salary && <>{payroll.salary}</>}$
                 </TableCell>
                 <TableCell className="font-semibold">
                   {payroll.bonus && <>{payroll.bonus}%</>}
@@ -74,7 +74,7 @@ function Payroll() {
                   {payroll.deductions && <>{payroll.deductions}$</>}
                 </TableCell>
                 <TableCell className="font-semibold">
-                  {payroll.netSalary && <>{payroll.netSalary}$</>}
+                  {payroll.netSalary && <>{payroll.netSalary}</>}$
                 </TableCell>
                 <TableCell className="font-semibold">
                   {payroll.periodStart

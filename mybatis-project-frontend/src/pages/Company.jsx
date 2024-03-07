@@ -7,7 +7,7 @@ import { FaHandHoldingUsd, FaMoneyCheckAlt } from "react-icons/fa";
 function Company() {
   const [employees, setEmployees] = useState([]);
   const [payrolls, setPayrolls] = useState([]);
-  const [totalHoldings, setTotalHoldings] = useState("");
+  const [totalHoldings, setTotalHoldings] = useState(0);
 
   const handleGetEmployeesData = async () => {
     const { data: employeeResponse } = await doGetAllEmployees();
@@ -18,9 +18,9 @@ function Company() {
     const { data: payrollResponse } = await doGetAllPayroll();
     setPayrolls(payrollResponse.data);
 
-    const totalSalary = payrollResponse.data.reduce(
-      (prev, currentValue) => prev.salary + currentValue.salary
-    );
+    const totalSalary = payrollResponse.data.reduce((prev, currentValue) => {
+      return prev + currentValue.salary;
+    }, 0);
     setTotalHoldings(totalSalary);
   };
 

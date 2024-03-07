@@ -74,7 +74,6 @@ function UpdateEmployeeDialog({
     terminationDate,
     departmentId,
     leavePaidDays,
-    insuranceIds,
   } = currentEmployee;
 
   useEffect(() => {
@@ -86,9 +85,6 @@ function UpdateEmployeeDialog({
       insurances.filter((item) => employee.insuranceIds?.includes(item.id))
     );
   }, []);
-
-  console.log(insurances);
-  console.log(insuranceIds);
 
   const handleChangeField = (e) => {
     setCurrentEmployee({ ...currentEmployee, [e.target.name]: e.target.value });

@@ -22,7 +22,6 @@ function Employees() {
 
   const handleGetEmployeesData = async () => {
     const { data: response } = await doGetAllEmployees();
-    console.log(response.data);
     setEmployees(response.data);
   };
 
@@ -50,6 +49,7 @@ function Employees() {
         <AddNewEmployeeDialog
           loadEmployeesData={handleGetEmployeesData}
           departments={departments}
+          insurances={insurances}
         />
       </div>
 
@@ -143,7 +143,6 @@ function Employees() {
                   />
                   <DelEmployeeDialog
                     employee={employee}
-                    insurances={insurances}
                     loadEmployeesData={handleGetEmployeesData}
                   />
                 </TableCell>

@@ -17,8 +17,8 @@ function TagsInput({ insurances, tags, setTags }) {
   useEffect(() => {
     setFilteredInsurances(
       tags.length > 0
-        ? insurances?.filter((item1) =>
-            !tags.map((item2) => item2.id)?.includes(item1.id)
+        ? insurances?.filter(
+            (item1) => !tags.map((item2) => item2.id)?.includes(item1.id)
           )
         : insurances
     );
@@ -67,7 +67,8 @@ function TagsInput({ insurances, tags, setTags }) {
                           {insurance.insuranceName}
                         </CommandItem>
                       ))
-                    : insurances
+                    : tags.length > 0
+                    ? insurances
                         ?.filter(
                           (item1) =>
                             !tags.map((item2) => item2.id)?.includes(item1.id)
@@ -80,7 +81,16 @@ function TagsInput({ insurances, tags, setTags }) {
                           >
                             {insurance.insuranceName}
                           </CommandItem>
-                        ))}
+                        ))
+                    : insurances?.map((insurance, index) => (
+                        <CommandItem
+                          key={index}
+                          value={insurance.insuranceName}
+                          onSelect={() => handleSelectInsurance(insurance)}
+                        >
+                          {insurance.insuranceName}
+                        </CommandItem>
+                      ))}
                 </CommandGroup>
               </ScrollArea>
             </Command>

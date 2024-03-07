@@ -45,8 +45,6 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments, insurances }) {
     gender: "",
     contactNumber: "",
     position: "",
-    departmentId: "",
-    insuranceIds: "",
     userId: "",
     leavePaidDays: 1,
   });
@@ -145,6 +143,16 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments, insurances }) {
         console.log(response);
 
         if (response.code === 200) {
+          setCurrentEmployee({
+            firstname: "",
+            lastname: "",
+            gender: "",
+            contactNumber: "",
+            position: "",
+            userId: "",
+            leavePaidDays: 1,
+          });
+
           const employeeData = response.data;
 
           let newPayroll = {
@@ -160,16 +168,6 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments, insurances }) {
           const { data: payrollResponse } = await doAddNewPayroll(newPayroll);
 
           console.log(payrollResponse);
-
-          setCurrentEmployee({
-            firstname: "",
-            lastname: "",
-            gender: "",
-            contactNumber: "",
-            position: "",
-            departmentId: 1,
-            userId: "",
-          });
 
           loadEmployeesData();
           setOpenDialog(false);

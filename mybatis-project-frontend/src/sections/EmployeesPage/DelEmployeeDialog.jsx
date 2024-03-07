@@ -21,8 +21,6 @@ function DelEmployeeDialog({ employee, loadEmployeesData }) {
   const handleDeleteEmployee = async () => {
     const { data: response } = await doDeleteEmployee(employee.id);
 
-    console.log(response);
-
     if (response.code === 200) {
       loadEmployeesData();
       toast({
