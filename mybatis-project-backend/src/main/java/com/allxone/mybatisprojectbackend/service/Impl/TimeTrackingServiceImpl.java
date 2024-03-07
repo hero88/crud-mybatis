@@ -71,7 +71,7 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
 
             if (timeTracking.getDateTrack().getMonth() != payrollEmployee.getPeriodEnd().getMonth()) {
                 payrollEmployee.setPeriodStart(timeTracking.getDateTrack());
-                payrollEmployee.setSalary(0.0);
+                payrollEmployee.setNetSalary(0.0);
             }
             if (dayOfWeekValue == 7) {
                 payrollEmployee.setNetSalary(getNetSalary(payrollEmployee,
@@ -123,7 +123,6 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
                     );
                     payrollEmployee.setNetSalary(firstPartSalary + secondPartSalary);
                 }
-
             } else {
                 payrollEmployee.setNetSalary(getNetSalary(payrollEmployee,
                         timeTracking.getTotalHours(),
@@ -150,10 +149,12 @@ public class TimeTrackingServiceImpl implements TimeTrackingService {
                                Double bonus,
                                Double taxRate,
                                Double insuranceRate) {
+
+        double deductions = payroll.getDeductions() != null ? payroll.getDeductions() : 0.0;
         return payroll.getNetSalary()
                 + (payroll.getSalary() * hour * (100 - taxRate - insuranceRate)) / 100
                 + bonus
-                - payroll.getDeductions();
+                - deductions;
 
     }
 
