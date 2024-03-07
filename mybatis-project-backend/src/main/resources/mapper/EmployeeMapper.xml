@@ -95,8 +95,18 @@
     </update>
 
     <delete id="deleteEmployeeById" parameterType="Long">
-        DELETE
-        FROM employee
-        WHERE id = #{id}
+        DELETE FROM employee WHERE id = #{id}
+    </delete>
+
+    <delete id="deletePayrollByEmployeeId" parameterType="Long">
+        DELETE FROM payroll WHERE employee_id = #{id}
+    </delete>
+
+    <delete id="deleteTaxInformationByEmployeeId" parameterType="Long">
+        DELETE FROM tax_information WHERE employee_id = #{id}
+    </delete>
+
+    <delete id="deleteTimeTrackingByEmployeeId" parameterType="Long">
+        DELETE FROM time_tracking WHERE employee_id = #{id}
     </delete>
 </mapper>

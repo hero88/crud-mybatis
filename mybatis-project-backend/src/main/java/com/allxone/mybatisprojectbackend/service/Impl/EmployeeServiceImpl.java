@@ -34,6 +34,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployeeById(Long id) {
+        employeeMapper.deletePayrollByEmployeeId(id);
+        employeeMapper.deleteTimeTrackingByEmployeeId(id);
+        employeeMapper.deleteTaxInformationByEmployeeId(id);
         employeeMapper.deleteEmployeeById(id);
     }
 
@@ -41,7 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse saveEmployee(EmployeeRequest employeeRequest) {
         Employee Employee = EmployeeConvert.toEmployee(employeeRequest);
         try {
-
             employeeMapper.saveEmployee(Employee);
         }catch (Exception e){
             System.out.println(e);
