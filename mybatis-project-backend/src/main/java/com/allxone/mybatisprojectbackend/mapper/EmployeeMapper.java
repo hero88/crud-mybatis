@@ -10,6 +10,9 @@ public interface EmployeeMapper {
     List<Employee> getAllEmployees();
     void updateEmployee(Employee employee);
     void deleteEmployeeById(Long id);
+    void deletePayrollByEmployeeId(Long id);
+    void deleteTaxInformationByEmployeeId(Long id);
+    void deleteTimeTrackingByEmployeeId(Long id);
     void saveEmployee(Employee employee);
     Employee getEmployeeById(Long id);
 }
