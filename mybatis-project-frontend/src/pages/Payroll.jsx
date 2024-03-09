@@ -6,12 +6,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import UpdatePayrollDialog from "@/sections/PayrollPage/UpdatePayrollDialog";
+import { doGetAllHoliday } from "@/services/HolidayAPI";
 import { doGetAllPayroll } from "@/services/PayrollAPI";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
 function Payroll() {
   const [payrolls, setPayrolls] = useState([]);
+  const [holidays, setHolidays] = useState([]);
+
+  const handleGetHolidaysData = async () => {
+    const { data: response } = await doGetAllHoliday();
+    setHolidays(response.data);
+  };
 
   const handleGetPayrollData = async () => {
     const { data: response } = await doGetAllPayroll();
@@ -21,6 +29,7 @@ function Payroll() {
 
   useEffect(() => {
     handleGetPayrollData();
+    handleGetHolidaysData();
   }, []);
 
   return (
@@ -86,7 +95,13 @@ function Payroll() {
                     ? format(new Date(payroll.periodEnd), "dd-MM-yyyy")
                     : "Not set yet"}
                 </TableCell>
-                <TableCell className="flex items-center space-x-4 justify-center"></TableCell>
+                <TableCell className="flex items-center space-x-4 justify-center">
+                  <UpdatePayrollDialog
+                    payroll={payroll}
+                    loadPayrollData={handleGetPayrollData}
+                    holidays={holidays}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -157,7 +157,7 @@ function AddNewEmployeeDialog({ loadEmployeesData, departments, insurances }) {
 
           let newPayroll = {
             employeeId: employeeData.id,
-            salary: 0,
+            salary: 1,
             bonus: 0,
             deductions: 0,
             netSalary: 0,

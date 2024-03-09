@@ -32,3 +32,13 @@ export const doAddNewPayroll = (payrollForm) => {
     return null;
   }
 };
+
+export const doUpdatePayroll = (payrollForm) => {
+  try {
+    const res = API.put("api/payroll/updatePayroll", payrollForm);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

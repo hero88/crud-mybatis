@@ -19,7 +19,7 @@ function Company() {
     setPayrolls(payrollResponse.data);
 
     const totalSalary = payrollResponse.data.reduce((prev, currentValue) => {
-      return prev + currentValue.salary;
+      return prev + currentValue.netSalary;
     }, 0);
     setTotalHoldings(totalSalary);
   };

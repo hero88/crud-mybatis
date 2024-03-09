@@ -364,7 +364,7 @@ function UpdateEmployeeDialog({
                 </PopoverContent>
               </Popover>
             </div>
-            {/* Tags Input */}
+            {/* Insurances */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="termination-date" className="text-right">
                 Insurances
