@@ -60,14 +60,21 @@ function AddCoinDialog({ type, user, userCoins, marketCoins, recallCoins }) {
       toast({
         variant: "destructive",
         title: "Uh oh! You can not let the coin empty",
-        description: "You can adding coin again.",
+        description: "You can change the value.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     } else if (addQuantity === "0") {
       toast({
         variant: "destructive",
         title: "Uh oh! You can not set the quantity at zero.",
-        description: "You can adding coin again.",
+        description: "You can change the value.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } else if (addQuantity !== Math.floor(addQuantity)) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! you can not set the quantity at Real Number type.",
+        description: "You can change the value.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     } else {
@@ -85,16 +92,24 @@ function AddCoinDialog({ type, user, userCoins, marketCoins, recallCoins }) {
       const { data: response } = await addCoin(newCoin);
 
       if (response.status === "ok") {
+        setOpenDialog(false);
         recallCoins();
+        toast({
+          title: "Coin was successfully added",
+          description: "Your coin list has change.",
+          action: <ToastAction altText="Try again">Nice</ToastAction>,
+        });
+        setSelectedValue();
+        setAddQuantity(1);
       } else {
-        console.log("fail");
+        toast({
+          variant: "destructive",
+          title: "Something went wrong with adding coin",
+          description: "You can adding coin again.",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
-
-      setSelectedValue();
-      setAddQuantity(1);
     }
-
-    setOpenDialog(false);
   };
 
   return (
