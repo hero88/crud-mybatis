@@ -22,7 +22,7 @@
         SELECT * FROM department
     </select>
 
-    <update id="updateDepartment" parameterType="Department">
+    <update id="updateDepartment" parameterType="Department" useGeneratedKeys="true" keyProperty="id">
         UPDATE department
         <set>
             <if test="name != null">

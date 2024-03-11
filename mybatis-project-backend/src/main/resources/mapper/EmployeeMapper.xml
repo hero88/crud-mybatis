@@ -15,16 +15,26 @@
         <result property="position" column="position"/>
         <result property="hireDate" column="hire_date" javaType="java.time.Instant"/>
         <result property="terminationDate" column="termination_date" javaType="java.time.Instant"/>
+        <result property="leavePaidDays" column="leave_paid_days"/>
+        <result property="insuranceIds" column="insurance_ids"
+                jdbcType="OTHER"
+                javaType="com.fasterxml.jackson.databind.JsonNode"
+                typeHandler="com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler"
+        />
         <result property="createdAt" column="created_at" javaType="java.time.Instant"/>
         <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
-    </resultMap>
 
+
+    </resultMap>
     <insert id="saveEmployee" parameterType="Employee" useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO employee (user_id, first_name, last_name, birthday, gender, contact_number, email, department_id,
-                              position, hire_date, termination_date, created_at, updated_at)
+                              position, hire_date, termination_date, leave_paid_days, insurance_ids, created_at, updated_at)
         VALUES (#{userId}, #{firstname}, #{lastname}, #{birthday}, #{gender}, #{contactNumber}, #{email},
-                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, NOW(), NOW())
+                #{departmentId}, #{position}, #{hireDate}, #{terminationDate}, #{leavePaidDays},
+                #{insuranceIds, jdbcType=OTHER, javaType=com.fasterxml.jackson.databind.JsonNode,typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler} ,
+                NOW(), NOW())
+
     </insert>
 
     <select id="getEmployeeById" parameterType="java.lang.Long" resultMap="employeeResultMap">
@@ -38,7 +48,7 @@
         FROM employee
     </select>
 
-    <update id="updateEmployee" parameterType="Employee">
+    <update id="updateEmployee" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
         UPDATE employee
         <set>
             <if test="firstname != null">
@@ -71,14 +81,32 @@
             <if test="terminationDate != null">
                 termination_date = #{terminationDate},
             </if>
+            <if test="leavePaidDays != null">
+                leave_paid_days = #{leavePaidDays},
+            </if>
+            <if test="leavePaidDays != null">
+                insurance_ids = #{insuranceIds,
+                jdbcType=OTHER,
+                typeHandler=com.allxone.mybatisprojectbackend.convert.handler.JsonTypeHandler},
+            </if>
             updated_at = NOW()
         </set>
         WHERE id = #{id}
     </update>
 
     <delete id="deleteEmployeeById" parameterType="Long">
-        DELETE
-        FROM employee
-        WHERE id = #{id}
+        DELETE FROM employee WHERE id = #{id}
+    </delete>
+
+    <delete id="deletePayrollByEmployeeId" parameterType="Long">
+        DELETE FROM payroll WHERE employee_id = #{id}
+    </delete>
+
+    <delete id="deleteTaxInformationByEmployeeId" parameterType="Long">
+        DELETE FROM tax_information WHERE employee_id = #{id}
+    </delete>
+
+    <delete id="deleteTimeTrackingByEmployeeId" parameterType="Long">
+        DELETE FROM time_tracking WHERE employee_id = #{id}
     </delete>
 </mapper>

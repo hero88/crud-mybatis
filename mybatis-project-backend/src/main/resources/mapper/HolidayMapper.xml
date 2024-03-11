@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allxone.mybatisprojectbackend.mapper.HolidayMapper">
+    <resultMap id="holidayResultMap" type="com.allxone.mybatisprojectbackend.model.Holiday">
+        <id property="id" column="id"/>
+        <result property="holidayName" column="holiday_name"/>
+        <result property="holidayDescription" column="holiday_description"/>
+        <result property="durationDays" column="duration_days"/>
+    </resultMap>
+
+    <insert id="saveHoliday" parameterType="Holiday" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO holiday (holiday_name, holiday_description, duration_days)
+        VALUES (#{holidayName}, #{holidayDescription}, #{durationDays})
+    </insert>
+
+    <select id="getHolidayById" parameterType="Integer" resultMap="holidayResultMap">
+        SELECT * FROM holiday WHERE id = #{id}
+    </select>
+
+    <select id="getAllHolidays" resultMap="holidayResultMap">
+        SELECT * FROM holiday
+    </select>
+
+    <update id="updateHoliday" parameterType="Holiday" useGeneratedKeys="true" keyProperty="id">
+        UPDATE holiday
+        <set>
+            <if test="holidayName != null">
+                holiday_name = #{holidayName},
+            </if>
+            <if test="holidayDescription != null">
+                holiday_description = #{holidayDescription},
+            </if>
+            <if test="durationDays != null">
+                duration_days = #{durationDays},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getTotalHolidayByPayrollId" resultMap="holidayResultMap" parameterType="Long">
+        SELECT h.*
+        FROM payroll p
+                 JOIN holiday h ON h.id
+            IN (SELECT * FROM JSON_TABLE(p.holiday_ids, '$[*]' COLUMNS (holiday_id INT PATH '$')) as tmp)
+        where p.id = #{id}
+    </select>
+
+    <delete id="deleteHolidayById" parameterType="Integer">
+        DELETE FROM holiday WHERE id = #{id}
+    </delete>
+</mapper>

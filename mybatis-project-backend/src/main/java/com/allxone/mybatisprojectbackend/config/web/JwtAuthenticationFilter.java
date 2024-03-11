@@ -1,5 +1,6 @@
 package com.allxone.mybatisprojectbackend.config.web;
 
+import com.allxone.mybatisprojectbackend.exception.JwtExpirationException;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
 import com.allxone.mybatisprojectbackend.mapper.UserRoleMapper;
 import com.allxone.mybatisprojectbackend.model.Role;
@@ -85,6 +86,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (FirebaseAuthException e) {
+            if(e.getErrorCode().equals("code-expired")){
+                throw new JwtExpirationException("Token has expired");
+            }
             userEmail = jwtService.extractUsername(jwt);
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
@@ -101,6 +105,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                }else{
+                    throw new JwtExpirationException("Token has expired");
                 }
             }
         }

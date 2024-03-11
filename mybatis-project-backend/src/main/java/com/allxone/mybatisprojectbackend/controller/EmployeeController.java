@@ -50,12 +50,12 @@ public class EmployeeController {
 //    @PreAuthorize("hasAuthority('admin:delete')")
     public CommonResponse<Long> deleteEmployeeById(@PathVariable Long id) {
 
-        try {
+//        try {
             employeeService.deleteEmployeeById(id);
             return CommonResponse.success(id);
-        } catch (Exception e) {
-            return CommonResponse.error(null);
-        }
+//        } catch (Exception e) {
+//            return CommonResponse.error(null);
+//        }
     }
 
     @PutMapping("/updateEmployee")
