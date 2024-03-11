@@ -14,4 +14,8 @@ public record CommonResponse<T>(
     public static <T> CommonResponse<T> error(T data) {
         return new CommonResponse<>("Internal Server Error", 500, "failure response", data);
     }
+
+    public static <T> CommonResponse<T> unAuthorized(T data) {
+        return new CommonResponse<>("Internal Server Error", 401, "failure response", data);
+    }
 }

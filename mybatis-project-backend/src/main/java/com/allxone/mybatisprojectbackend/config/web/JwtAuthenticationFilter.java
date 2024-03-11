@@ -1,12 +1,13 @@
 package com.allxone.mybatisprojectbackend.config.web;
 
-import com.allxone.mybatisprojectbackend.exception.JwtExpirationException;
+import com.allxone.mybatisprojectbackend.common.dto.CommonResponse;
 import com.allxone.mybatisprojectbackend.mapper.UserMapper;
 import com.allxone.mybatisprojectbackend.mapper.UserRoleMapper;
 import com.allxone.mybatisprojectbackend.model.Role;
 import com.allxone.mybatisprojectbackend.model.User;
 import com.allxone.mybatisprojectbackend.service.Impl.JwtService;
 import com.allxone.mybatisprojectbackend.mapper.TokenMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -87,27 +88,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (FirebaseAuthException e) {
             if(e.getErrorCode().equals("code-expired")){
-                throw new JwtExpirationException("Token has expired");
+                CommonResponse<String> commonResponse = CommonResponse.unAuthorized("Token has expired");
+                String jsonResponse = new ObjectMapper().writeValueAsString(commonResponse);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write(jsonResponse);
+                return;
             }
-            userEmail = jwtService.extractUsername(jwt);
-            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-                var isTokenValid = tokenMapper.findByToken(jwt)
-                        .map(t -> !t.isExpired() && !t.isRevoked())
-                        .orElse(false);
-                if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-                    authToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request)
-                    );
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }else{
-                    throw new JwtExpirationException("Token has expired");
+
+            try {
+                userEmail = jwtService.extractUsername(jwt);
+                if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                    var isTokenValid = tokenMapper.findByToken(jwt)
+                            .map(t -> !t.isExpired() && !t.isRevoked())
+                            .orElse(false);
+                    if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+                        authToken.setDetails(
+                                new WebAuthenticationDetailsSource().buildDetails(request)
+                        );
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
                 }
+            }catch (Exception ex){
+                CommonResponse<String> commonResponse = CommonResponse.unAuthorized("Token has expired");
+                String jsonResponse = new ObjectMapper().writeValueAsString(commonResponse);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write(jsonResponse);
+                return;
             }
         }
         filterChain.doFilter(request, response);
