@@ -17,18 +17,16 @@ import { getMarketCapCoins } from "@/services/CoinAPI";
 function Home() {
   const [marketCoinList, setMarketCoinList] = useState([]);
 
-  // const user = localStorage
+  const callGetAllCoinsApi = async () => {
+    try {
+      const { data: response } = await getMarketCapCoins();
+      setMarketCoinList(response.data.cryptoCurrencyList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const callGetAllCoinsApi = async () => {
-      try {
-        const { data: response } = await getMarketCapCoins();
-        setMarketCoinList(response.data.cryptoCurrencyList);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     callGetAllCoinsApi();
 
     const callGetAllCoinsApiEvery30s = setInterval(() => {
@@ -39,13 +37,10 @@ function Home() {
   }, []);
 
   const formatNumber = (numericData, fractionDigits) => {
-    return (
-      "$" +
-      numericData.toLocaleString("en-US", {
-        minimumFractionDigits: fractionDigits,
-        maximumFractionDigits: fractionDigits,
-      })
-    );
+    return numericData.toLocaleString("en-US", {
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    });
   };
 
   const renderChange = (numericData, fractionDigits) => {
@@ -147,7 +142,7 @@ function Home() {
                   </div>
                 </TableCell>
                 <TableCell className="font-semibold text-end">
-                  {formatNumber(item.quotes[0].price)}
+                  {"$" + formatNumber(item.quotes[0].price)}
                 </TableCell>
                 <TableCell className="font-semibold text-end">
                   {renderChange(item.quotes[0].percentChange1h)}
@@ -159,10 +154,10 @@ function Home() {
                   {renderChange(item.quotes[0].percentChange7d)}
                 </TableCell>
                 <TableCell className="font-semibold text-end">
-                  {formatNumber(item.quotes[0].marketCap)}
+                  {"$" + formatNumber(item.quotes[0].marketCap)}
                 </TableCell>
                 <TableCell className="font-semibold text-end">
-                  {formatNumber(item.quotes[0].volume24h)}
+                  {"$" + formatNumber(item.quotes[0].volume24h)}
                 </TableCell>
                 <TableCell className="font-semibold text-end">
                   {formatNumber(parseFloat(item.circulatingSupply), 0)}{" "}

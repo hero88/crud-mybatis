@@ -18,6 +18,9 @@ import {
   AuthLayout,
   ProfileLayout,
 } from "@/layouts";
+import Insurance from "@/pages/Insurance";
+import Holiday from "@/pages/Holiday";
+import RedirectPage from "@/pages/RedirectPage";
 
 //Public routes
 const publicRoutes = [
@@ -29,6 +32,11 @@ const publicRoutes = [
   { path: config.routes.verify, component: VerifyEmail, layout: VerifyLayout },
   { path: config.routes.signin, component: SignIn, layout: AuthLayout },
   { path: config.routes.signup, component: SignUp, layout: AuthLayout },
+  {
+    path: config.routes.redirecting,
+    component: RedirectPage,
+    layout: VerifyLayout,
+  },
   { path: config.routes.company, component: Company, layout: CompanyLayout },
   {
     path: config.routes.employees,
@@ -43,6 +51,16 @@ const publicRoutes = [
   {
     path: config.routes.payroll,
     component: Payroll,
+    layout: CompanyLayout,
+  },
+  {
+    path: config.routes.insurance,
+    component: Insurance,
+    layout: CompanyLayout,
+  },
+  {
+    path: config.routes.holiday,
+    component: Holiday,
     layout: CompanyLayout,
   },
 ];

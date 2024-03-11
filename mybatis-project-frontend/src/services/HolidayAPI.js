@@ -13,9 +13,9 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const doGetAllPayroll = () => {
+export const doGetAllHoliday = () => {
   try {
-    const res = API.get("api/payroll/getAllPayrolls");
+    const res = API.get("api/holiday/getAllHoliday");
     return res;
   } catch (error) {
     console.log(error);
@@ -23,9 +23,9 @@ export const doGetAllPayroll = () => {
   }
 };
 
-export const doAddNewPayroll = (payrollForm) => {
+export const doAddNewHoliday = (holidayForm) => {
   try {
-    const res = API.post("api/payroll/savePayroll", payrollForm);
+    const res = API.post("api/holiday/saveHoliday", holidayForm);
     return res;
   } catch (error) {
     console.log(error);
@@ -33,9 +33,19 @@ export const doAddNewPayroll = (payrollForm) => {
   }
 };
 
-export const doUpdatePayroll = (payrollForm) => {
+export const doUpdateHoliday = (holidayForm) => {
   try {
-    const res = API.put("api/payroll/updatePayroll", payrollForm);
+    const res = API.put("api/holiday/updateHoliday", holidayForm);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const doDeleteHoliday = (holidayId) => {
+  try {
+    const res = API.delete(`api/holiday/deleteHolidayById/${holidayId}`);
     return res;
   } catch (error) {
     console.log(error);

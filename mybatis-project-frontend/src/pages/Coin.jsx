@@ -71,7 +71,7 @@ function Coin() {
     const callGetAllCoinsApiEvery30s = setInterval(() => {
       getAllUserCoins();
       getMarketCoins();
-    }, 30000);
+    }, 90000);
 
     return () => clearInterval(callGetAllCoinsApiEvery30s);
   }, []);

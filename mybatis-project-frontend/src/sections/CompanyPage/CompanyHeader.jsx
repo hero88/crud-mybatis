@@ -51,6 +51,24 @@ function CompanyHeader() {
               TimeTracking
             </Link>
           </div>
+          {/* Insurance */}
+          <div>
+            <Link
+              to="/company/insurance"
+              className="font-semibold hover:text-blue-500"
+            >
+              Insurance
+            </Link>
+          </div>
+          {/* Holiday */}
+          <div>
+            <Link
+              to="/company/holiday"
+              className="font-semibold hover:text-blue-500"
+            >
+              Holiday
+            </Link>
+          </div>
         </div>
         <div className="flex items-center justify-end">
           <AvatarTray user={user} handleLogout={handleLogout} />

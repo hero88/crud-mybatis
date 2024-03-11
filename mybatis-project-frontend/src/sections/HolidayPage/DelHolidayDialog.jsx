@@ -11,18 +11,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { doDeleteEmployee } from "@/services/EmployeeAPI";
+import { doDeleteHoliday } from "@/services/HolidayAPI";
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import { Trash } from "lucide-react";
 
-function DelEmployeeDialog({ employee, loadEmployeesData }) {
+function DelHolidayDialog({ holiday, loadHolidaysData }) {
   const { toast } = useToast();
 
-  const handleDeleteEmployee = async () => {
-    const { data: response } = await doDeleteEmployee(employee.id);
+  const handleDeleteHoliday = async () => {
+    const { data: response } = await doDeleteHoliday(holiday.id);
+
+    console.log(response);
 
     if (response.code === 200) {
-      loadEmployeesData();
+      loadHolidaysData();
       toast({
         title: "Delete employee successfully!",
         description: "Employee list has been changed.",
@@ -51,12 +53,12 @@ function DelEmployeeDialog({ employee, loadEmployeesData }) {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete this
-              employee account and remove this employee data from servers.
+              holiday info and remove this holiday data from servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteEmployee}>
+            <AlertDialogAction onClick={handleDeleteHoliday}>
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -66,4 +68,4 @@ function DelEmployeeDialog({ employee, loadEmployeesData }) {
   );
 }
 
-export default DelEmployeeDialog;
+export default DelHolidayDialog;
