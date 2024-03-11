@@ -33,7 +33,7 @@ function Home() {
 
     const callGetAllCoinsApiEvery30s = setInterval(() => {
       callGetAllCoinsApi();
-    }, 30000);
+    }, 90000);
 
     return () => clearInterval(callGetAllCoinsApiEvery30s);
   }, []);
