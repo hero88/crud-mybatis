@@ -23,18 +23,30 @@ jobs:
         # ref: ${{ github.event.before }}  # Use the commit before the push
         ref: "develop-java-gr3"
 
-    # - name: Cache node modules
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: node_modules
-    #     key: node_modules-${{hashFiles('package-lock.json')}}
-    #     restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+    - name: Cache node modules
+      uses: actions/cache@v4
+      env:
+        cache-name: cache-node-modules
+      with:
+        # caching node_modules
+        path: node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
 
-    - name: build_FE
+    - name: Install dependencies
+      if: steps.cache-nodemodules.outputs.cache-hit != 'true'
       run: |
         cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-3/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
         cd mybatis-project-frontend
         npm install
+
+    - name: Build_FE
+      run: |
+        cp /home/azureuser/crud_training/java_gr3/.env /home/azureuser/actions-runner-3/_work/crud-mybatis/crud-mybatis/mybatis-project-frontend/.env
+        cd mybatis-project-frontend
         npm run build
         sudo rsync -a dist/. /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn/public
         sudo chown -R cannex_xone__usr:cannex_xone__usr /var/www/cannex_xone__usr/data/www/java-gr3.xone.ai.vn
