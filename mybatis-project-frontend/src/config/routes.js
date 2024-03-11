@@ -15,6 +15,7 @@ const routes = {
   verify: "/verify",
   signin: "/sign-in",
   signup: "/sign-up",
+  redirecting: "/redirecting",
 };
 
 export default routes;

@@ -33,12 +33,12 @@ const CoinDetail = () => {
     findMarketCoin();
     hanldeLoadChartData();
 
-    const callGetAllCoinsApiEvery30s = setInterval(() => {
+    const callGetAllCoinsApiEvery90s = setInterval(() => {
       hanldeLoadChartData();
       findMarketCoin();
-    }, 100000);
+    }, 90000);
 
-    return () => clearInterval(callGetAllCoinsApiEvery30s);
+    return () => clearInterval(callGetAllCoinsApiEvery90s);
   }, []);
 
   return (
