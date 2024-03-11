@@ -6,6 +6,7 @@ import com.allxone.mybatisprojectbackend.service.EmailService;
 import com.allxone.mybatisprojectbackend.service.Impl.JwtService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,14 @@ public class RegistrationEventListener implements ApplicationListener<Registrati
     private final EmailService emailService;
     private User user;
 
+    @Value("${client.url}")
+    private String clientUrl;
     @Override
     public void onApplicationEvent(RegistrationEvent event) {
         user = event.getUser();
         String name = user.getName();
         String email = user.getEmail();
-        String url = "http://localhost:5555/api/auth/verifyEmail?token="+event.getJwtToken();
+        String url = clientUrl+ "/api/auth/verifyEmail?token="+event.getJwtToken();
         try {
             emailService.sendVerificationEmail(name,email,url);
         } catch (MessagingException | UnsupportedEncodingException e) {
