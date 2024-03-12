@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS
     insurance_type
 ;
 
-CREATE TABLE coin
+CREATE TABLE IF NOT EXISTS coin
 (
     id             BIGINT       NOT NULL,
     created_at     datetime     NULL,
@@ -33,7 +33,7 @@ CREATE TABLE coin
     quantity       BIGINT       NULL
 );
 
-CREATE TABLE user
+CREATE TABLE IF NOT EXISTS user
 (
     id           BIGINT       NOT NULL,
     name         VARCHAR(255) NULL,
@@ -48,7 +48,7 @@ CREATE TABLE user
     updated_at   datetime     NULL
 );
 
-CREATE TABLE token
+CREATE TABLE IF NOT EXISTS token
 (
     id         BIGINT AUTO_INCREMENT NOT NULL,
     token      VARCHAR(255)          NULL,
@@ -60,25 +60,25 @@ CREATE TABLE token
 )
 ;
 
-CREATE TABLE role
+CREATE TABLE IF NOT EXISTS role
 (
     id   INT NOT NULL,
     name VARCHAR(255)
 );
 
-CREATE TABLE user_role
+CREATE TABLE IF NOT EXISTS user_role
 (
     user_id BIGINT,
     role_id INT
 );
 
-CREATE TABLE department
+CREATE TABLE IF NOT EXISTS department
 (
     id   int         NOT NULL,
     name varchar(50) NOT NULL
 );
 
-CREATE TABLE employee
+CREATE TABLE IF NOT EXISTS employee
 (
     id               bigint      NOT NULL,
     user_id          bigint      NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE employee
     updated_at       timestamp   NULL     DEFAULT NULL
 );
 
-CREATE TABLE holiday
+CREATE TABLE IF NOT EXISTS holiday
 (
     id                  int          NOT NULL,
     holiday_name        varchar(255) NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE holiday
     duration_days       smallint     NOT NULL
 );
 
-CREATE TABLE insurance_type
+CREATE TABLE IF NOT EXISTS insurance_type
 (
     id                    int           NOT NULL,
     insurance_name        varchar(255)  NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE insurance_type
 
 
 
-CREATE TABLE payroll
+CREATE TABLE IF NOT EXISTS payroll
 (
     id           bigint         NOT NULL,
     employee_id  bigint         NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE payroll
     updated_at   timestamp      NULL DEFAULT NULL
 );
 
-CREATE TABLE tax_information
+CREATE TABLE IF NOT EXISTS tax_information
 (
     id            int           NOT NULL,
     employee_id   bigint        NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE tax_information
     updated_at    timestamp     NULL DEFAULT NULL
 );
 
-CREATE TABLE time_tracking
+CREATE TABLE IF NOT EXISTS time_tracking
 (
     id          bigint    NOT NULL,
     employee_id bigint    NOT NULL,

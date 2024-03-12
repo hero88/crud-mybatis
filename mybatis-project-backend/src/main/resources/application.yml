@@ -8,7 +8,7 @@ spring:
     driver-class-name: ${SPRING_DATASOURCE_DRIVER}
   sql:
     init:
-      mode: always
+      mode: embedded
       data-locations: classpath:data.sql
   mail:
     host: ${MAIL_HOST}
