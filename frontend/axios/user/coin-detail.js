@@ -1,4 +1,5 @@
 import { instance } from "../config/config.js";
+const apiProfile = instance.defaults.baseURL + 'v1/user/own';
 const baseURL = instance.defaults.baseURL;
 var api = baseURL + "v1/coins";
 
@@ -62,8 +63,8 @@ const getCoin = async (start, limit) => {
             </button>
             <ul class="dropdown-menu">
                 ${coin.detail.contract_address
-                  .map(
-                    (coins) => `
+            .map(
+              (coins) => `
                     <li onclick="copyText(this)">
                         <a class="dropdown-item">
                             <div class="d-flex">
@@ -83,8 +84,8 @@ const getCoin = async (start, limit) => {
                             </div>
                         </a>
                     </li>`
-                  )
-                  .join("")}
+            )
+            .join("")}
             </ul>
         </div>`;
       } else {
@@ -92,7 +93,7 @@ const getCoin = async (start, limit) => {
       }
     });
     totalcount = data.totalCount;
-    rebuildPagination(start,data.totalCount);
+    rebuildPagination(start, data.totalCount);
   } catch (error) {
     console.log(error.message);
   }
@@ -179,7 +180,7 @@ function rebuildPagination(currentPage, totalcount) {
 function addButton(number, currentPage) {
   var HTML = "<a class='page-link'";
 
- 
+
   if (number == currentPage) {
     HTML += " style='background-color:#6495ED' ";
   }
@@ -196,18 +197,86 @@ function addButton(number, currentPage) {
 
 
 window.handlevent = function (value) {
-    start = value;
-    rebuildPagination(start, totalcount);
-    getCoin(start,limit);
+  start = value;
+  rebuildPagination(start, totalcount);
+  getCoin(start, limit);
 }
 
 window.goToPage = function (pageNumber) {
 
-    currentPage = pageNumber;
-    start = (pageNumber - 1) * limit;
-  
+  currentPage = pageNumber;
+  start = (pageNumber - 1) * limit;
+
   getCoin(start, limit);
 };
+// hiển thị menu và nut login
+document.addEventListener("DOMContentLoaded", function () {
+  var buttonLogin = document.getElementById("buttonLogin");
+  var menu = document.getElementById("menu");
+  // Kiểm tra xem cookie có tồn tại không
+  var cookieExists = getCookie('token');
+  // Nếu cookie không tồn tại, hiển thị phần tử loginContainer
+  if (!cookieExists) {
+      buttonLogin.style.display = "block";
+  } else {
+      menu.style.display = "block";
+  }
+});
 
+// hàm get cookies
+function getCookie(cookieName) {
+  var name = cookieName + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var cookieArray = decodedCookie.split(';');
+  for (var i = 0; i < cookieArray.length; i++) {
+    var cookie = cookieArray[i].trim();
+    if (cookie.indexOf(name) == 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
+  }
+  return null;
+}
 
-getCoin(item,limit);
+function profile(apiUrl) {
+  var authToken = getCookie('token');
+  var name = document.getElementById('name');
+  const requestConfig = {
+    headers: {
+      'Authorization': `Bearer ${authToken}`,
+    }
+  };
+  axios.get(apiUrl, requestConfig)
+    .then(response => {
+      if (response.status !== 200) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      return response.data;
+    })
+    .then(data => {
+      var profile = data;
+      name.textContent = profile.data.name;
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+function logout() {
+  var cookies = document.cookie.split(";");
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    var eqPos = cookie.indexOf("=");
+    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+  }
+  window.location.href = window.location.origin + "/html/page/SignInSignUp.html"; // Thay đổi đường dẫn nếu cần
+}
+
+document.getElementById("logoutButton").addEventListener("click", function () {
+  logout();
+});
+if (getCookie('token') != null) {
+  profile(apiProfile);
+}
+
+getCoin(item, limit);

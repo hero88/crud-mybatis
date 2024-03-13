@@ -13,20 +13,20 @@ import { instance } from "../config/config.js";
 
 const baseURL = instance.defaults.baseURL;
 
-$("#home-not-account").attr("href",window.location.origin+"/html/page/home.html");
+$("#home-not-account").attr("href", window.location.origin + "/html/page/home.html");
 
 $(".btn-login").click(function () {
     var mailLogin = $('.mailLogin').val();
     var passLogin = $('.passLogin').val();
-    axios.post(baseURL+'v1/login', {
+    axios.post(baseURL + 'v1/login', {
         email: mailLogin,
         password: passLogin
     }).then(function (resp) {
-        if(resp.data.data.status == 1){
+        if (resp.data.data.status == 1) {
             alert("Login successful")
             setCookie("token", resp.data.data.access_token, 30)
-            window.location.href = window.location.origin+"/html/page/home.html";
-        }else{
+            window.location.href = window.location.origin + "/html/page/company.html";
+        } else {
             alert("Login fail. Check your information")
         }
     }).catch(function (error) {
@@ -41,14 +41,14 @@ $(".btn-register").click(function () {
     var ageRegister = $('.age-register').val();
     var passRegister = $('.pass-register').val();
     var confirmPass = $('.confirm-pass-register').val();
-    var genderRegister =  $('input[name="gender"]:checked').val();
+    var genderRegister = $('input[name="gender"]:checked').val();
     var phoneNumberRegister = $('.phone-register').val();
     var AddressRegister = $('.address-register').val();
 
     if (confirmPass !== passRegister) {
         alert('Password is not match')
     } else {
-        axios.post(baseURL+'v1/register', {
+        axios.post(baseURL + 'v1/register', {
             username: usernameRegister,
             password: passRegister,
             name: fullnameRegister,
@@ -65,9 +65,9 @@ $(".btn-register").click(function () {
     }
 });
 
-$(".btn-send-mail-forgot").click(function(){
+$(".btn-send-mail-forgot").click(function () {
     var mailForgot = $('#mail-forgot').val();
-    axios.get(baseURL+'v1/sendmail-forgot-password', {
+    axios.get(baseURL + 'v1/sendmail-forgot-password', {
         params: {
             email: mailForgot,
         },
